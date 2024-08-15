@@ -3,7 +3,12 @@ guid: 2ff532dcbe50aaa438c59ed5fe09640f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - monsterSprite: {instanceID: 0}
+  - basickAttack1: {instanceID: 0}
+  - basickAttack2: {instanceID: 0}
+  - specialAttack: {instanceID: 0}
+  - animator: {fileID: 9100000, guid: 9b3ae1c5d0a780b4eb63f01007242c06, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -19,10 +19,11 @@ public class PlayerReferences : MonoBehaviour
 
     public PlayerDevice device;
 
-    public Monster actualMonster;
+    public Monster currentMonster;
 
     [Header("Player Sprites")]
     public SpriteRenderer monsterSprite;
+    public Animator monsterAnimator;
 
     #region Scripts
     [HideInInspector] public PlayerMovement playerMovement;
@@ -38,6 +39,7 @@ public class PlayerReferences : MonoBehaviour
 
     private void Awake()
     {
+        monsterAnimator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         playerAim = GetComponent<PlayerAim>();
         playerCombat = GetComponent<PlayerCombat>();

@@ -1,3 +1,4 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Monsters/New Monster")]
@@ -6,7 +7,6 @@ public class Monster : ScriptableObject
     [Header("Monster Info")]
     public int monsterID;
     public string monsterName;
-    public Sprite monsterSprite;
 
     [Header("Monster Stats Properties")]
     public float monsterHealth;
@@ -19,4 +19,7 @@ public class Monster : ScriptableObject
     public Attack basickAttack1;
     public Attack basickAttack2;
     public Attack specialAttack;
+
+    [Header("Sprite")]
+    public GameObject prefabMonster;
 }

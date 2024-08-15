@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Properties")]
-    [SerializeField] private float actualSpeed;
+    [SerializeField] private float currentSpeed;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float aimingSpeed;
     [Space]
@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movementInput;
     private Vector2 movementDirection;
     private Vector2 lastMovementInput = new Vector2(1, 0);
+    private Animator animator;
 
     [Header("Combat Properties")]
     [SerializeField] private float dashForce;
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
 
     [SerializeField] private PlayerReferences references;
+
 
     public void SetMovementSpeeds(float movementSpeed, float aimingSpeed) { this.movementSpeed = movementSpeed; this.aimingSpeed = aimingSpeed; }
 
@@ -33,16 +35,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        if (references.actualMonster != null)
+        animator = GetComponent<Animator>();
+
+        if (references.currentMonster != null)
         {
-            movementSpeed = references.actualMonster.monsterSpeed;
-            aimingSpeed = references.actualMonster.monsterAimSpeed;
-            dashForce = references.actualMonster.monsterDashForce;
-            dashCooldown = references.actualMonster.monsterDashCooldown;
+            movementSpeed = references.currentMonster.monsterSpeed;
+            aimingSpeed = references.currentMonster.monsterAimSpeed;
+            dashForce = references.currentMonster.monsterDashForce;
+            dashCooldown = references.currentMonster.monsterDashCooldown;
+
+            FindAnyObjectByType<PlayerController>().AssignPlayerPropertiesCollider(references.currentMonster.prefabMonster.GetComponent<BoxCollider2D>());
+            FindAnyObjectByType<PlayerController>().AssignPlayerRenderer(references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>());
+            FindAnyObjectByType<PlayerController>().AssignPlayerAnimator(references.currentMonster.prefabMonster.GetComponent<Animator>());
         }
 
         references.playerCombat.StartDefense += DefenseStarted;
         references.playerCombat.StopDefense += DefenseStopped;
+
     }
 
     private void OnDisable()
@@ -55,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         GetInputs();
+
+        animator.SetFloat("speed", movementInput.sqrMagnitude);
     }
 
     private void FixedUpdate()
@@ -65,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     private void GetInputs()
     {
         movementInput = references.playerInputs.Movement.Movement.ReadValue<Vector2>();
-        movementDirection = movementInput.normalized * actualSpeed;
+        movementDirection = movementInput.normalized * currentSpeed;
 
         if (movementInput != Vector2.zero)
             lastMovementInput = movementInput;
@@ -82,9 +93,12 @@ public class PlayerMovement : MonoBehaviour
         if (!CanMove()) return;
 
         if (references.playerAim.isAiming)
-            actualSpeed = aimingSpeed;
+            currentSpeed = aimingSpeed;
         else
-            actualSpeed = movementSpeed;
+            currentSpeed = movementSpeed;
+
+        
+        transform.rotation = Quaternion.Euler(0, movementInput.x > 0 ? 0 : movementInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
 
         movementDirection += forceToApply;
         forceToApply /= forceDamping;
@@ -108,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
 
         return true;
     }
+
 
     /// <summary>
     /// triggers when the player start the defense 

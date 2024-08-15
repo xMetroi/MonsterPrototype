@@ -39,12 +39,12 @@ public class PlayerCombat : MonoBehaviour
 
     private void Start()
     {
-        if (references.actualMonster != null)
+        if (references.currentMonster != null)
         {
-            monsterHp = references.actualMonster.monsterHealth;
-            basickAttack1 = references.actualMonster.basickAttack1;
-            basickAttack2 = references.actualMonster.basickAttack2;
-            specialAttack = references.actualMonster.specialAttack;
+            monsterHp = references.currentMonster.monsterHealth;
+            basickAttack1 = references.currentMonster.basickAttack1;
+            basickAttack2 = references.currentMonster.basickAttack2;
+            specialAttack = references.currentMonster.specialAttack;
         }
     }
 
@@ -83,7 +83,7 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator StartBasicAttack1Cooldown(float cooldown)
     {
         canUseBasicAttack1 = false;
-        Attack attack = references.actualMonster.basickAttack1;
+        Attack attack = references.currentMonster.basickAttack1;
 
         if (basickAttack1.attackType == Attack.AttackType.Throwable)
         {
@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator StartBasicAttack2Cooldown(float cooldown)
     {
         canUseBasicAttack2 = false;
-        Attack attack = references.actualMonster.basickAttack2;
+        Attack attack = references.currentMonster.basickAttack2;
 
         if (basickAttack2.attackType == Attack.AttackType.Throwable)
         {       
@@ -127,7 +127,7 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator StartSpecialAttackCooldown(float cooldown)
     {
         canUseSpecialAttack = false;
-        Attack attack = references.actualMonster.specialAttack;
+        Attack attack = references.currentMonster.specialAttack;
 
         if (specialAttack.attackType == Attack.AttackType.Throwable)
         {
@@ -192,23 +192,31 @@ public class PlayerCombat : MonoBehaviour
         }
 
         GameObject go = Instantiate(attack.meleePrefab, direction, rotation);
+
+        MeleeAttack(go.transform.position, attack);
     }
 
     public IEnumerator StartTransformAttack(Attack attack)
     {
-        references.monsterSprite.sprite = attack.transformationSprite;
+        FindAnyObjectByType<PlayerController>().AssignPlayerPropertiesCollider(attack.prefabTransformation.GetComponent<BoxCollider2D>());
+        references.monsterSprite.sprite = attack.prefabTransformation.GetComponent<SpriteRenderer>().sprite;
+        references.monsterAnimator.runtimeAnimatorController = attack.prefabTransformation.GetComponent<Animator>().runtimeAnimatorController;
+
         references.playerMovement.SetMovementSpeeds
         (
-            references.actualMonster.monsterSpeed * attack.transformationSpeedMultiplier,
-            references.actualMonster.monsterAimSpeed * attack.transformationSpeedMultiplier
+            references.currentMonster.monsterSpeed * attack.transformationSpeedMultiplier,
+            references.currentMonster.monsterAimSpeed * attack.transformationSpeedMultiplier
         );
 
         yield return new WaitForSeconds(attack.transformationDuration);
-        references.monsterSprite.sprite = references.actualMonster.monsterSprite;
+        FindAnyObjectByType<PlayerController>().AssignPlayerPropertiesCollider(references.currentMonster.prefabMonster.GetComponent<BoxCollider2D>());
+        references.monsterSprite.sprite = references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>().sprite;
+        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.prefabMonster.GetComponent<Animator>().runtimeAnimatorController;
+        
         references.playerMovement.SetMovementSpeeds
         (
-            references.actualMonster.monsterSpeed,
-            references.actualMonster.monsterAimSpeed
+            references.currentMonster.monsterSpeed,
+            references.currentMonster.monsterAimSpeed
         );
     }
 
@@ -219,6 +227,28 @@ public class PlayerCombat : MonoBehaviour
 
         return true;
     }
+
+    public void MeleeAttack(Vector2 position, Attack attack)
+    {
+        if (!CanAttack()) return;
+
+        Collider2D[] objects = Physics2D.OverlapCircleAll(position, attack.meleeRange);
+
+        foreach (Collider2D collider in objects)
+        {
+            if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
+            {
+                //Damage
+            }
+        }
+    }
+
+   /* private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(hitController.position, radiusAttack);
+    }*/
+
 
     #endregion
 

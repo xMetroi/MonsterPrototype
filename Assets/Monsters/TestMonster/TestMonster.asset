@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: TestMonster
   m_EditorClassIdentifier: 
   monsterID: 0
-  monsterName: Test
-  monsterSprite: {fileID: 21300000, guid: 5c44a11031206c84eb0efab4b4dbd65c, type: 3}
+  monsterName: Dino Chibi
+  monsterSprite: {fileID: -2097783688, guid: ca7e9b42695e9ae44ab974562516d311, type: 3}
   monsterHealth: 5
-  monsterSpeed: 5
+  monsterSpeed: 4
   monsterAimSpeed: 2
   monsterDashForce: 10
   monsterDashCooldown: 1
   basickAttack1: {fileID: 11400000, guid: 61f7cb743ad76b34bb9f87a280001cd8, type: 2}
   basickAttack2: {fileID: 11400000, guid: 8976bfc1fc092ca4889cf9feabff691b, type: 2}
   specialAttack: {fileID: 11400000, guid: 9b437cdc4263f484e9c4162781035b54, type: 2}
+  prefabMonster: {fileID: 1167512238874780061, guid: 4ad247bb51167c7479790dde7f633dbc, type: 3}

@@ -16,7 +16,7 @@ public class PlayerVisuals : MonoBehaviour
         references.playerCombat.StopDefense += DefenseStopped;
 
         //Set the sprite of the actual monster
-        references.monsterSprite.sprite = references.actualMonster.monsterSprite;
+        references.monsterSprite.sprite = references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>().sprite;
     }
 
     private void OnDisable()

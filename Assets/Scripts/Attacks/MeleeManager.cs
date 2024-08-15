@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MeleeManager : MonoBehaviour
 {
+   
     /// <summary>
     /// This method triggers when the animation end
     /// </summary>

@@ -47,7 +47,7 @@ public class Attack : ScriptableObject
     public float transformationResistanceMultiplier;
     public float transformationSpeedMultiplier;
     public float transformationDuration;
-    public Sprite transformationSprite;
+    public GameObject prefabTransformation;
     #endregion
 
     /// <summary>
@@ -97,7 +97,7 @@ public class Attack : ScriptableObject
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationResistanceMultiplier"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationSpeedMultiplier"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationDuration"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationSprite"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("prefabTransformation"));
                     break;
             }
 
