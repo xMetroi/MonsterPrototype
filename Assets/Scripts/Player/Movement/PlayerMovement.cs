@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [SerializeField] private Vector2 forceToApply;
     [SerializeField] private float forceDamping;
+
+    public Transform predictionPivot;
     
     [Space]
     private Vector2 movementInput;
@@ -64,13 +66,33 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         GetInputs();
-
+        MovePivot();
         animator.SetFloat("speed", movementInput.sqrMagnitude);
     }
 
     private void FixedUpdate()
     {
         Movement();
+    }
+
+    //Envia si el player se esta moviendo
+    public bool isMove()
+    {
+        if (movementInput.sqrMagnitude != 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void MovePivot()
+    {
+        if (movementInput.sqrMagnitude != 0)
+        {
+            float angle = Mathf.Atan2(movementInput.y, movementInput.x) * Mathf.Rad2Deg;
+            predictionPivot.transform.eulerAngles = new Vector3(0, 0, angle);
+        } 
     }
 
     private void GetInputs()

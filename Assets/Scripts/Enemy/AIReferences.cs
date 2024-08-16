@@ -11,6 +11,8 @@ public class AIReferences : MonoBehaviour
     public Animator monsterAnimator;
     [Space]
     public Transform playerTransform;
+    public Transform predicitonPlayer;
+
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public NavMeshAgent agent;
 
