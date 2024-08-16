@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class TrainerController : MonoBehaviour
 {
+    /*
     private List<Monster> monsters = new List<Monster>();
     private int coins = 0;
 
 
     private void Start()
     {
-        SetMonsters(SaveLoadManager.Instance.LoadPlayerMonster());
-        SetCoins(SaveLoadManager.Instance.LoadPlayerCoins());
+        //SetMonsters(SaveLoadManager.Instance.LoadPlayerMonster());
+        //SetCoins(SaveLoadManager.Instance.LoadPlayerCoins());
     }
 
     public void SetMonsters(List<int> ids)
@@ -66,5 +67,5 @@ public class TrainerController : MonoBehaviour
     public int GetCoins()
     {
         return this.coins;
-    }
+    }*/
 }
