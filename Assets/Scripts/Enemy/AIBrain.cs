@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -37,7 +39,9 @@ public class AIBrain : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     bool aswd = true;
-    
+
+    bool isDash = true;
+
     private void Start()
     {
         animatorIA = GetComponent<Animator>();
@@ -63,8 +67,11 @@ public class AIBrain : MonoBehaviour
 
     private void Update()
     {
-     
-        if (Vector2.Distance(references.playerTransform.position, transform.position) <= meleeRange)
+        float distance = Vector2.Distance(references.playerTransform.position, transform.position);
+
+        Debug.Log(distance);
+
+        if (distance <= meleeRange)
         {
             if (canUseBasicAttack1)
             {
@@ -72,6 +79,9 @@ public class AIBrain : MonoBehaviour
 
                 StartCoroutine(StartBasicAttack1Cooldown(basickAttack1.attackCooldown));
             }
+        } else if (distance > 2f && distance < 4f && canUseBasicAttack2)
+        {
+            references.agent.SetDestination(references.playerTransform.position);
         }
         else
         {
@@ -108,7 +118,23 @@ public class AIBrain : MonoBehaviour
     {
         //Follow the NavMesh Agent
         Vector2 velocity = (new Vector2(references.agent.nextPosition.x, references.agent.nextPosition.y) - references.rb.position);
-        references.rb.velocity = velocity * actualSpeed;
+
+        float distance = Vector2.Distance(references.playerTransform.position, transform.position);
+
+        if (distance > 2f && distance < 4f)
+        {
+            references.rb.velocity = velocity * actualSpeed;
+        }
+        else
+        {
+
+            if (canUseBasicAttack2)
+            {
+                references.rb.velocity = velocity * actualSpeed * 10;
+            }
+
+        }
+
         lastDir = velocity.normalized;
 
         //Mira al jugador
@@ -128,6 +154,14 @@ public class AIBrain : MonoBehaviour
         // Aplica la rotación
         transform.rotation = Quaternion.Euler(0, angle, 0);
     }
+
+    private IEnumerator StartDash()
+    {
+        isDash = false;
+        yield return new WaitForSeconds(3f);
+        isDash = true;
+    }
+
 
     /// <summary>
     /// Give us a random point in the nav mesh area to do random patrolling
@@ -284,17 +318,15 @@ public class AIBrain : MonoBehaviour
         Quaternion rotation;
 
         if (isAiming)
-            direction = transform.position + pointerGO.transform.right;
-        else
-            direction = new Vector2(transform.position.x + lastDir.x, transform.position.y + lastDir.y);
-
-        if (isAiming)
+        {
+            direction = (Vector2)transform.position + (Vector2)pointerGO.transform.right;
             rotation = pointerGO.transform.rotation;
+        }
         else
         {
+            direction = new Vector2(transform.position.x + lastDir.x, transform.position.y + lastDir.y);
             float angleInRadians = Mathf.Atan2(lastDir.y, lastDir.x); // Ángulo en radianes
             float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
-
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 

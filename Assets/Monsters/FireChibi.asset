@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterID: 0
   monsterName: Dino Chibi
-  monsterHealth: 5
+  monsterHealth: 10
   monsterSpeed: 4
   monsterAimSpeed: 2
   monsterDashForce: 10
   monsterDashCooldown: 1
   basickAttack1: {fileID: 11400000, guid: f198a72acbacd0d479285eee60dbfa63, type: 2}
-  basickAttack2: {fileID: 11400000, guid: 8976bfc1fc092ca4889cf9feabff691b, type: 2}
+  basickAttack2: {fileID: 11400000, guid: 09da24df647179f47a4eafddd292dc75, type: 2}
   specialAttack: {fileID: 11400000, guid: 9b437cdc4263f484e9c4162781035b54, type: 2}
   prefabMonster: {fileID: 8318368107756990988, guid: e4a7eae6261e01349ab8ccd5567bbc47, type: 3}

@@ -12,6 +12,7 @@ public class AIReferences : MonoBehaviour
     [Space]
     public Transform playerTransform;
     public Transform predicitonPlayer;
+    public Transform predicitonPlayerMelee;
 
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public NavMeshAgent agent;
