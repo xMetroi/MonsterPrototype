@@ -8,10 +8,17 @@ public class ProjectileManager : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float liveTime;
     [SerializeField] private Transform spriteTransform;
+    [SerializeField] private Collider2D ignoreCollider;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Destroy(gameObject);
+        if (collision.CompareTag("Monster"))
+        {
+            if (collision != ignoreCollider)
+            {
+                Debug.Log("Attacked");
+            }
+        }
     }
 
     /// <summary>
@@ -21,12 +28,13 @@ public class ProjectileManager : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="speed"></param>
     /// <param name="liveTime"></param>
-    public void Initialize(Vector2 direction, Quaternion rotation, float speed, float liveTime)
+    public void Initialize(Vector2 direction, Quaternion rotation, float speed, float liveTime, Collider2D ignoreCollider)
     {
         this.direction = direction.normalized;
         this.spriteTransform.rotation = rotation;
         this.speed = speed;
         this.liveTime = liveTime;
+        this.ignoreCollider = ignoreCollider;
 
         StartCoroutine(DestroyCooldown());
     }
