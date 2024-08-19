@@ -5,13 +5,17 @@ using UnityEngine;
 
 public class SubtitleManager : MonoBehaviour
 {
-    [SerializeField] public List<string> subtitles = new List<string>();
-    [SerializeField] public List<float> time = new List<float>();
-    [SerializeField] public TextMeshProUGUI textSubtitles;
+    private List<string> subtitles = new List<string>();
+    private List<float> time = new List<float>();
+    [SerializeField] public TextMeshProUGUI textSubtitles; 
 
+    private DataSubtitles data = new DataSubtitles();
 
     void Start()
     {
+        subtitles = data.GetSubtitles();
+        time = data.GetTime();
+
         StartCoroutine(StartSubtitles());
     }
 

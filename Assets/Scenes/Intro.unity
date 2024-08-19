@@ -818,30 +818,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c93340ca4532c47a6de2962c0ff67f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subtitles:
-  - In the peaceful village of Rumblemon, a
-  - young monster trainer faces an
-  - unexpected tragedy. A group of
-  - ruthless villains has kidnapped one of
-  - his beloved creatures. Now,
-  - to save it, he must embark on a series of
-  - challenging battles. The mission
-  - won't be easy, but with courage and
-  - determination, anything is
-  - possible. Are you ready to face the
-  - dangers and rescue your monster?
-  time:
-  - 3
-  - 2.5
-  - 2.5
-  - 3
-  - 2.5
-  - 3
-  - 3
-  - 3
-  - 2.5
-  - 2.5
-  - 2.5
   textSubtitles: {fileID: 1561351700}
 --- !u!4 &1964029508
 Transform:
