@@ -345,7 +345,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (monsterHp <= 0)
         {
-            GameManager.Instance.GameOver();
+            //GameManager.Instance.GameOver();
         }
     }
 
