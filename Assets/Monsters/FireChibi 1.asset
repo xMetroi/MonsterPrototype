@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
-  m_Name: DiniChibi
+  m_Name: FireChibi 1
   m_EditorClassIdentifier: 
-  monsterID: 1
-  monsterName: Dino Chibi
+  monsterID: 3
+  monsterName: Dino Chibi 1
   monsterHealth: 10
   monsterSpeed: 4
   monsterAimSpeed: 2
   monsterDashForce: 10
   monsterDashCooldown: 1
-  basickAttack1: {fileID: 11400000, guid: 61f7cb743ad76b34bb9f87a280001cd8, type: 2}
-  basickAttack2: {fileID: 0}
+  basickAttack1: {fileID: 11400000, guid: f198a72acbacd0d479285eee60dbfa63, type: 2}
+  basickAttack2: {fileID: 11400000, guid: 09da24df647179f47a4eafddd292dc75, type: 2}
   specialAttack: {fileID: 11400000, guid: 9b437cdc4263f484e9c4162781035b54, type: 2}
-  prefabMonster: {fileID: 1167512238874780061, guid: 4ad247bb51167c7479790dde7f633dbc, type: 3}
+  prefabMonster: {fileID: 8318368107756990988, guid: e4a7eae6261e01349ab8ccd5567bbc47, type: 3}

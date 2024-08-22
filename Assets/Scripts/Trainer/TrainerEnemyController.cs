@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TrainerController : MonoBehaviour
+public class TrainerEnemyController : MonoBehaviour
 {
     [SerializeField] private List<Monster> monsters = new List<Monster>();
     private int coins = 0;
@@ -11,25 +11,19 @@ public class TrainerController : MonoBehaviour
 
     private void Start()
     {
-        if (SaveLoadManager.Instance.LoadPlayerMonster() != null)
-        {
-            SetMonsters(SaveLoadManager.Instance.LoadPlayerMonster());
-        }
-        
+        //SetMonsters(SaveLoadManager.Instance.LoadPlayerMonster());
         //SetCoins(SaveLoadManager.Instance.LoadPlayerCoins());
     }
 
     public void SetMonsters(List<int> ids)
     {
-        Debug.Log("ASDASA: " + ids.Count);
-
         List<Monster> allMonsters = SaveLoadManager.Instance.LoadAllMonstersFromAssets();
 
-        List<Monster> filteredMonstersById = allMonsters
-            .Where(monster => ids.Contains(monster.monsterID) && monster.monsterID != 0)
-            .ToList(); // Convertir el resultado a una lista
+        Monster[] filteredMonstersById = allMonsters
+            .Where(monster => ids.Contains(monster.monsterID))
+            .ToArray();
 
-        monsters = filteredMonstersById; // Asignar la lista filtrada a la variable monsters
+        monsters = allMonsters;
     }
 
     public void AddMonster(Monster monster)

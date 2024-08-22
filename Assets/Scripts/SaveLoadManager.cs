@@ -7,7 +7,6 @@ using UnityEngine;
 public class PlayerData
 {
     public List<int> monstersIds = new List<int>();
-    public int coins;
 }
 
 public class SaveLoadManager : MonoBehaviour
@@ -36,13 +35,13 @@ public class SaveLoadManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
+       TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
         SavePlayerData(trainer.GetAllMonstersById(), trainer.GetCoins());
     }
 
     public void SavePlayerData(List<int> monstersIds, int coins)
     {
-        PlayerData data = new PlayerData { monstersIds = monstersIds, coins = coins };
+        PlayerData data = new PlayerData { monstersIds = monstersIds};
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(filePath, json);
     }
@@ -70,20 +69,7 @@ public class SaveLoadManager : MonoBehaviour
         }
         else
         {
-            return new List<int> { 0 };
-        }
-    }
-
-    public int LoadPlayerCoins()
-    {
-        PlayerData data = LoadPlayerData();
-        if (data != null)
-        {
-            return data.coins;
-        }
-        else
-        {
-            return 0;
+            return null;
         }
     }
 
