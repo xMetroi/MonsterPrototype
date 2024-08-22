@@ -75,7 +75,7 @@ public class SelectMonsterToWin : MonoBehaviour
     {
         panelSelectMonster.SetActive(false);
         panelSuccessful.SetActive(true);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(4f);   
         panelSuccessful.SetActive(false);
     }
 

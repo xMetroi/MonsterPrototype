@@ -32,16 +32,14 @@ public class TrainerMovement : MonoBehaviour
     private void Start()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        //playerAnimator = GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
     }
 
     void Update()
     {
         movInput = controls.Movement.Movement.ReadValue<Vector2>().normalized;
 
-        /*playerAnimator.SetFloat("movX", movInput.x);
-        playerAnimator.SetFloat("movY", movInput.y);
-        playerAnimator.SetFloat("speed", movInput.sqrMagnitude);*/
+        playerAnimator.SetFloat("Speed", movInput.sqrMagnitude);
     }
 
     private void FixedUpdate()
