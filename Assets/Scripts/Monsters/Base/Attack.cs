@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 [CreateAssetMenu(menuName = "Monsters/Stats/New Attack")]
 public class Attack : ScriptableObject

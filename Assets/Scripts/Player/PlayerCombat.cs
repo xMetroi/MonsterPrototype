@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -25,6 +26,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Transform arrowTransform;
     [SerializeField] private PlayerReferences references;
 
+    public Slider sliderPlayer;
+
+    private Animator animatorMonster;
+
     #region Events
 
     public event Action<float> StartDefense;
@@ -39,9 +44,13 @@ public class PlayerCombat : MonoBehaviour
 
     private void Start()
     {
+        animatorMonster = GetComponent<Animator>();
+
         if (references.currentMonster != null)
         {
             monsterHp = references.currentMonster.monsterHealth;
+            sliderPlayer.maxValue = monsterHp;
+            sliderPlayer.value = monsterHp;
             basickAttack1 = references.currentMonster.basickAttack1;
             basickAttack2 = references.currentMonster.basickAttack2;
             specialAttack = references.currentMonster.specialAttack;
@@ -53,6 +62,8 @@ public class PlayerCombat : MonoBehaviour
     {
         Combat();
         DefenseBubble();
+
+        IsDead();
     }
 
     #region Combat
@@ -169,6 +180,17 @@ public class PlayerCombat : MonoBehaviour
         }
 
         go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.throwableSpeed, 5f, GetComponent<Collider2D>());
+        StartCoroutine(TrackProjectile(go, attack));
+    }
+
+
+    private IEnumerator TrackProjectile(GameObject projectile, Attack attack)
+    {
+        while (projectile != null && projectile.transform != null)
+        {
+            DistanceAttack(projectile, attack);
+            yield return new WaitForSeconds(0.001f);
+        }
     }
 
     public void SpawnMelee(Attack attack)
@@ -238,17 +260,27 @@ public class PlayerCombat : MonoBehaviour
         {
             if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
             {
-                //Damage
+                GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(1);
             }
         }
     }
 
-   /* private void OnDrawGizmos()
+    public void DistanceAttack(GameObject projectile, Attack attack)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(hitController.position, radiusAttack);
-    }*/
+        if (!CanAttack()) return;
 
+        Collider2D[] objects = Physics2D.OverlapCircleAll(projectile.transform.position, attack.meleeRange);
+
+        foreach (Collider2D collider in objects)
+        {
+            if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
+            {
+                Debug.Log("AtaqueADistancia");
+                GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(2);
+                Destroy(projectile); // Destruir el proyectil
+            }
+        }
+    }
 
     #endregion
 
@@ -288,6 +320,33 @@ public class PlayerCombat : MonoBehaviour
         defenseBubbleHP = initialDefenseBubbleHP;
         defenseBroken = false;
         canDefense = true;
+    }
+
+    #endregion
+
+    #region Damage
+
+    public void receiveDamage(int damage)
+    {
+        StartCoroutine(RoutineDamage(damage));
+    }
+
+    IEnumerator RoutineDamage(int damage)
+    {
+        animatorMonster.SetBool("isAttacked", true);
+        monsterHp -= damage;
+        sliderPlayer.value = monsterHp;
+        yield return new WaitForSeconds(0.5f);
+        animatorMonster.SetBool("isAttacked", false);
+
+    }
+
+    private void IsDead()
+    {
+        if (monsterHp <= 0)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 
     #endregion

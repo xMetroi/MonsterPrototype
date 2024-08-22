@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class AIBrain : MonoBehaviour
 {
@@ -28,24 +31,47 @@ public class AIBrain : MonoBehaviour
 
     [SerializeField] private AIReferences references;
 
+
+
+    //Properties
+    public Slider sliderHP;
+    private Animator animatorIA;
+    private SpriteRenderer spriteRenderer;
+
     bool aswd = true;
+
+    bool isDash = true;
+
     private void Start()
     {
+        animatorIA = GetComponent<Animator>();
+        references = GetComponentInParent<AIReferences>();
+
         if (references.currentMonster != null)
         {
             monsterHp = references.currentMonster.monsterHealth;
+            sliderHP.maxValue = monsterHp;
+            sliderHP.value = monsterHp;
             basickAttack1 = references.currentMonster.basickAttack1;
             basickAttack2 = references.currentMonster.basickAttack2;
             specialAttack = references.currentMonster.specialAttack;
+
+            FindAnyObjectByType<EnemyController>().AssignPlayerRenderer(references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>());
+            FindAnyObjectByType<EnemyController>().AssignPlayerAnimator(references.currentMonster.prefabMonster.GetComponent<Animator>());
+            FindAnyObjectByType<EnemyController>().AssignPlayerPropertiesCollider(references.currentMonster.prefabMonster.GetComponent<BoxCollider2D>());
         }
+
     }
 
     public void SetMovementSpeeds(float movementSpeed, float aimingSpeed) { this.movementSpeed = movementSpeed; this.aimingSpeed = aimingSpeed; }
 
     private void Update()
     {
-     
-        if (Vector2.Distance(references.playerTransform.position, transform.position) <= meleeRange)
+        float distance = Vector2.Distance(references.playerTransform.position, transform.position);
+
+        Debug.Log(distance);
+
+        if (distance <= meleeRange)
         {
             if (canUseBasicAttack1)
             {
@@ -53,6 +79,9 @@ public class AIBrain : MonoBehaviour
 
                 StartCoroutine(StartBasicAttack1Cooldown(basickAttack1.attackCooldown));
             }
+        } else if (distance > 2f && distance < 4f && canUseBasicAttack2)
+        {
+            references.agent.SetDestination(references.playerTransform.position);
         }
         else
         {
@@ -68,6 +97,13 @@ public class AIBrain : MonoBehaviour
                 StartCoroutine(StartBasicAttack2Cooldown(basickAttack2.attackCooldown));
             }
         }
+
+        if (animatorIA.runtimeAnimatorController != null)
+        {
+            animatorIA.SetFloat("speed", 1);
+
+        }
+
     }
 
     // Update is called once per frame
@@ -82,9 +118,50 @@ public class AIBrain : MonoBehaviour
     {
         //Follow the NavMesh Agent
         Vector2 velocity = (new Vector2(references.agent.nextPosition.x, references.agent.nextPosition.y) - references.rb.position);
-        references.rb.velocity = velocity * actualSpeed;
+
+        float distance = Vector2.Distance(references.playerTransform.position, transform.position);
+
+        if (distance > 2f && distance < 4f)
+        {
+            references.rb.velocity = velocity * actualSpeed;
+        }
+        else
+        {
+
+            if (canUseBasicAttack2)
+            {
+                references.rb.velocity = velocity * actualSpeed * 10;
+            }
+
+        }
+
         lastDir = velocity.normalized;
+
+        //Mira al jugador
+        Vector3 direction = references.playerTransform.position - transform.position;
+
+        float angle = 0;
+
+        if (direction.x > 0)
+        {
+            angle = 0;
+        } 
+        else if (direction.x < 0)
+        {
+            angle = 180;
+        }
+
+        // Aplica la rotación
+        transform.rotation = Quaternion.Euler(0, angle, 0);
     }
+
+    private IEnumerator StartDash()
+    {
+        isDash = false;
+        yield return new WaitForSeconds(3f);
+        isDash = true;
+    }
+
 
     /// <summary>
     /// Give us a random point in the nav mesh area to do random patrolling
@@ -200,20 +277,39 @@ public class AIBrain : MonoBehaviour
         Quaternion rotation;
 
         if (isAiming)
-            direction = pointerGO.transform.right;
-        else
-            direction = lastDir;
-
-        if (isAiming)
-            rotation = pointerGO.transform.rotation;
-        else
         {
-            float angleInRadians = Mathf.Atan2(lastDir.y, lastDir.x); // Ángulo en radianes
+            direction = pointerGO.transform.right;
+            rotation = pointerGO.transform.rotation;
+        }
+        else
+        { 
+            if (!GameObject.FindAnyObjectByType<PlayerMovement>().isMove())
+            {
+                direction = (references.playerTransform.position - transform.position).normalized;
+            }
+            else
+            {
+                direction = (references.predicitonPlayer.position - transform.position).normalized;
+            }
+
+            float angleInRadians = Mathf.Atan2(direction.y, direction.x); // Ángulo en radianes
             float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
         go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.throwableSpeed, 5f, GetComponent<Collider2D>());
+        StartCoroutine(TrackProjectile(go, attack)); 
+    }
+
+
+    private IEnumerator TrackProjectile(GameObject projectile, Attack attack)
+    {
+        while (projectile != null && projectile.transform != null)
+        {
+            DistanceAttack(projectile, attack);
+            yield return new WaitForSeconds(0.001f);         
+        }   
     }
 
     public void SpawnMelee(Attack attack)
@@ -222,14 +318,13 @@ public class AIBrain : MonoBehaviour
         Quaternion rotation;
 
         if (isAiming)
-            direction = transform.position + pointerGO.transform.right;
-        else
-            direction = new Vector2(transform.position.x + lastDir.x, transform.position.y + lastDir.y);
-
-        if (isAiming)
+        {
+            direction = (Vector2)transform.position + (Vector2)pointerGO.transform.right;
             rotation = pointerGO.transform.rotation;
+        }
         else
         {
+            direction = new Vector2(transform.position.x + lastDir.x, transform.position.y + lastDir.y);
             float angleInRadians = Mathf.Atan2(lastDir.y, lastDir.x); // Ángulo en radianes
             float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
@@ -285,10 +380,56 @@ public class AIBrain : MonoBehaviour
         {
             if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
             {
-                //Damage
+                Debug.Log("Ataque");
+                GameObject.FindAnyObjectByType<PlayerCombat>().receiveDamage(1);
+            }
+        }
+    }
+
+    public void DistanceAttack(GameObject projectile, Attack attack)
+    {
+        if (!CanAttack()) return;
+
+        Collider2D[] objects = Physics2D.OverlapCircleAll(projectile.transform.position, attack.meleeRange);
+
+        foreach (Collider2D collider in objects)
+        {
+            if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
+            {
+                Debug.Log("AtaqueADistancia");
+                GameObject.FindAnyObjectByType<PlayerCombat>().receiveDamage(2);
+                Destroy(projectile); // Destruir el proyectil
             }
         }
     }
 
     #endregion
+
+    #region Damage
+
+    public void receiveDamage(int damage)
+    {
+        Debug.Log("Le pegue");
+        StartCoroutine(RoutineDamage(damage));
+    }
+
+    IEnumerator RoutineDamage(int damage)
+    {
+        animatorIA.SetBool("isAttacked", true);
+        monsterHp -= damage;
+        sliderHP.value = monsterHp;
+        yield return new WaitForSeconds(0.5f);
+        animatorIA.SetBool("isAttacked", false);
+
+    }
+
+    private void IsDead()
+    {
+        if (monsterHp <= 0)
+        {
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    #endregion*/
 }
