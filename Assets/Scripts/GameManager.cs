@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject panelGameOver;
 
+    public bool isWinBattle = false; 
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

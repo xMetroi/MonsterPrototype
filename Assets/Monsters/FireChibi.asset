@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: FireChibi
   m_EditorClassIdentifier: 
-  monsterID: 0
+  monsterID: 2
   monsterName: Dino Chibi
   monsterHealth: 10
   monsterSpeed: 4
