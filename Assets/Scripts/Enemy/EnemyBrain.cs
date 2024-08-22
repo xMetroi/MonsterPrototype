@@ -15,6 +15,9 @@ public class EnemyBrain : MonoBehaviour
     [SerializeField] private Monster actualMonster;
     [SerializeField] private float meleeRange;
 
+    [Header("Combat Stats")]
+    [SerializeField] private float monsterHp;
+
     [Header("Defense")]
     [SerializeField] private float initialDefenseBubbleHP;
     [SerializeField] private float defenseBubbleHP;
@@ -71,6 +74,15 @@ public class EnemyBrain : MonoBehaviour
     public bool IsInMeleeRange(Vector3 playerPosition)
     {
         return Vector3.Distance(playerPosition, references.MonsterTransform.position) <= meleeRange;
+    }
+
+    /// <summary>
+    /// Get distance from the player
+    /// </summary>
+    /// <returns></returns>
+    public float GetDistanceWithPlayer()
+    {
+        return Vector3.Distance(references.MonsterTransform.position, references.playerReferences.playerTransform.position);
     }
 
     /// <summary>
@@ -134,7 +146,7 @@ public class EnemyBrain : MonoBehaviour
     }
 
     private void Movement()
-    {       
+    {
         if (references.state == States.Wandering)
         {
             //Follow the NavMesh Agent
@@ -144,10 +156,10 @@ public class EnemyBrain : MonoBehaviour
         else if (references.state == States.Approach)
         {
             //Go directly to the player
-            Vector2 velocity = (references.playerTransform.position - references.MonsterTransform.position).normalized;
+            Vector2 velocity = (references.playerReferences.playerTransform.position - references.MonsterTransform.position).normalized;
             references.rb.velocity = velocity * actualSpeed;
         }
-        else if (references.state == States.RangedAttack) 
+        else if (references.state == States.RangedAttack)
         {
             //Follow the NavMesh Agent
             Vector2 velocity = new Vector2(references.agent.transform.position.x, references.agent.transform.position.y) - references.rb.position;
@@ -193,18 +205,75 @@ public class EnemyBrain : MonoBehaviour
     {
         if (attack.attackType == Attack.AttackType.Melee)
         {
-            //Debug.Log(attack.attackName);
-            //DoMeleeAttack();
+            SpawnMelee(attack);
         }
         else if (attack.attackType == Attack.AttackType.Throwable)
         {
             //Debug.Log(attack.attackName);
-            //DoThrowableAttack();
+            SpawnThrowable(attack, true);
         }
         else if (attack.attackType == Attack.AttackType.Transformation)
         {
             //We are gonna use this? if yes tell me to add a transformation state to the state machine!
         }
+    }
+
+    /// <summary>
+    /// We use this to spawn a melee attack prefab
+    /// </summary>
+    /// <param name="attack"></param>
+    private void SpawnMelee(Attack attack)
+    {
+        Vector2 direction = references.playerReferences.playerPredictThrowableTransform.position - references.MonsterTransform.position;
+        direction.Normalize();
+        float angleInRadians = Mathf.Atan2(direction.y, direction.x); // 聲gulo en radianes
+        float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversi鏮 a grados
+        Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
+
+        GameObject go = Instantiate(attack.meleePrefab, references.playerReferences.playerTransform.position, rotation);
+        IDamageable damageable = references.playerReferences.GetComponent<IDamageable>();
+        damageable.Damage(attack.attackDamage);
+    }
+
+    /// <summary>
+    /// We use this to spawn a throwable attack prefab
+    /// </summary>
+    /// <param name="attack"></param>
+    private void SpawnThrowable(Attack attack, bool enablePredict)
+    {
+        GameObject go = Instantiate(attack.throwablePrefab, references.MonsterTransform.position, Quaternion.identity);
+        Vector2 direction;
+        Quaternion rotation;
+
+        if (enablePredict)
+        {
+            if (references.playerReferences.playerTransform.gameObject.GetComponent<PlayerMovement>().IsMoving())
+            {
+                direction = (references.playerReferences.playerPredictThrowableTransform.position - transform.position);
+                direction.Normalize();
+                float angleInRadians = Mathf.Atan2(direction.y, direction.x); // 聲gulo en radianes
+                float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversi鏮 a grados
+                rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
+            }
+            else
+            {
+                direction = references.playerReferences.playerTransform.position - references.MonsterTransform.position;
+                direction.Normalize();
+                float angleInRadians = Mathf.Atan2(direction.y, direction.x); // 聲gulo en radianes
+                float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversi鏮 a grados
+                rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
+            }
+        }
+        else
+        {
+            direction = references.playerReferences.playerTransform.position - references.MonsterTransform.position;
+            direction.Normalize();
+            float angleInRadians = Mathf.Atan2(direction.y, direction.x); // 聲gulo en radianes
+            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversi鏮 a grados
+            rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
+        }
+
+        go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.attackDamage, attack.throwableSpeed, 5f, references.monsterCollider);
     }
 
     #endregion

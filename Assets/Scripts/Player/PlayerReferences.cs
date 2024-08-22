@@ -25,6 +25,11 @@ public class PlayerReferences : MonoBehaviour
     public SpriteRenderer monsterSprite;
     public Animator monsterAnimator;
 
+    [Header("Transform Properties")]
+    public Transform playerTransform;
+    public Transform playerPredictMeleeTransform;
+    public Transform playerPredictThrowableTransform;
+
     #region Scripts
     [HideInInspector] public PlayerMovement playerMovement;
     [HideInInspector] public PlayerAim playerAim;

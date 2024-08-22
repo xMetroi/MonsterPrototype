@@ -109,16 +109,19 @@ public class StateMachineController : MonoBehaviour
             {
                 if (references.brain.HasRangedAttack()) // if the monster has atleast 1 ranged attack:
                 {
-                    if (references.brain.IsInMeleeRange(references.playerTransform.position)) //if is the melee range
+                    if (references.brain.IsInMeleeRange(references.playerReferences.playerTransform.position)) //if is the melee range
                     {
 
                         var (hasMeleeAttackAvailable, availableAttack) = HasMeleeAttacksAvailable();
 
                         if (attack && references.brain.CanAttack() && hasMeleeAttackAvailable) //if the monster can attack and have a melee attack available (not in cooldown)
                         {
-                            Debug.Log("Melee Attack");
-                            AttackStarted?.Invoke(availableAttack);
-                            StartAttack(attackCooldown, Attack.AttackType.Melee);
+                            if (references.brain.GetDistanceWithPlayer() <= availableAttack.meleeRange) //if the distance with the player is in attack reach
+                            {
+                                Debug.Log("Melee Attack");
+                                AttackStarted?.Invoke(availableAttack);
+                                StartAttack(attackCooldown, Attack.AttackType.Melee);
+                            }
                         }
                         else //defend
                         {
@@ -146,15 +149,18 @@ public class StateMachineController : MonoBehaviour
                 }
                 else //if the monster dont have a ranged attack:
                 {
-                    if (references.brain.IsInMeleeRange(references.playerTransform.position)) //if is in the melee range
+                    if (references.brain.IsInMeleeRange(references.playerReferences.playerTransform.position)) //if is in the melee range
                     {
                         var (hasMeleeAttackAvailable, availableAttack) = HasMeleeAttacksAvailable();
 
                         if (attack && references.brain.CanAttack() && hasMeleeAttackAvailable) //if the monster can attack and have a melee attack available (not in cooldown)
                         {
-                            Debug.Log("Melee Attack");
-                            AttackStarted?.Invoke(availableAttack);
-                            StartAttack(attackCooldown, Attack.AttackType.Melee);
+                            if (references.brain.GetDistanceWithPlayer() <= availableAttack.meleeRange) //if the distance with the player is in attack reach
+                            {
+                                Debug.Log("Melee Attack");
+                                AttackStarted?.Invoke(availableAttack);
+                                StartAttack(attackCooldown, Attack.AttackType.Melee);
+                            }
                         }
                         else //defend
                         {
@@ -174,14 +180,18 @@ public class StateMachineController : MonoBehaviour
 
         if (references.state == States.Approach)
         {
-            if (references.brain.IsInMeleeRange(references.playerTransform.position)) // if is in the melee range
+            if (references.brain.IsInMeleeRange(references.playerReferences.playerTransform.position)) // if is in the melee range
             {
                 var (hasMeleeAttackAvailable, availableAttack) = HasMeleeAttacksAvailable();
 
                 if (attack && references.brain.CanAttack() && hasMeleeAttackAvailable) //if the monster can attack and have a melee attack available (not in cooldown)
                 {
-                    Debug.Log("Melee Attack");
-                    StartAttack(attackCooldown, Attack.AttackType.Melee);
+                    if (references.brain.GetDistanceWithPlayer() <= availableAttack.meleeRange) //if the distance with the player is in attack reach
+                    {
+                        Debug.Log("Melee Attack");
+                        AttackStarted?.Invoke(availableAttack);
+                        StartAttack(attackCooldown, Attack.AttackType.Melee);
+                    }
                 }
                 else //defend
                 {

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class AIBrain : MonoBehaviour
 {
+    /*
     [Header("Movement Properties")]
     [SerializeField] private float actualSpeed;
     [SerializeField] private float movementSpeed;
@@ -332,7 +333,7 @@ public class AIBrain : MonoBehaviour
     {
         /*
         if (isDefensed)
-            return false;*/
+            return false;
 
         return true;
     }

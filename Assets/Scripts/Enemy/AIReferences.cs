@@ -10,14 +10,13 @@ public class AIReferences : MonoBehaviour
     public Monster currentMonster;
     public SpriteRenderer monsterSprite;
     public Animator monsterAnimator;
-    [Space]
+
     [Header("Player Properties")]
-    public Transform playerTransform;
-    public Transform predicitonPlayer;
-    public Transform predicitonPlayerMelee;
+    public PlayerReferences playerReferences;
 
     [Header("AI Properties")]
     public Transform MonsterTransform;
+    public Collider2D monsterCollider;
 
     [Header("State Machine")]
     public States state;
@@ -30,7 +29,9 @@ public class AIReferences : MonoBehaviour
 
     private void Awake()
     {
-        playerTransform = GameObject.Find("Player").transform;
+        playerReferences = GameObject.Find("Player").GetComponent<PlayerReferences>();
+
+
         agent = GetComponentInChildren<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;

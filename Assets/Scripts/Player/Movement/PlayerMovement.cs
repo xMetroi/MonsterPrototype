@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private PlayerReferences references;
 
+    #region Getter / Setter
 
     public void SetMovementSpeeds(float movementSpeed, float aimingSpeed) { this.movementSpeed = movementSpeed; this.aimingSpeed = aimingSpeed; }
 
@@ -34,6 +35,27 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 GetLastMovementInput() { return lastMovementInput; }
 
     public bool IsMoving() { return references.rb.velocity.magnitude > 0.1f; }
+
+    #endregion
+
+    #region Checkers / Utilities
+
+    /// <summary>
+    /// Determines if the player can move
+    /// </summary>
+    /// <returns></returns>
+    public bool CanMove()
+    {
+        if (references.playerCombat.isDefensed)
+            return false;
+
+        if (references.playerCombat.GetIsHitted())
+            return false;
+
+        return true;
+    }
+
+    #endregion
 
     private void Start()
     {
@@ -75,26 +97,6 @@ public class PlayerMovement : MonoBehaviour
         Movement();
     }
 
-    //Envia si el player se esta moviendo
-    public bool isMove()
-    {
-        if (movementInput.sqrMagnitude != 0)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private void MovePivot()
-    {
-        if (movementInput.sqrMagnitude != 0)
-        {
-            float angle = Mathf.Atan2(movementInput.y, movementInput.x) * Mathf.Rad2Deg;
-            predictionPivot.transform.eulerAngles = new Vector3(0, 0, angle);
-        } 
-    }
-
     private void GetInputs()
     {
         movementInput = references.playerInputs.Movement.Movement.ReadValue<Vector2>();
@@ -108,6 +110,15 @@ public class PlayerMovement : MonoBehaviour
             if (CanMove())
                 StartCoroutine(Dash());
         }
+    }
+
+    private void MovePivot()
+    {
+        if (movementInput.sqrMagnitude != 0)
+        {
+            float angle = Mathf.Atan2(movementInput.y, movementInput.x) * Mathf.Rad2Deg;
+            predictionPivot.transform.eulerAngles = new Vector3(0, 0, angle);
+        } 
     }
 
     private void Movement()
@@ -132,19 +143,6 @@ public class PlayerMovement : MonoBehaviour
 
         references.rb.velocity = movementDirection;
     }
-
-    /// <summary>
-    /// Determines if the player can move
-    /// </summary>
-    /// <returns></returns>
-    public bool CanMove()
-    {
-        if (references.playerCombat.isDefensed) 
-            return false;
-
-        return true;
-    }
-
 
     /// <summary>
     /// triggers when the player start the defense 

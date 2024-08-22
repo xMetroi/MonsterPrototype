@@ -499,6 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actualSpeed: 3
+  stopDistance: 0
   actualMonster: {fileID: 0}
   meleeRange: 4
   initialDefenseBubbleHP: 0
@@ -525,11 +526,13 @@ MonoBehaviour:
   predicitonPlayer: {fileID: 0}
   predicitonPlayerMelee: {fileID: 0}
   MonsterTransform: {fileID: 196185071479461608}
+  monsterCollider: {fileID: 3972640969983689911}
   state: 0
   rb: {fileID: 0}
   agent: {fileID: 0}
   sm: {fileID: 0}
   brain: {fileID: 0}
+  stateMachineController: {fileID: 0}
 --- !u!114 &5855622523483640305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,9 +545,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7420afbbec49ee34d8dbff0474d20e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldown: 1
+  attackCooldown: 0.7
   aproachMinMaxTime: {x: 3, y: 6}
-  nextAproachMinMaxTime: {x: 3, y: 6}
+  nextAproachMinMaxTime: {x: 4, y: 8}
   defenseMinMaxTime: {x: 1, y: 3}
   references: {fileID: 7478372213216200953}
 --- !u!95 &3817854324355063197
