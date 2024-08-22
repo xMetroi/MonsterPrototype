@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,7 +10,7 @@ public class PlayerData
 
 public class SaveLoadManager : MonoBehaviour
 {
-    public static SaveLoadManager Instance { get; private set; }
+    /*public static SaveLoadManager Instance { get; private set; }
     private string filePath;
 
     private void Awake()
@@ -76,13 +75,13 @@ public class SaveLoadManager : MonoBehaviour
     public List<Monster> LoadAllMonstersFromAssets()
     {
         // Encuentra todos los assets de tipo Monster en la carpeta "Assets/>Monsters"
-        string[] guids = AssetDatabase.FindAssets("t:Monster", new[] { "Assets/Monsters" });
+        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Monster", new[] { "Assets/Monsters" });
         List<Monster> monsters = new List<Monster>();
 
         foreach (string guid in guids)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            Monster monster = AssetDatabase.LoadAssetAtPath<Monster>(path);
+            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+            Monster monster = UnityEditor.AssetDatabase.LoadAssetAtPath<Monster>(path);
             if (monster != null)
             {
                 monsters.Add(monster);
@@ -91,5 +90,5 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         return monsters;
-    }
+    }*/
 }

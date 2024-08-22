@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : MonoBehaviour, IDamageable
 {
     [Header("Combat Properties")]
     [SerializeField] private float monsterHp;
@@ -14,6 +14,12 @@ public class PlayerCombat : MonoBehaviour
     private bool canUseBasicAttack1 = true;
     private bool canUseBasicAttack2 = true;
     private bool canUseSpecialAttack = true;
+
+    private bool isHitted = false;
+
+    [Header("Combat Visuals")]
+    [SerializeField] private Material damageMaterial;
+    [SerializeField] private Color damageColor;
 
     [Header("Defense Properties")]
     [SerializeField] private float initialDefenseBubbleHP;
@@ -34,6 +40,12 @@ public class PlayerCombat : MonoBehaviour
 
     public event Action<float> StartDefense;
     public event Action<float> StopDefense;
+
+    #endregion
+
+    #region Getter / Setters
+
+    public bool GetIsHitted() { return isHitted; }
 
     #endregion
 
@@ -62,8 +74,6 @@ public class PlayerCombat : MonoBehaviour
     {
         Combat();
         DefenseBubble();
-
-        IsDead();
     }
 
     #region Combat
@@ -179,7 +189,7 @@ public class PlayerCombat : MonoBehaviour
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
-        go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.throwableSpeed, 5f, GetComponent<Collider2D>());
+        //go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.throwableSpeed, 5f, GetComponent<Collider2D>());
         StartCoroutine(TrackProjectile(go, attack));
     }
 
@@ -247,8 +257,12 @@ public class PlayerCombat : MonoBehaviour
         if (isDefensed)
             return false;
 
+        if (isHitted)
+            return false;
+
         return true;
     }
+
 
     public void MeleeAttack(Vector2 position, Attack attack)
     {
@@ -260,7 +274,7 @@ public class PlayerCombat : MonoBehaviour
         {
             if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
             {
-                GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(1);
+                //GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(1);
             }
         }
     }
@@ -276,7 +290,7 @@ public class PlayerCombat : MonoBehaviour
             if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
             {
                 Debug.Log("AtaqueADistancia");
-                GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(2);
+                //GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(2);
                 Destroy(projectile); // Destruir el proyectil
             }
         }
@@ -326,27 +340,28 @@ public class PlayerCombat : MonoBehaviour
 
     #region Damage
 
-    public void receiveDamage(int damage)
+    public void Damage(float damage)
     {
-        StartCoroutine(RoutineDamage(damage));
+        if (!isHitted)
+            StartCoroutine(RoutineDamage(damage));
     }
 
-    IEnumerator RoutineDamage(int damage)
+    IEnumerator RoutineDamage(float damage)
     {
-        animatorMonster.SetBool("isAttacked", true);
+        Material originalMaterial = references.monsterSprite.material;
+        Color originalColor = originalMaterial.color;
+
+        isHitted = true;
+        references.rb.velocity = Vector2.zero;
+        references.monsterSprite.material = damageMaterial;
+        damageMaterial.color = damageColor;
         monsterHp -= damage;
         sliderPlayer.value = monsterHp;
         yield return new WaitForSeconds(0.5f);
-        animatorMonster.SetBool("isAttacked", false);
 
-    }
-
-    private void IsDead()
-    {
-        if (monsterHp <= 0)
-        {
-            GameManager.Instance.GameOver();
-        }
+        isHitted = false;
+        originalMaterial.color = originalColor;
+        references.monsterSprite.material = originalMaterial;
     }
 
     #endregion
