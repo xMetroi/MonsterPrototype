@@ -23,6 +23,7 @@ public class Attack : ScriptableObject
     [Header("Attack Properties")]
     public float attackDamage;
     public float attackCooldown;
+    public float attackKnockback;
 
     //SOLO SALDRA EN EL INSPECTOR SI EL ATAQUE ES DE TIPO MELEE
     #region Melee Variables
@@ -84,11 +85,13 @@ public class Attack : ScriptableObject
                 case AttackType.Melee:
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("meleeRange"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("meleePrefab"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("attackKnockback"));
                     break;
 
                 case AttackType.Throwable:
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("throwableSpeed"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("throwablePrefab"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("attackKnockback"));
                     break;
 
                 case AttackType.Transformation:

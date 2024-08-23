@@ -18,6 +18,7 @@ MonoBehaviour:
   attackType: 1
   attackDamage: 3
   attackCooldown: 2
+  attackKnockback: 3
   meleeRange: 0
   meleePrefab: {fileID: 0}
   throwableSpeed: 10

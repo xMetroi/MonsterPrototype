@@ -7,13 +7,28 @@ public class PlayerVisuals : MonoBehaviour
     [Header("Defense Bubble Properties")]
     [SerializeField] private GameObject defenseBubbleGO;
 
+    [Header("Combat Visuals")]
+    [SerializeField] private Color damageColor;
+    private Color originalColor;
+
     [SerializeField] private PlayerReferences references;
 
     private void Start()
     {
+        //Initialize
+        originalColor = references.monsterSprite.color;
+
         //Events subscriptions
+
+        //Defense
         references.playerCombat.StartDefense += DefenseStarted;
         references.playerCombat.StopDefense += DefenseStopped;
+        references.playerCombat.DefenseBroke += OnDefenseBroken;
+        references.playerCombat.HitDefensed += OnHitDefensed;
+
+        //Hit
+        references.playerCombat.StartHitted += OnPlayerStartHitted;
+        references.playerCombat.StopHitted += OnPlayerStopHitted;
 
         //Set the sprite of the actual monster
         references.monsterSprite.sprite = references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>().sprite;
@@ -22,16 +37,40 @@ public class PlayerVisuals : MonoBehaviour
     private void OnDisable()
     {
         //Events desubscription
+
+        //Defense
         references.playerCombat.StartDefense -= DefenseStarted;
         references.playerCombat.StopDefense -= DefenseStopped;
-    }
+        references.playerCombat.DefenseBroke -= OnDefenseBroken;
+        references.playerCombat.HitDefensed -= OnHitDefensed;
 
-    void Update()
-    {
-        
+        //Hit
+        references.playerCombat.StartHitted -= OnPlayerStartHitted;
+        references.playerCombat.StopHitted -= OnPlayerStopHitted;
     }
 
     #region Combat
+
+    #region Hitted
+
+    /// <summary>
+    /// Triggers when the player is hitted
+    /// </summary>
+    /// <param name="damage"></param>
+    private void OnPlayerStartHitted(float damage)
+    {
+        references.monsterSprite.color = damageColor;
+    }
+
+    /// <summary>
+    /// Triggers when the hit time ends
+    /// </summary>
+    private void OnPlayerStopHitted()
+    {
+        references.monsterSprite.color = originalColor;
+    }
+
+    #endregion
 
     #region Defense
 
@@ -53,6 +92,22 @@ public class PlayerVisuals : MonoBehaviour
     private void DefenseStopped(float bubbleHP)
     {
         defenseBubbleGO.SetActive(false);
+    }
+
+    /// <summary>
+    /// Triggers when defenseHP reach zero or less
+    /// </summary>
+    private void OnDefenseBroken()
+    {
+        defenseBubbleGO.SetActive(false);
+    }
+
+    /// <summary>
+    /// Triggers when bubble defends a hit
+    /// </summary>
+    private void OnHitDefensed(float bubbleHP)
+    {
+        defenseBubbleGO.GetComponent<Animator>().SetInteger("DefenseBubbleHP", (int)bubbleHP);
     }
 
     #endregion

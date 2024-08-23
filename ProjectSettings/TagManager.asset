@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Monster
+  - Forest
+  - Snow
+  - Water
+  - House
   layers:
   - Default
   - TransparentFX
@@ -12,10 +16,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Monster1
+  - PushBlocker1
+  - Monster2
+  - PushBlocker2
   - 
   - 
   - 
