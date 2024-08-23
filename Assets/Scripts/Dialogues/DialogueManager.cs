@@ -11,22 +11,24 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
     public Animator animator;
-    
+
     // Start is called before the first frame update
     void Start()
     {
+        animator.enabled = false;
         sentences = new Queue<string>();
     }
 
-    public void StartDialogue (Dialogue dialogue)
+    public void StartDialogue(Dialogue dialogue)
     {
+        animator.enabled = true;
         animator.SetBool("IsOpen", true);
 
         nameText.text = dialogue.name;
 
         sentences.Clear();
 
-        foreach ( string sentence in dialogue.sentences)
+        foreach (string sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
         }
@@ -46,7 +48,7 @@ public class DialogueManager : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(TypeSentense(sentence));
     }
-    IEnumerator TypeSentense ( string setence)
+    IEnumerator TypeSentense(string setence)
     {
         dialogueText.text = "";
         foreach (char letter in setence.ToCharArray())
@@ -55,11 +57,11 @@ public class DialogueManager : MonoBehaviour
             yield return null;
         }
     }
-   
-   void EndDialogue()
-   {
-        Debug.Log("End of conversation");
+
+    void EndDialogue()
+    {
         animator.SetBool("IsOpen", false);
-        
-   }
+        FindObjectOfType<TrainerMovement>().SetCanMove(true);
+        GameManager.Instance.SetIsBattle(true);
+    }
 }

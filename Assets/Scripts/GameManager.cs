@@ -8,9 +8,14 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
 
+    public GameObject panelStartBattle;
+
     public GameObject panelGameOver;
 
+    private bool isBattle = false;
+
     public bool isWinBattle = false; 
+
 
     private void Awake()
     {
@@ -30,6 +35,11 @@ public class GameManager : MonoBehaviour
         if (panelGameOver == null)
         {
             panelGameOver = FindInactiveGameObjectByName("PanelGameOver");
+        }
+
+        if (isBattle)
+        {
+            panelStartBattle.SetActive(true);
         }
     }
 
@@ -52,4 +62,13 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    public void SetIsBattle(bool isBattle)
+    {
+        this.isBattle = isBattle;
+    }
+
+    public bool IsBattle()
+    {
+        return isBattle;
+    }
 }
