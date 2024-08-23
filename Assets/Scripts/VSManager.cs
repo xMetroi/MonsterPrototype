@@ -46,4 +46,9 @@ public class VSManager : MonoBehaviour
         yield return new WaitForSeconds(10f);
         panelStartBattle.SetActive(false);
     }
+
+    public void DestroyPanel() 
+    {
+        Destroy(gameObject);
+    }
 }

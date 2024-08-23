@@ -15,6 +15,8 @@ public class TrainerMovement : MonoBehaviour
 
     private bool canMove = true;
 
+    private SpriteRenderer spriteRenderer;
+
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class TrainerMovement : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
+        spriteRenderer =  GetComponent<SpriteRenderer>();
 
         FindObjectOfType<VSManager>().SetImagePlayer(gameObject.GetComponent<SpriteRenderer>());
     }
@@ -61,7 +64,9 @@ public class TrainerMovement : MonoBehaviour
         {
             playerRb.MovePosition(playerRb.position + movInput * speed * Time.fixedDeltaTime);
 
-            transform.rotation = Quaternion.Euler(0, movInput.x > 0 ? 0 : movInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
+            // transform.rotation = Quaternion.Euler(0, movInput.x > 0 ? 0 : movInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
+
+            spriteRenderer.flipX = movInput.x < 0;
         }
     }
 

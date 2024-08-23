@@ -29,7 +29,8 @@ public class AIReferences : MonoBehaviour
 
     private void Awake()
     {
-        playerReferences = GameObject.Find("Player").GetComponent<PlayerReferences>();
+        //playerReferences = GameObject.Find("Player").GetComponent<PlayerReferences>();
+        playerReferences = FindObjectOfType<PlayerReferences>();
 
 
         agent = GetComponentInChildren<NavMeshAgent>();

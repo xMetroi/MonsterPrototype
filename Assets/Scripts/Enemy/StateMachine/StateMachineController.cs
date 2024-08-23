@@ -98,9 +98,9 @@ public class StateMachineController : MonoBehaviour
             {
                 if (references.state == States.Wandering)
                 {
-                    Debug.Log("Aproach");
+                    // Debug.Log("Aproach");
                     float aproachTime = UnityEngine.Random.Range(aproachMinMaxTime.x, aproachMinMaxTime.y);
-                    Debug.Log(aproachTime);
+                    // Debug.Log(aproachTime);
                     references.SetState(States.Approach);
                     StartAproach(aproachTime);
                 }
@@ -118,7 +118,7 @@ public class StateMachineController : MonoBehaviour
                         {
                             if (references.brain.GetDistanceWithPlayer() <= availableAttack.meleeRange) //if the distance with the player is in attack reach
                             {
-                                Debug.Log("Melee Attack");
+                                // Debug.Log("Melee Attack");
                                 AttackStarted?.Invoke(availableAttack);
                                 StartAttack(attackCooldown, Attack.AttackType.Melee);
                             }

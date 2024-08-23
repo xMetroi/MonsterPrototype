@@ -12,9 +12,19 @@ public class GameManager : MonoBehaviour
 
     public GameObject panelGameOver;
 
-    private bool isBattle = false;
+    public bool isBattle = false;
 
     public bool isWinBattle = false; 
+
+    public Transform playerLocation;
+    public Transform enemyLocation;
+    public GameObject playerMonster;
+    public GameObject enemyMonster;
+
+    bool areSpawned = false;
+
+    [SerializeField] GameObject cameraFight;
+    [SerializeField] GameObject cameraWorld;
 
 
     private void Awake()
@@ -37,9 +47,19 @@ public class GameManager : MonoBehaviour
             panelGameOver = FindInactiveGameObjectByName("PanelGameOver");
         }
 
-        if (isBattle)
+        if (isBattle && !areSpawned)
         {
             panelStartBattle.SetActive(true);
+
+            FindObjectOfType<TrainerMovement>().SetCanMove(false);
+            Instantiate(playerMonster, playerLocation.position, Quaternion.identity);
+            Instantiate(enemyMonster, enemyLocation.position, Quaternion.identity);
+            areSpawned = true;
+
+            cameraWorld.SetActive(false);
+            cameraFight.SetActive(true);
+
+           
         }
     }
 
@@ -47,6 +67,11 @@ public class GameManager : MonoBehaviour
     {
         panelGameOver.SetActive(true);
         Time.timeScale = 0f;
+        isBattle = false;
+        areSpawned = false;
+
+        cameraWorld.SetActive(true);
+        cameraFight.SetActive(false);
     }
 
     GameObject FindInactiveGameObjectByName(string name)

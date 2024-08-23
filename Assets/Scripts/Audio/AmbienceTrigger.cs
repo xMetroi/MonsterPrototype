@@ -35,7 +35,7 @@ public class AmbienceTrigger : MonoBehaviour
          }  
           else if (other.tag == "Player" && ambTag == "Water")
          {
-            PlayClip(3);
+            StopClip();
             Debug.Log("Se supone que " + ambTag);
          }  
     }
@@ -48,14 +48,14 @@ public class AmbienceTrigger : MonoBehaviour
         }    
     }
 
-    void PlayClip (int index)
+    public void PlayClip (int index)
     {
         AudioClip selectedAmb = ambClips[index];
         ambSource.clip = selectedAmb;
         ambSource.Play();
     }
     
-    void StopClip()
+    public void StopClip()
     {
         ambSource.Stop(); 
     }
