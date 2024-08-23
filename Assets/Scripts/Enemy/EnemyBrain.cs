@@ -1,40 +1,52 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBrain : MonoBehaviour
+public class EnemyBrain : MonoBehaviour, IDamageable
 {
     [Header("Movement")]
     [SerializeField] private float actualSpeed;
     [Tooltip("The distance limit to still following the navmesh agent")]
     [SerializeField] private float stopDistance;
     private bool goToNextPoint = true;
+    [SerializeField] private Vector2 forceToApply;
+    [SerializeField] private float forceDamping = 1.2f;
+    private Vector2 velocity;
 
     [Header("Combat")]
     [SerializeField] private Monster actualMonster;
     [SerializeField] private float meleeRange;
+    [SerializeField] private float hittedCooldown;
+    private bool isHitted = false;
 
     [Header("Combat Stats")]
     [SerializeField] private float monsterHp;
+
+    [Header("Combat Visuals")]
+    [SerializeField] private Color damageColor;
+    private Color originalColor;
 
     [Header("Defense")]
     [SerializeField] private float initialDefenseBubbleHP;
     [SerializeField] private float defenseBubbleHP;
     [SerializeField] private float defenseBubbleBrokenCooldown;
     [SerializeField] private bool isDefended;
+    private bool defenseBroken;
+    private Coroutine BubbleBreakRoutine;
+
+    [Header("Defense Visuals")]
+    [SerializeField] private GameObject defenseBubbleGO;
 
     [SerializeField] private AIReferences references;
 
-    private void Start()
-    {
-        references.stateMachineController.AttackStarted += OnAttackStarted;
-    }
+    #region Events
 
-    private void OnDestroy()
-    {
-        references.stateMachineController.AttackStarted -= OnAttackStarted;
-    }
+    public event Action DefenseBroke;
+    public event Action DefenseRegenerated;
+
+    #endregion
 
     #region Getter / Setter
 
@@ -85,13 +97,27 @@ public class EnemyBrain : MonoBehaviour
         return Vector3.Distance(references.MonsterTransform.position, references.playerReferences.playerTransform.position);
     }
 
+    public bool CanMove()
+    {
+        if (isHitted)
+            return false;
+
+        if (isDefended)
+            return false;
+
+        return true;
+    }
+
     /// <summary>
     /// Check if the AI can defense
     /// </summary>
     /// <returns></returns>
     public bool CanDefense()
     {
-        if (defenseBubbleHP <= 0)
+        if (defenseBroken)
+            return false;
+
+        if (isHitted)
             return false;
 
         return true;
@@ -106,15 +132,33 @@ public class EnemyBrain : MonoBehaviour
         if (references.state == States.Defensing)
             return false;
 
+        if (isHitted)
+            return false;
+
         return true;
     }
 
     #endregion
 
+    private void Start()
+    {
+        originalColor = references.monsterSprite.color;
+        references.stateMachineController.AttackStarted += OnAttackStarted;
+    }
+
+    private void OnDestroy()
+    {
+        references.stateMachineController.AttackStarted -= OnAttackStarted;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        AgentMovement();
+        if (CanMove())
+        {
+            AgentMovement();
+        }
+
         Defense();
     }
 
@@ -147,28 +191,48 @@ public class EnemyBrain : MonoBehaviour
 
     private void Movement()
     {
+        Vector2 direction = Vector2.zero;
+        
         if (references.state == States.Wandering)
         {
-            //Follow the NavMesh Agent
-            Vector2 velocity = new Vector2(references.agent.transform.position.x, references.agent.transform.position.y) - references.rb.position;
-            references.rb.velocity = velocity.normalized * actualSpeed;
+            if (Vector3.Distance(references.MonsterTransform.position, references.agent.transform.position) >= 1)
+                //Follow the NavMesh Agent
+                direction = new Vector2(references.agent.transform.position.x, references.agent.transform.position.y) - references.rb.position;
         }
         else if (references.state == States.Approach)
         {
             //Go directly to the player
-            Vector2 velocity = (references.playerReferences.playerTransform.position - references.MonsterTransform.position).normalized;
-            references.rb.velocity = velocity * actualSpeed;
+            direction = (references.playerReferences.playerTransform.position - references.MonsterTransform.position).normalized;
         }
         else if (references.state == States.RangedAttack)
         {
             //Follow the NavMesh Agent
-            Vector2 velocity = new Vector2(references.agent.transform.position.x, references.agent.transform.position.y) - references.rb.position;
-            references.rb.velocity = velocity.normalized * actualSpeed;
+            direction = new Vector2(references.agent.transform.position.x, references.agent.transform.position.y) - references.rb.position;
         }
         else
         {
-            references.rb.velocity = Vector2.zero;
+            direction = Vector2.zero;
         }
+
+        direction.Normalize();
+
+        velocity = direction * actualSpeed;
+
+        velocity += forceToApply;
+        forceToApply /= forceDamping;
+
+        if (Mathf.Abs(forceToApply.x) <= 0.01f && Mathf.Abs(forceToApply.y) <= 0.01f)
+        {
+            forceToApply = Vector2.zero;
+        }
+
+        references.rb.velocity = velocity;
+
+    }
+
+    public void ApplyForce(Vector2 force)
+    {
+        forceToApply = force;
     }
 
     /// <summary>
@@ -180,7 +244,7 @@ public class EnemyBrain : MonoBehaviour
     /// <returns></returns>
     private bool RandomPoint(Vector3 center, float range, out Vector2 result)
     {
-        Vector2 randomPoint = center + Random.insideUnitSphere * range;
+        Vector2 randomPoint = center + UnityEngine.Random.insideUnitSphere * range;
         NavMeshHit hit;
 
         if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
@@ -224,7 +288,7 @@ public class EnemyBrain : MonoBehaviour
     /// <param name="attack"></param>
     private void SpawnMelee(Attack attack)
     {
-        Vector2 direction = references.playerReferences.playerPredictThrowableTransform.position - references.MonsterTransform.position;
+        Vector2 direction = references.playerReferences.playerTransform.position - references.MonsterTransform.position;
         direction.Normalize();
         float angleInRadians = Mathf.Atan2(direction.y, direction.x); // Ángulo en radianes
         float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
@@ -232,7 +296,7 @@ public class EnemyBrain : MonoBehaviour
 
         GameObject go = Instantiate(attack.meleePrefab, references.playerReferences.playerTransform.position, rotation);
         IDamageable damageable = references.playerReferences.GetComponent<IDamageable>();
-        damageable.Damage(attack.attackDamage);
+        damageable.Damage(attack.attackDamage, direction * attack.attackKnockback);
     }
 
     /// <summary>
@@ -273,7 +337,40 @@ public class EnemyBrain : MonoBehaviour
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
-        go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.attackDamage, attack.throwableSpeed, 5f, references.monsterCollider);
+        go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack, 5f, references.monsterCollider);
+    }
+
+    #endregion
+
+    #region Damage
+
+    public void Damage(float damage, Vector2 kb)
+    {
+        if (isDefended)
+        {
+            defenseBubbleHP--;
+        }
+        else
+        {
+            if (!isHitted)
+            {
+                StartCoroutine(RoutineDamage(damage, kb));
+            }
+        }
+    }
+
+    private IEnumerator RoutineDamage(float damage, Vector2 kb)
+    {
+        isHitted = true;
+
+        references.monsterSprite.color = damageColor;
+        monsterHp -= damage;
+        ApplyForce(kb);
+
+        yield return new WaitForSeconds(hittedCooldown);
+
+        references.monsterSprite.color = originalColor;
+        isHitted = false;
     }
 
     #endregion
@@ -281,7 +378,37 @@ public class EnemyBrain : MonoBehaviour
     #region Defense
     private void Defense()
     {
+        defenseBroken = defenseBubbleHP <= 0;
+
         isDefended = references.state == States.Defensing;
+
+        DefenseVisuals();
+
+        if (defenseBroken)
+        {
+            if (BubbleBreakRoutine != null)
+            {
+                StopCoroutine(BubbleBreakRoutine);
+                return;
+            }
+
+            BubbleBreakRoutine = StartCoroutine(BubbleBreakCoroutine());
+        }
     }
+
+    private void DefenseVisuals()
+    {
+        defenseBubbleGO.SetActive(isDefended);
+    }
+
+    private IEnumerator BubbleBreakCoroutine()
+    {
+        DefenseBroke?.Invoke();
+        yield return new WaitForSeconds(defenseBubbleBrokenCooldown);
+        DefenseRegenerated?.Invoke();
+        defenseBubbleHP = initialDefenseBubbleHP;
+        BubbleBreakRoutine = null;
+    }
+
     #endregion
 }

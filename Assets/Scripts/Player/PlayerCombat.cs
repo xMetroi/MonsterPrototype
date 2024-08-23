@@ -14,38 +14,65 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     private bool canUseBasicAttack1 = true;
     private bool canUseBasicAttack2 = true;
     private bool canUseSpecialAttack = true;
-
+    [Space]
+    [SerializeField] private float hittedCooldown;
     private bool isHitted = false;
-
-    [Header("Combat Visuals")]
-    [SerializeField] private Material damageMaterial;
-    [SerializeField] private Color damageColor;
 
     [Header("Defense Properties")]
     [SerializeField] private float initialDefenseBubbleHP;
     [SerializeField] private float defenseBubbleHP;
     [SerializeField] private float defenseBubbleBrokenCooldown;
-    private bool canDefense = true;
     public bool isDefensed;
     private bool defenseBroken;
+    private Coroutine BubbleBreakRoutine;
 
     [SerializeField] private Transform arrowTransform;
     [SerializeField] private PlayerReferences references;
-
-    public Slider sliderPlayer;
 
     private Animator animatorMonster;
 
     #region Events
 
+    public event Action<float> StartHitted;
+    public event Action StopHitted;
+
     public event Action<float> StartDefense;
     public event Action<float> StopDefense;
+    public event Action<float> HitDefensed;
+    public event Action DefenseBroke;
+    public event Action DefenseRegenerated;
 
     #endregion
 
     #region Getter / Setters
 
     public bool GetIsHitted() { return isHitted; }
+
+    #endregion
+
+    #region Utilities / Checkers
+
+    public bool CanAttack()
+    {
+        if (isDefensed)
+            return false;
+
+        if (isHitted)
+            return false;
+
+        return true;
+    }
+
+    public bool CanDefend()
+    {
+        if (defenseBroken)
+            return false;
+
+        if (isHitted)
+            return false;
+
+        return true;
+    }
 
     #endregion
 
@@ -58,11 +85,14 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     {
         animatorMonster = GetComponent<Animator>();
 
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         if (references.currentMonster != null)
         {
             monsterHp = references.currentMonster.monsterHealth;
-            sliderPlayer.maxValue = monsterHp;
-            sliderPlayer.value = monsterHp;
             basickAttack1 = references.currentMonster.basickAttack1;
             basickAttack2 = references.currentMonster.basickAttack2;
             specialAttack = references.currentMonster.specialAttack;
@@ -73,7 +103,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     void Update()
     {
         Combat();
-        DefenseBubble();
+        Defense();
     }
 
     #region Combat
@@ -189,18 +219,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
-        //go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack.throwableSpeed, 5f, GetComponent<Collider2D>());
-        StartCoroutine(TrackProjectile(go, attack));
-    }
-
-
-    private IEnumerator TrackProjectile(GameObject projectile, Attack attack)
-    {
-        while (projectile != null && projectile.transform != null)
-        {
-            DistanceAttack(projectile, attack);
-            yield return new WaitForSeconds(0.001f);
-        }
+        go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack, 5f, GetComponent<Collider2D>());
     }
 
     public void SpawnMelee(Attack attack)
@@ -225,7 +244,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
         GameObject go = Instantiate(attack.meleePrefab, direction, rotation);
 
-        MeleeAttack(go.transform.position, attack);
+        MeleeAttack(go.transform.position, lastMovementInput * attack.attackKnockback, attack);
     }
 
     public IEnumerator StartTransformAttack(Attack attack)
@@ -252,19 +271,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         );
     }
 
-    public bool CanAttack()
-    {
-        if (isDefensed)
-            return false;
-
-        if (isHitted)
-            return false;
-
-        return true;
-    }
-
-
-    public void MeleeAttack(Vector2 position, Attack attack)
+    public void MeleeAttack(Vector2 position, Vector2 kb, Attack attack)
     {
         if (!CanAttack()) return;
 
@@ -274,24 +281,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         {
             if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
             {
-                //GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(1);
-            }
-        }
-    }
-
-    public void DistanceAttack(GameObject projectile, Attack attack)
-    {
-        if (!CanAttack()) return;
-
-        Collider2D[] objects = Physics2D.OverlapCircleAll(projectile.transform.position, attack.meleeRange);
-
-        foreach (Collider2D collider in objects)
-        {
-            if (collider.CompareTag("Monster") && collider != GetComponent<Collider2D>())
-            {
-                Debug.Log("AtaqueADistancia");
-                //GameObject.FindAnyObjectByType<AIBrain>().receiveDamage(2);
-                Destroy(projectile); // Destruir el proyectil
+                IDamageable damageable = collider.GetComponentInParent<IDamageable>();
+                damageable.Damage(attack.attackDamage, kb);
             }
         }
     }
@@ -299,11 +290,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     #endregion
 
     #region Defense
-    private void DefenseBubble()
+    private void Defense()
     {
         if (references.playerInputs.Combat.Defense.WasPressedThisFrame())
         {
-            if (canDefense)
+            if (CanDefend())
             {
                 isDefensed = true;
                 StartDefense?.Invoke(defenseBubbleHP);
@@ -318,50 +309,63 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
         if (defenseBubbleHP <= 0)
         {
-            StartCoroutine(BubbleCooldown());
-        }
+            if (BubbleBreakRoutine != null)
+            {
+                StopCoroutine(BubbleBreakCoroutine());
+                return;
+            }
 
-        if (defenseBroken)
-            canDefense = false;
+            BubbleBreakRoutine = StartCoroutine(BubbleBreakCoroutine());
+        }
     }
 
-    private IEnumerator BubbleCooldown()
+    private IEnumerator BubbleBreakCoroutine()
     {
-        canDefense = false;
+        DefenseBroke?.Invoke();
         isDefensed = false;
         defenseBroken = true;
         yield return new WaitForSeconds(defenseBubbleBrokenCooldown);
+        DefenseRegenerated?.Invoke();   
         defenseBubbleHP = initialDefenseBubbleHP;
         defenseBroken = false;
-        canDefense = true;
+
+        BubbleBreakRoutine = null;
     }
 
     #endregion
 
     #region Damage
 
-    public void Damage(float damage)
+    public void Damage(float damage, Vector2 kb)
     {
-        if (!isHitted)
-            StartCoroutine(RoutineDamage(damage));
+        if (isDefensed)
+        {
+            defenseBubbleHP--;
+            HitDefensed?.Invoke(defenseBubbleHP);
+        }
+        else
+        {
+            if (!isHitted)
+            {
+                StartHitted?.Invoke(damage);
+                StartCoroutine(RoutineDamage(damage, kb));
+            }
+        }               
     }
 
-    IEnumerator RoutineDamage(float damage)
-    {
-        Material originalMaterial = references.monsterSprite.material;
-        Color originalColor = originalMaterial.color;
-
+    IEnumerator RoutineDamage(float damage, Vector2 kb)
+    {        
         isHitted = true;
-        references.rb.velocity = Vector2.zero;
-        references.monsterSprite.material = damageMaterial;
-        damageMaterial.color = damageColor;
-        monsterHp -= damage;
-        sliderPlayer.value = monsterHp;
-        yield return new WaitForSeconds(0.5f);
 
+        references.rb.velocity = Vector2.zero;
+        references.playerMovement.ApplyForce(kb);
+
+        monsterHp -= damage;
+
+        yield return new WaitForSeconds(hittedCooldown);
+
+        StopHitted?.Invoke();
         isHitted = false;
-        originalMaterial.color = originalColor;
-        references.monsterSprite.material = originalMaterial;
     }
 
     #endregion

@@ -18,11 +18,13 @@ MonoBehaviour:
   attackType: 1
   attackDamage: 8
   attackCooldown: 2
-  attackRange: 0
+  attackKnockback: 3
+  meleeRange: 0
+  meleePrefab: {fileID: 0}
   throwableSpeed: 10
   throwablePrefab: {fileID: 1221909155011939934, guid: 59606be0b9d70a7469564336d1b5259e, type: 3}
   transformationDamageMultiplier: 0
   transformationResistanceMultiplier: 0
   transformationSpeedMultiplier: 0
   transformationDuration: 0
-  transformationSprite: {fileID: 0}
+  prefabTransformation: {fileID: 0}
