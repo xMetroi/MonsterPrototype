@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ProjectileManager : MonoBehaviour
 {
+    [SerializeField] private Attack attack;
     [SerializeField] private Vector2 direction;
-    [SerializeField] private float damage;
     [SerializeField] float speed;
     [SerializeField] float liveTime;
     [SerializeField] private Transform spriteTransform;
@@ -20,7 +20,7 @@ public class ProjectileManager : MonoBehaviour
                 IDamageable damageable = collision.GetComponent<IDamageable>();
                 if (damageable != null)
                 {
-                    damageable.Damage(damage);
+                    damageable.Damage(attack.attackDamage, direction * attack.attackKnockback);
                     Destroy(gameObject);
                 }
             }
@@ -34,12 +34,12 @@ public class ProjectileManager : MonoBehaviour
     /// <param name="rotation"></param>
     /// <param name="speed"></param>
     /// <param name="liveTime"></param>
-    public void Initialize(Vector2 direction, Quaternion rotation, float damage, float speed, float liveTime, Collider2D ignoreCollider)
+    public void Initialize(Vector2 direction, Quaternion rotation, Attack attack, float liveTime, Collider2D ignoreCollider)
     {
         this.direction = direction.normalized;
         this.spriteTransform.rotation = rotation;
-        this.damage = damage;
-        this.speed = speed;
+        this.attack = attack;
+        this.speed = attack.throwableSpeed;
         this.liveTime = liveTime;
         this.ignoreCollider = ignoreCollider;
 

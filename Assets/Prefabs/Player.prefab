@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 4939346786512639614}
   - component: {fileID: 4939346786512639615}
   - component: {fileID: 4939346786512639613}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -287,13 +287,13 @@ MonoBehaviour:
   basickAttack1: {fileID: 0}
   basickAttack2: {fileID: 0}
   specialAttack: {fileID: 0}
+  hittedCooldown: 0.5
   initialDefenseBubbleHP: 4
   defenseBubbleHP: 4
   defenseBubbleBrokenCooldown: 3
   isDefensed: 0
   arrowTransform: {fileID: 4939346786421335692}
   references: {fileID: 4939346786512639607}
-  sliderPlayer: {fileID: 0}
 --- !u!114 &4939346786512639608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defenseBubbleGO: {fileID: 4939346787234466474}
+  damageColor: {r: 1, g: 0, b: 0, a: 0.8666667}
   references: {fileID: 4939346786512639607}
 --- !u!114 &4939346786512639610
 MonoBehaviour:

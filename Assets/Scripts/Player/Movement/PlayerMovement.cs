@@ -99,7 +99,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInputs()
     {
-        movementInput = references.playerInputs.Movement.Movement.ReadValue<Vector2>();
+        if (CanMove())
+            movementInput = references.playerInputs.Movement.Movement.ReadValue<Vector2>();
+        else
+            movementInput = Vector2.zero;
+
         movementDirection = movementInput.normalized * currentSpeed;
 
         if (movementInput != Vector2.zero)
@@ -122,14 +126,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Movement()
-    {        
-        if (!CanMove()) return;
-
+    {                
         if (references.playerAim.isAiming)
             currentSpeed = aimingSpeed;
         else
             currentSpeed = movementSpeed;
-
         
         transform.rotation = Quaternion.Euler(0, movementInput.x > 0 ? 0 : movementInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
 
@@ -140,8 +141,13 @@ public class PlayerMovement : MonoBehaviour
         {
             forceToApply = Vector2.zero;
         }
-
+       
         references.rb.velocity = movementDirection;
+    }
+
+    public void ApplyForce(Vector2 force)
+    {
+        forceToApply = force;
     }
 
     /// <summary>
