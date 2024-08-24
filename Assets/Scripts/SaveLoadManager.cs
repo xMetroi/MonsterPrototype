@@ -119,7 +119,7 @@ public class SaveLoadManager : MonoBehaviour
 
     public List<Monster> LoadAllMonstersFromAssets()
     {
-        try
+        /*try
         {
             // Encuentra todos los assets de tipo Monster en la carpeta "Assets/Monsters"
             string[] guids = AssetDatabase.FindAssets("t:Monster", new[] { "Assets/Monsters" });
@@ -142,6 +142,7 @@ public class SaveLoadManager : MonoBehaviour
         {
             Debug.LogError("Error al cargar todos los monstruos desde los assets: " + ex.Message);
             return new List<Monster>();
-        }
+        }*/
+        return null;
     }
 }

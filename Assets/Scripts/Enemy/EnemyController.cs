@@ -1,47 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
-    private BoxCollider2D boxColliderEnemy;
-    private SpriteRenderer enemyRenderer;
-    private Animator enemyAnimator;
+    EnemyBrain references;
+    Slider monsterSliderLife;
 
-    void Start()
+    private void Start()
     {
-        boxColliderEnemy = GetComponent<BoxCollider2D>();
-        enemyRenderer = GetComponent<SpriteRenderer>();
-        enemyAnimator = GetComponent<Animator>();
-
+        references = GetComponent<EnemyBrain>();
+        monsterSliderLife = GameObject.Find("SliderIAHP").GetComponent<Slider>();
+        monsterSliderLife.maxValue = references.GetHP();
+        monsterSliderLife.value = references.GetHP();
     }
 
-    public void AssignPlayerPropertiesCollider(BoxCollider2D boxColliderReference)
+    private void Update()
     {
-        if (boxColliderReference != null && boxColliderEnemy != null)
+        if (monsterSliderLife.value != references.GetHP())
         {
-            boxColliderEnemy.offset = boxColliderReference.offset;
-            boxColliderEnemy.size = boxColliderReference.size;
-            boxColliderEnemy.isTrigger = boxColliderEnemy.isTrigger;
-            boxColliderEnemy.usedByComposite = boxColliderReference.usedByComposite;
-            boxColliderEnemy.edgeRadius = boxColliderReference.edgeRadius;
-            boxColliderEnemy.autoTiling = boxColliderReference.autoTiling;
-            boxColliderEnemy.usedByEffector = boxColliderReference.usedByEffector;
-            boxColliderEnemy.sharedMaterial = boxColliderReference.sharedMaterial;
+            monsterSliderLife.value = references.GetHP();
         }
-    }
-
-    public void AssignPlayerRenderer(SpriteRenderer spriteRenderer)
-    {
-        enemyRenderer.sprite = spriteRenderer.sprite;
-    }
-
-    public void AssignPlayerAnimator(Animator animator)
-    {
-        enemyAnimator.enabled = true;
-
-        enemyAnimator.runtimeAnimatorController = animator.runtimeAnimatorController;
-
-        enemyAnimator.Rebind();
     }
 }

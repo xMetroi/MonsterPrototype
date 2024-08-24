@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameObject panelStartBattle;
+    public GameObject panelLifeMonsters;
 
     public Transform trainerTransform;
     public Transform battlePointTransform;
@@ -31,6 +32,11 @@ public class GameManager : MonoBehaviour
 
     bool areSpawned = false;
 
+    [Header("Slow Motion")]
+    public float slowMotionFactor = 0.05f;
+    public float slowMotionDuration = 0.08f;
+    private bool isSlowMotionActive = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -49,7 +55,7 @@ public class GameManager : MonoBehaviour
         if (isBattle && !areSpawned)
         {
             panelStartBattle.SetActive(true);
-
+            panelLifeMonsters.SetActive(true);
             FindObjectOfType<TrainerMovement>().SetCanMove(false);
             Instantiate(playerMonster, playerLocation.position, Quaternion.identity);
             Instantiate(enemyMonster, enemyLocation.position, Quaternion.identity);
@@ -62,8 +68,24 @@ public class GameManager : MonoBehaviour
             Camera.main.transform.position = new Vector3(trainerTransform.position.x, trainerTransform.position.y, -10);
     }
 
+    void ActivateSlowMotion()
+    {
+        Time.timeScale = slowMotionFactor;
+        Time.fixedDeltaTime = Time.fixedDeltaTime * slowMotionFactor;
+        isSlowMotionActive = true;
+    }
+
+    void RestoreNormalSpeed()
+    {
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = Time.fixedDeltaTime / slowMotionFactor;
+        isSlowMotionActive = false;
+        slowMotionDuration = 0.08f;
+    }
+
     public void PlayerWins()
     {
+        panelLifeMonsters.SetActive(false);
         panelGameOver.SetActive(true);
         winText.SetActive(true);
         gameFinished = true;
@@ -71,17 +93,26 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLoose()
     {
-        panelGameOver.SetActive(true);
+        panelLifeMonsters.SetActive(false);
         looseText.SetActive(true);
         gameFinished = true;
+        StartCoroutine(StartSlow());
     }
 
     public void GameOver()
     {
-        panelGameOver.SetActive(true);
+        panelLifeMonsters.SetActive(false);
         Time.timeScale = 0f;
         isBattle = false;
         areSpawned = false;
+        StartCoroutine(StartSlow());
+    }
+
+    IEnumerator StartSlow()
+    {
+        ActivateSlowMotion();
+        yield return new WaitForSeconds(slowMotionDuration);
+        panelGameOver.SetActive(true);
     }
 
     GameObject FindInactiveGameObjectByName(string name)
@@ -105,5 +136,10 @@ public class GameManager : MonoBehaviour
     public bool IsBattle()
     {
         return isBattle;
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

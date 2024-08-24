@@ -169,6 +169,20 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         }
 
         Defense();
+
+        if (references.rb.velocity != Vector2.zero)
+        {
+            references.monsterAnimator.SetFloat("speed", 1);
+        }
+        else
+        {
+            references.monsterAnimator.SetFloat("speed", 0);
+        }
+    }
+
+    public float GetHP()
+    {
+        return monsterHp;
     }
 
     private void FixedUpdate()
@@ -236,6 +250,12 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         }
 
         references.rb.velocity = velocity;
+
+        if (direction != Vector2.zero)
+        {
+            float rotationY = GameObject.FindObjectOfType<PlayerMovement>().transform.position.x > references.MonsterTransform.position.x ? 0 : 180f;
+            references.MonsterTransform.rotation = Quaternion.Euler(0, rotationY, 0);
+        }
 
     }
 

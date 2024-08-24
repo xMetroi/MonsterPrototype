@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterID: 1
   monsterName: Dino Chibi
-  monsterHealth: 10
+  monsterHealth: 20
   monsterSpeed: 4
   monsterAimSpeed: 2
   monsterDashForce: 10

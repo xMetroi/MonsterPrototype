@@ -71,9 +71,6 @@ public class PlayerMovement : MonoBehaviour
             dashForce = references.currentMonster.monsterDashForce;
             dashCooldown = references.currentMonster.monsterDashCooldown;
 
-            FindAnyObjectByType<PlayerController>().AssignPlayerPropertiesCollider(references.currentMonster.prefabMonster.GetComponent<BoxCollider2D>());
-            FindAnyObjectByType<PlayerController>().AssignPlayerRenderer(references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>());
-            FindAnyObjectByType<PlayerController>().AssignPlayerAnimator(references.currentMonster.prefabMonster.GetComponent<Animator>());
         }
 
         references.playerCombat.StartDefense += DefenseStarted;
