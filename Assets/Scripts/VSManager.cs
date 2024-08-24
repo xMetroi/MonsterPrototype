@@ -49,6 +49,7 @@ public class VSManager : MonoBehaviour
 
     public void DestroyPanel() 
     {
+        GameManager.Instance.battleStarted = true;
         Destroy(gameObject);
     }
 }

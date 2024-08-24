@@ -10,6 +10,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     [SerializeField] private float actualSpeed;
     [Tooltip("The distance limit to still following the navmesh agent")]
     [SerializeField] private float stopDistance;
+    [SerializeField] private Transform centerPoint;
     private bool goToNextPoint = true;
     [SerializeField] private Vector2 forceToApply;
     [SerializeField] private float forceDamping = 1.2f;
@@ -105,6 +106,9 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         if (isDefended)
             return false;
 
+        if (!GameManager.Instance.battleStarted)
+            return false;
+
         return true;
     }
 
@@ -135,6 +139,9 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         if (isHitted)
             return false;
 
+        if (!GameManager.Instance.battleStarted)
+            return false;
+
         return true;
     }
 
@@ -143,6 +150,8 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     private void Start()
     {
         originalColor = references.monsterSprite.color;
+        centerPoint = GameObject.Find("CenterPoint").transform;
+
         references.stateMachineController.AttackStarted += OnAttackStarted;
     }
 
@@ -176,7 +185,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
             if (goToNextPoint)
             {
                 goToNextPoint = false;
-                RandomPoint(new Vector3(0, 0, 0), 5, out Vector2 result);
+                RandomPoint(centerPoint.position, 5, out Vector2 result);
                 references.agent.SetDestination(result);
             }
 
@@ -355,6 +364,11 @@ public class EnemyBrain : MonoBehaviour, IDamageable
             if (!isHitted)
             {
                 StartCoroutine(RoutineDamage(damage, kb));
+
+                if (monsterHp <= 0 && !GameManager.Instance.gameFinished)
+                {
+                    GameManager.Instance.PlayerWins();
+                }
             }
         }
     }
