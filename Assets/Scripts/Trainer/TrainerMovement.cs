@@ -13,6 +13,11 @@ public class TrainerMovement : MonoBehaviour
 
     private Vector2 movInput;
 
+    private bool canMove = true;
+
+    private SpriteRenderer spriteRenderer;
+
+
     private void Awake()
     {
         controls = new();
@@ -32,25 +37,46 @@ public class TrainerMovement : MonoBehaviour
     private void Start()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        //playerAnimator = GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
+        spriteRenderer =  GetComponent<SpriteRenderer>();
+
+        FindObjectOfType<VSManager>().SetImagePlayer(gameObject.GetComponent<SpriteRenderer>());
     }
 
     void Update()
     {
-        movInput = controls.Movement.Movement.ReadValue<Vector2>().normalized;
+        if (CanMove())
+        {
+            movInput = controls.Movement.Movement.ReadValue<Vector2>().normalized;
+        }
 
-        /*playerAnimator.SetFloat("movX", movInput.x);
-        playerAnimator.SetFloat("movY", movInput.y);
-        playerAnimator.SetFloat("speed", movInput.sqrMagnitude);*/
+        else 
+        {
+            movInput = Vector2.zero;
+        }
+
+        playerAnimator.SetFloat("Speed", movInput.sqrMagnitude);
     }
 
     private void FixedUpdate()
     {
-        if (movInput != Vector2.zero)
+        if (movInput != Vector2.zero && CanMove())
         {
             playerRb.MovePosition(playerRb.position + movInput * speed * Time.fixedDeltaTime);
 
-            transform.rotation = Quaternion.Euler(0, movInput.x > 0 ? 0 : movInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
+            // transform.rotation = Quaternion.Euler(0, movInput.x > 0 ? 0 : movInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
+
+            spriteRenderer.flipX = movInput.x < 0;
         }
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        this.canMove = canMove;
+    }
+
+    public bool CanMove()
+    {
+        return canMove;
     }
 }

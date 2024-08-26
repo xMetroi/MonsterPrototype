@@ -1,108 +1,135 @@
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
 public class PlayerData
 {
     public List<int> monstersIds = new List<int>();
-    public int coins;
 }
 
 public class SaveLoadManager : MonoBehaviour
 {
-    /*public static SaveLoadManager Instance { get; private set; }
+    public static SaveLoadManager Instance { get; private set; }
     private string filePath;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        try
         {
-            Destroy(gameObject);
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);  // Persistir entre escenas
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);  // Persistir entre escenas
+            Debug.LogError("Error en Awake: " + ex.Message);
         }
     }
 
     private void Start()
     {
-        filePath = Application.persistentDataPath + "/playerData.json";
-        LoadPlayerData();
+        try
+        {
+            filePath = Application.persistentDataPath + "/playerData.json";
+            LoadPlayerData();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error en Start: " + ex.Message);
+        }
     }
 
     private void OnDestroy()
     {
-        TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
-        SavePlayerData(trainer.GetAllMonstersById(), trainer.GetCoins());
+        try
+        {
+            TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
+            SavePlayerData(trainer.GetAllMonstersById());
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error al destruir el objeto: " + ex.Message);
+        }
     }
 
-    public void SavePlayerData(List<int> monstersIds, int coins)
+    public void SavePlayerData(List<int> monstersIds)
     {
-        PlayerData data = new PlayerData { monstersIds = monstersIds, coins = coins };
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(filePath, json);
+        try
+        {
+            PlayerData data = new PlayerData { monstersIds = monstersIds };
+            string json = JsonUtility.ToJson(data);
+            File.WriteAllText(filePath, json);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error al guardar los datos del jugador: " + ex.Message);
+        }
     }
 
     private PlayerData LoadPlayerData()
     {
-        if (File.Exists(filePath))
+        try
         {
-            string json = File.ReadAllText(filePath);
-            return JsonUtility.FromJson<PlayerData>(json);
+            if (File.Exists(filePath))
+            {
+                string json = File.ReadAllText(filePath);
+                return JsonUtility.FromJson<PlayerData>(json);
+            }
+            else
+            {
+                Debug.LogError("No se encontró el archivo de datos: " + filePath);
+                return null;
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            Debug.LogError("No se encontró el archivo de datos: " + filePath);
+            Debug.LogError("Error al cargar los datos del jugador: " + ex.Message);
             return null;
         }
     }
 
     public List<int> LoadPlayerMonster()
     {
-        PlayerData data = LoadPlayerData();
-        if (data != null)
+        try
         {
-            return data.monstersIds;
+            PlayerData data = LoadPlayerData();
+            if (data != null)
+            {
+                return data.monstersIds;
+            }
+            else
+            {
+                return null;
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            return new List<int> { 0 };
-        }
-    }
-
-    public int LoadPlayerCoins()
-    {
-        PlayerData data = LoadPlayerData();
-        if (data != null)
-        {
-            return data.coins;
-        }
-        else
-        {
-            return 0;
+            Debug.LogError("Error al cargar los IDs de los monstruos del jugador: " + ex.Message);
+            return null;
         }
     }
 
     public List<Monster> LoadAllMonstersFromAssets()
     {
-        // Encuentra todos los assets de tipo Monster en la carpeta "Assets/>Monsters"
-        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Monster", new[] { "Assets/Monsters" });
-        List<Monster> monsters = new List<Monster>();
-
-        foreach (string guid in guids)
+        try
         {
-            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
-            Monster monster = UnityEditor.AssetDatabase.LoadAssetAtPath<Monster>(path);
-            if (monster != null)
-            {
-                monsters.Add(monster);
-                Debug.Log("Aa: " + monster.name);
-            }
+            // Cargar todos los assets de tipo Monster desde la carpeta "Resources/Monsters"
+            Monster[] monsters = Resources.LoadAll<Monster>("Monsters");
+            return new List<Monster>(monsters);
         }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error al cargar todos los monstruos desde los assets: " + ex.Message);
+            return new List<Monster>();
+        }
+    }
 
-        return monsters;
-    }*/
 }

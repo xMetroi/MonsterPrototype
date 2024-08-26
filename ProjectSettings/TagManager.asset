@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Monster
+  - Forest
+  - Snow
+  - Water
+  - House
   layers:
   - Default
   - TransparentFX

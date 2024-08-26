@@ -60,6 +60,9 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         if (isHitted)
             return false;
 
+        if (!GameManager.Instance.battleStarted)
+            return false;
+
         return true;
     }
 
@@ -104,6 +107,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     {
         Combat();
         Defense();
+    }
+
+    public float GetHP()
+    {
+        return monsterHp;
     }
 
     #region Combat
@@ -249,7 +257,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     public IEnumerator StartTransformAttack(Attack attack)
     {
-        FindAnyObjectByType<PlayerController>().AssignPlayerPropertiesCollider(attack.prefabTransformation.GetComponent<BoxCollider2D>());
         references.monsterSprite.sprite = attack.prefabTransformation.GetComponent<SpriteRenderer>().sprite;
         references.monsterAnimator.runtimeAnimatorController = attack.prefabTransformation.GetComponent<Animator>().runtimeAnimatorController;
 
@@ -260,7 +267,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         );
 
         yield return new WaitForSeconds(attack.transformationDuration);
-        FindAnyObjectByType<PlayerController>().AssignPlayerPropertiesCollider(references.currentMonster.prefabMonster.GetComponent<BoxCollider2D>());
         references.monsterSprite.sprite = references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>().sprite;
         references.monsterAnimator.runtimeAnimatorController = references.currentMonster.prefabMonster.GetComponent<Animator>().runtimeAnimatorController;
         
@@ -349,6 +355,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
             {
                 StartHitted?.Invoke(damage);
                 StartCoroutine(RoutineDamage(damage, kb));
+
+                if (monsterHp <= 0 && !GameManager.Instance.gameFinished)
+                {
+                    GameManager.Instance.PlayerLoose();
+                }
             }
         }               
     }

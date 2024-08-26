@@ -10,4 +10,18 @@ public class LoadScene : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(num);
     }
+
+    IEnumerator SkipIntro()
+    {
+        yield return new WaitForSeconds(33);
+        LoadNewScene(2);
+    }
+
+    private void Start() 
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            StartCoroutine(SkipIntro());
+        }    
+    }
 }

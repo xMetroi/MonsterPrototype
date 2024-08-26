@@ -2,43 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private BoxCollider2D boxColliderPlayer;
-    private SpriteRenderer playerRenderer;
-    private Animator playerAnimator;
+    PlayerCombat references;
+    Slider monsterSliderLife;
 
-    void Start()
+    private void Start()
     {
-        boxColliderPlayer = GetComponent<BoxCollider2D>();
-        playerRenderer = GetComponent<SpriteRenderer>();
-        playerAnimator = GetComponent<Animator>();
-
+        references = GetComponent<PlayerCombat>();
+        monsterSliderLife = GameObject.Find("SliderPlayerHP").GetComponent<Slider>();
+        monsterSliderLife.maxValue = references.GetHP();
+        monsterSliderLife.value = references.GetHP();
     }
 
-    public void AssignPlayerPropertiesCollider(BoxCollider2D boxColliderReference)
+    private void Update()
     {
-        if (boxColliderReference != null && boxColliderPlayer != null)
+        if(monsterSliderLife.value != references.GetHP()) 
         {
-            boxColliderPlayer.offset = boxColliderReference.offset;
-            boxColliderPlayer.size = boxColliderReference.size;
-            boxColliderPlayer.isTrigger = boxColliderPlayer.isTrigger;
-            boxColliderPlayer.usedByComposite = boxColliderReference.usedByComposite;
-            boxColliderPlayer.edgeRadius = boxColliderReference.edgeRadius;
-            boxColliderPlayer.autoTiling = boxColliderReference.autoTiling;
-            boxColliderPlayer.usedByEffector = boxColliderReference.usedByEffector;
-            boxColliderPlayer.sharedMaterial = boxColliderReference.sharedMaterial;
+            monsterSliderLife.value = references.GetHP();
         }
-    }
-
-    public void AssignPlayerRenderer(SpriteRenderer spriteRenderer)
-    { 
-        playerRenderer.sprite = spriteRenderer.sprite;
-    }
-
-    public void AssignPlayerAnimator(Animator animator)
-    {
-        playerAnimator.runtimeAnimatorController = animator.runtimeAnimatorController;
     }
 }

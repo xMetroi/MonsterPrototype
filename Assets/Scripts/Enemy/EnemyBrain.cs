@@ -10,6 +10,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     [SerializeField] private float actualSpeed;
     [Tooltip("The distance limit to still following the navmesh agent")]
     [SerializeField] private float stopDistance;
+    [SerializeField] private Transform centerPoint;
     private bool goToNextPoint = true;
     [SerializeField] private Vector2 forceToApply;
     [SerializeField] private float forceDamping = 1.2f;
@@ -105,6 +106,9 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         if (isDefended)
             return false;
 
+        if (!GameManager.Instance.battleStarted)
+            return false;
+
         return true;
     }
 
@@ -135,6 +139,9 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         if (isHitted)
             return false;
 
+        if (!GameManager.Instance.battleStarted)
+            return false;
+
         return true;
     }
 
@@ -143,6 +150,8 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     private void Start()
     {
         originalColor = references.monsterSprite.color;
+        centerPoint = GameObject.Find("CenterPoint").transform;
+
         references.stateMachineController.AttackStarted += OnAttackStarted;
     }
 
@@ -160,6 +169,20 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         }
 
         Defense();
+
+        if (references.rb.velocity != Vector2.zero)
+        {
+            references.monsterAnimator.SetFloat("speed", 1);
+        }
+        else
+        {
+            references.monsterAnimator.SetFloat("speed", 0);
+        }
+    }
+
+    public float GetHP()
+    {
+        return monsterHp;
     }
 
     private void FixedUpdate()
@@ -176,7 +199,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
             if (goToNextPoint)
             {
                 goToNextPoint = false;
-                RandomPoint(new Vector3(0, 0, 0), 5, out Vector2 result);
+                RandomPoint(centerPoint.position, 5, out Vector2 result);
                 references.agent.SetDestination(result);
             }
 
@@ -227,6 +250,12 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         }
 
         references.rb.velocity = velocity;
+
+        if (direction != Vector2.zero)
+        {
+            float rotationY = GameObject.FindObjectOfType<PlayerMovement>().transform.position.x > references.MonsterTransform.position.x ? 0 : 180f;
+            references.MonsterTransform.rotation = Quaternion.Euler(0, rotationY, 0);
+        }
 
     }
 
@@ -355,6 +384,11 @@ public class EnemyBrain : MonoBehaviour, IDamageable
             if (!isHitted)
             {
                 StartCoroutine(RoutineDamage(damage, kb));
+
+                if (monsterHp <= 0 && !GameManager.Instance.gameFinished)
+                {
+                    GameManager.Instance.PlayerWins();
+                }
             }
         }
     }
