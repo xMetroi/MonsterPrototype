@@ -33,9 +33,18 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     #region Events
 
+    //Attack
+    public event Action<Attack> AttackStarted;
+
+    //Transformation
+    public event Action<Attack> TransformationStart;
+    public event Action<Attack> TransformationEnd;
+
+    //Hit
     public event Action<float> StartHitted;
     public event Action StopHitted;
 
+    //Defense
     public event Action<float> StartDefense;
     public event Action<float> StopDefense;
     public event Action<float> HitDefensed;
@@ -45,6 +54,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     #endregion
 
     #region Getter / Setters
+
+    public float GetHP()
+    {
+        return monsterHp;
+    }
 
     public bool GetIsHitted() { return isHitted; }
 
@@ -107,11 +121,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     {
         Combat();
         Defense();
-    }
-
-    public float GetHP()
-    {
-        return monsterHp;
     }
 
     #region Combat
@@ -228,6 +237,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         }
 
         go.GetComponent<ProjectileManager>().Initialize(direction, rotation, attack, 5f, GetComponent<Collider2D>());
+
+        AttackStarted?.Invoke(attack);
     }
 
     public void SpawnMelee(Attack attack)
@@ -253,12 +264,14 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         GameObject go = Instantiate(attack.meleePrefab, direction, rotation);
 
         MeleeAttack(go.transform.position, lastMovementInput * attack.attackKnockback, attack);
+
+        AttackStarted?.Invoke(attack);
     }
 
     public IEnumerator StartTransformAttack(Attack attack)
     {
-        references.monsterSprite.sprite = attack.prefabTransformation.GetComponent<SpriteRenderer>().sprite;
-        references.monsterAnimator.runtimeAnimatorController = attack.prefabTransformation.GetComponent<Animator>().runtimeAnimatorController;
+        references.monsterSprite.sprite = attack.spriteTransformation;
+        references.monsterAnimator.runtimeAnimatorController = attack.animatorTransformation;
 
         references.playerMovement.SetMovementSpeeds
         (
@@ -266,15 +279,19 @@ public class PlayerCombat : MonoBehaviour, IDamageable
             references.currentMonster.monsterAimSpeed * attack.transformationSpeedMultiplier
         );
 
+        TransformationStart?.Invoke(attack);
+
         yield return new WaitForSeconds(attack.transformationDuration);
-        references.monsterSprite.sprite = references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>().sprite;
-        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.prefabMonster.GetComponent<Animator>().runtimeAnimatorController;
+        references.monsterSprite.sprite = references.currentMonster.monsterSprite;
+        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator;
         
         references.playerMovement.SetMovementSpeeds
         (
             references.currentMonster.monsterSpeed,
             references.currentMonster.monsterAimSpeed
         );
+
+        TransformationEnd?.Invoke(attack);
     }
 
     public void MeleeAttack(Vector2 position, Vector2 kb, Attack attack)

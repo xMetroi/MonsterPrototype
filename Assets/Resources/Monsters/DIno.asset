@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
+  m_Name: DIno
+  m_EditorClassIdentifier: 
+  monsterID: 2
+  monsterName: 
+  monsterSprite: {fileID: 56907809, guid: 491b5d22485382d49b7be3858fb6b234, type: 3}
+  monsterAnimator: {fileID: 9100000, guid: 362c431ecfdd58947a50e800a8e47f8e, type: 2}
+  monsterHealth: 0
+  monsterSpeed: 0
+  monsterAimSpeed: 0
+  monsterDashForce: 0
+  monsterDashCooldown: 0
+  basickAttack1: {fileID: 0}
+  basickAttack2: {fileID: 0}
+  specialAttack: {fileID: 0}

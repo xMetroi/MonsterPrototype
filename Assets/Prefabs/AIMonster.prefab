@@ -556,6 +556,7 @@ GameObject:
   - component: {fileID: 5855622523483640305}
   - component: {fileID: 3817854324355063197}
   - component: {fileID: 7088813634276034176}
+  - component: {fileID: 5547346569149945138}
   m_Layer: 0
   m_Name: AIMonster
   m_TagString: Untagged
@@ -683,3 +684,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4163f96950970d444aeb9bc6893a7dae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5547346569149945138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9202629590522215790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bfb5235b8911854894299d36cba4aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  references: {fileID: 7478372213216200953}

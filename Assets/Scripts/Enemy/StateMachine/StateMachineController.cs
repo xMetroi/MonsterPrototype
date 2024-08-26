@@ -36,7 +36,12 @@ public class StateMachineController : MonoBehaviour
 
     #region Events
 
+    //Attack
     public event Action<Attack> AttackStarted;
+
+    //Defense
+    public event Action<float> DefenseStarted;
+    public event Action<float> DefenseFinished;
 
     #endregion
 
@@ -317,6 +322,8 @@ public class StateMachineController : MonoBehaviour
 
         defenseTimer = time;  // Reiniciar el tiempo transcurrido
 
+        DefenseStarted?.Invoke(references.brain.GetBubbleHP());
+
         // Contar el tiempo mientras se espera
         while (defenseTimer > 0)
         {
@@ -325,6 +332,7 @@ public class StateMachineController : MonoBehaviour
         }
 
         defense = true;
+        DefenseFinished?.Invoke(references.brain.GetBubbleHP());
     }
 
     private void StartAproach(float time)

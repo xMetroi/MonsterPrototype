@@ -45,12 +45,7 @@ public class SelectMonsterToWin : MonoBehaviour
         {
             if (i < monsters.Count && monsters[i] != null)
             {
-                SpriteRenderer spriteRenderer = monsters[i].prefabMonster.GetComponent<SpriteRenderer>();
-
-                if (spriteRenderer != null)
-                {
-                    monsterButtons[i].image.sprite = spriteRenderer.sprite;
-                }
+                monsterButtons[i].image.sprite = monsters[i].monsterSprite;
             }
             else
             {

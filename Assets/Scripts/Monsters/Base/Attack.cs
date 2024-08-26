@@ -19,6 +19,7 @@ public class Attack : ScriptableObject
     public string attackName;
     public string attackDescription;
     public AttackType attackType;
+    public AudioClip attackClip;
 
     [Header("Attack Properties")]
     public float attackDamage;
@@ -47,7 +48,8 @@ public class Attack : ScriptableObject
     public float transformationResistanceMultiplier;
     public float transformationSpeedMultiplier;
     public float transformationDuration;
-    public GameObject prefabTransformation;
+    public Sprite spriteTransformation;
+    public RuntimeAnimatorController animatorTransformation;
     #endregion
 
     /// <summary>
@@ -76,6 +78,7 @@ public class Attack : ScriptableObject
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackId"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackName"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDescription"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("attackClip"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDamage"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackCooldown"));
 
@@ -99,7 +102,8 @@ public class Attack : ScriptableObject
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationResistanceMultiplier"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationSpeedMultiplier"));
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("transformationDuration"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("prefabTransformation"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("spriteTransformation"));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("animatorTransformation"));
                     break;
             }
 
