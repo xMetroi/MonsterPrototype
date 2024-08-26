@@ -119,30 +119,17 @@ public class SaveLoadManager : MonoBehaviour
 
     public List<Monster> LoadAllMonstersFromAssets()
     {
-        /*try
+        try
         {
-            // Encuentra todos los assets de tipo Monster en la carpeta "Assets/Monsters"
-            string[] guids = AssetDatabase.FindAssets("t:Monster", new[] { "Assets/Monsters" });
-            List<Monster> monsters = new List<Monster>();
-
-            foreach (string guid in guids)
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                Monster monster = AssetDatabase.LoadAssetAtPath<Monster>(path);
-                if (monster != null)
-                {
-                    monsters.Add(monster);
-                    Debug.Log("Aa: " + monster.name);
-                }
-            }
-
-            return monsters;
+            // Cargar todos los assets de tipo Monster desde la carpeta "Resources/Monsters"
+            Monster[] monsters = Resources.LoadAll<Monster>("Monsters");
+            return new List<Monster>(monsters);
         }
         catch (System.Exception ex)
         {
             Debug.LogError("Error al cargar todos los monstruos desde los assets: " + ex.Message);
             return new List<Monster>();
-        }*/
-        return null;
+        }
     }
+
 }
