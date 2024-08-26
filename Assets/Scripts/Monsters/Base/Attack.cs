@@ -19,6 +19,7 @@ public class Attack : ScriptableObject
     public string attackName;
     public string attackDescription;
     public AttackType attackType;
+    public AudioClip attackClip;
 
     [Header("Attack Properties")]
     public float attackDamage;
@@ -76,6 +77,7 @@ public class Attack : ScriptableObject
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackId"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackName"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDescription"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("attackClip"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDamage"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackCooldown"));
 

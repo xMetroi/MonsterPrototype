@@ -7,6 +7,10 @@ public class Monster : ScriptableObject
     public int monsterID;
     public string monsterName;
 
+    [Header("Monster Visuals")]
+    public Sprite monsterSprite;
+    public Animator monsterAnimator;
+
     [Header("Monster Stats Properties")]
     public float monsterHealth;
     public float monsterSpeed;
@@ -18,7 +22,4 @@ public class Monster : ScriptableObject
     public Attack basickAttack1;
     public Attack basickAttack2;
     public Attack specialAttack;
-
-    [Header("Sprite")]
-    public GameObject prefabMonster;
 }

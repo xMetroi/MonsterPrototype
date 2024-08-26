@@ -31,7 +31,7 @@ public class PlayerVisuals : MonoBehaviour
         references.playerCombat.StopHitted += OnPlayerStopHitted;
 
         //Set the sprite of the actual monster
-        references.monsterSprite.sprite = references.currentMonster.prefabMonster.GetComponent<SpriteRenderer>().sprite;
+        references.monsterSprite.sprite = references.currentMonster.monsterSprite;
     }
 
     private void OnDisable()
