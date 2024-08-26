@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
+  m_Name: ComeGalletas
+  m_EditorClassIdentifier: 
+  monsterID: 1
+  monsterName: 
+  monsterSprite: {fileID: 585366258, guid: 98e7367607721b64a90b28e86f644700, type: 3}
+  monsterAnimator: {fileID: 9100000, guid: 8b12854732fde804b96db523166aa54e, type: 2}
+  monsterHealth: 0
+  monsterSpeed: 0
+  monsterAimSpeed: 0
+  monsterDashForce: 0
+  monsterDashCooldown: 0
+  basickAttack1: {fileID: 0}
+  basickAttack2: {fileID: 0}
+  specialAttack: {fileID: 0}

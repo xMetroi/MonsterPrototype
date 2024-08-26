@@ -270,8 +270,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     public IEnumerator StartTransformAttack(Attack attack)
     {
-        references.monsterSprite.sprite = attack.prefabTransformation.GetComponent<SpriteRenderer>().sprite;
-        references.monsterAnimator.runtimeAnimatorController = attack.prefabTransformation.GetComponent<Animator>().runtimeAnimatorController;
+        references.monsterSprite.sprite = attack.spriteTransformation;
+        references.monsterAnimator.runtimeAnimatorController = attack.animatorTransformation;
 
         references.playerMovement.SetMovementSpeeds
         (
@@ -283,7 +283,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(attack.transformationDuration);
         references.monsterSprite.sprite = references.currentMonster.monsterSprite;
-        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator.runtimeAnimatorController;
+        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator;
         
         references.playerMovement.SetMovementSpeeds
         (
