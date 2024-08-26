@@ -44,6 +44,12 @@ public class EnemyBrain : MonoBehaviour, IDamageable
 
     #region Events
 
+    //Hit
+    public event Action<float> StartHitted;
+    public event Action StopHitted;
+
+    //Defense
+    public event Action<float> HitDefensed;
     public event Action DefenseBroke;
     public event Action DefenseRegenerated;
 
@@ -56,6 +62,8 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     /// </summary>
     /// <returns></returns>
     public bool GetIsDefended() { return isDefended; }
+
+    public float GetBubbleHP() { return defenseBubbleHP; }
 
     #endregion
 
