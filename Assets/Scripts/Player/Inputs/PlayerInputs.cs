@@ -323,6 +323,42 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Change1"",
+                    ""type"": ""Button"",
+                    ""id"": ""63489878-6ce1-4b57-8db3-4bc5a491706b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Change2"",
+                    ""type"": ""Button"",
+                    ""id"": ""9409efb9-7690-4218-8a6a-da6a1ed2cd86"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Change3"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5422e8b-36fd-4f86-af48-a477cb4ec32b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Change4"",
+                    ""type"": ""Button"",
+                    ""id"": ""26824e95-ed10-4529-9949-6625ac049e9c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -413,6 +449,50 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Special"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d93b2d74-5067-411e-a929-858e26199b11"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfc9dd81-1804-483a-b16d-54776a2b364f"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35bcbb51-c30f-4f38-8644-f081a45c1c3f"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""564d2695-b0ae-4160-a7d4-18f7616c1d50"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -456,6 +536,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Combat_BasicAttack2 = m_Combat.FindAction("BasicAttack2", throwIfNotFound: true);
         m_Combat_Special = m_Combat.FindAction("Special", throwIfNotFound: true);
         m_Combat_Defense = m_Combat.FindAction("Defense", throwIfNotFound: true);
+        m_Combat_Change1 = m_Combat.FindAction("Change1", throwIfNotFound: true);
+        m_Combat_Change2 = m_Combat.FindAction("Change2", throwIfNotFound: true);
+        m_Combat_Change3 = m_Combat.FindAction("Change3", throwIfNotFound: true);
+        m_Combat_Change4 = m_Combat.FindAction("Change4", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -629,6 +713,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Combat_BasicAttack2;
     private readonly InputAction m_Combat_Special;
     private readonly InputAction m_Combat_Defense;
+    private readonly InputAction m_Combat_Change1;
+    private readonly InputAction m_Combat_Change2;
+    private readonly InputAction m_Combat_Change3;
+    private readonly InputAction m_Combat_Change4;
     public struct CombatActions
     {
         private @PlayerInputs m_Wrapper;
@@ -637,6 +725,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @BasicAttack2 => m_Wrapper.m_Combat_BasicAttack2;
         public InputAction @Special => m_Wrapper.m_Combat_Special;
         public InputAction @Defense => m_Wrapper.m_Combat_Defense;
+        public InputAction @Change1 => m_Wrapper.m_Combat_Change1;
+        public InputAction @Change2 => m_Wrapper.m_Combat_Change2;
+        public InputAction @Change3 => m_Wrapper.m_Combat_Change3;
+        public InputAction @Change4 => m_Wrapper.m_Combat_Change4;
         public InputActionMap Get() { return m_Wrapper.m_Combat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -658,6 +750,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Defense.started += instance.OnDefense;
             @Defense.performed += instance.OnDefense;
             @Defense.canceled += instance.OnDefense;
+            @Change1.started += instance.OnChange1;
+            @Change1.performed += instance.OnChange1;
+            @Change1.canceled += instance.OnChange1;
+            @Change2.started += instance.OnChange2;
+            @Change2.performed += instance.OnChange2;
+            @Change2.canceled += instance.OnChange2;
+            @Change3.started += instance.OnChange3;
+            @Change3.performed += instance.OnChange3;
+            @Change3.canceled += instance.OnChange3;
+            @Change4.started += instance.OnChange4;
+            @Change4.performed += instance.OnChange4;
+            @Change4.canceled += instance.OnChange4;
         }
 
         private void UnregisterCallbacks(ICombatActions instance)
@@ -674,6 +778,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Defense.started -= instance.OnDefense;
             @Defense.performed -= instance.OnDefense;
             @Defense.canceled -= instance.OnDefense;
+            @Change1.started -= instance.OnChange1;
+            @Change1.performed -= instance.OnChange1;
+            @Change1.canceled -= instance.OnChange1;
+            @Change2.started -= instance.OnChange2;
+            @Change2.performed -= instance.OnChange2;
+            @Change2.canceled -= instance.OnChange2;
+            @Change3.started -= instance.OnChange3;
+            @Change3.performed -= instance.OnChange3;
+            @Change3.canceled -= instance.OnChange3;
+            @Change4.started -= instance.OnChange4;
+            @Change4.performed -= instance.OnChange4;
+            @Change4.canceled -= instance.OnChange4;
         }
 
         public void RemoveCallbacks(ICombatActions instance)
@@ -725,5 +841,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnBasicAttack2(InputAction.CallbackContext context);
         void OnSpecial(InputAction.CallbackContext context);
         void OnDefense(InputAction.CallbackContext context);
+        void OnChange1(InputAction.CallbackContext context);
+        void OnChange2(InputAction.CallbackContext context);
+        void OnChange3(InputAction.CallbackContext context);
+        void OnChange4(InputAction.CallbackContext context);
     }
 }

@@ -24,4 +24,9 @@ public class PlayerController : MonoBehaviour
             monsterSliderLife.value = references.GetHP();
         }
     }
+
+    /*public void ChangeHP()
+    {
+        monsterSliderLife.value = references.GetHP();
+    }*/
 }

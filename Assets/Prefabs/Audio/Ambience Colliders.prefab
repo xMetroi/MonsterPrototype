@@ -98,6 +98,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0d86a43dd1585f74da42e05f4cdb3cec, type: 3}
   - {fileID: 8300000, guid: a8dc6bffb04deb74a9871bf66a17d334, type: 3}
   - {fileID: 8300000, guid: 50279639b8b08fc4b97603cc3fd4bb1b, type: 3}
+  fadeInDuration: 3
+  fadeOutDuration: 3
 --- !u!82 &5121206931050155855
 AudioSource:
   m_ObjectHideFlags: 0
@@ -292,6 +294,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 93b1147461e634b469397d9f43a62a3f, type: 3}
   - {fileID: 8300000, guid: a8dc6bffb04deb74a9871bf66a17d334, type: 3}
   - {fileID: 8300000, guid: 50279639b8b08fc4b97603cc3fd4bb1b, type: 3}
+  fadeInDuration: 3
+  fadeOutDuration: 3
 --- !u!82 &6959802542613880152
 AudioSource:
   m_ObjectHideFlags: 0
@@ -521,6 +525,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 93b1147461e634b469397d9f43a62a3f, type: 3}
   - {fileID: 8300000, guid: a8dc6bffb04deb74a9871bf66a17d334, type: 3}
   - {fileID: 8300000, guid: 50279639b8b08fc4b97603cc3fd4bb1b, type: 3}
+  fadeInDuration: 3
+  fadeOutDuration: 3
 --- !u!82 &3879826849956076894
 AudioSource:
   m_ObjectHideFlags: 0
@@ -712,6 +718,8 @@ MonoBehaviour:
   ambSource: {fileID: 6121464719057578769}
   ambClips:
   - {fileID: 8300000, guid: 0d86a43dd1585f74da42e05f4cdb3cec, type: 3}
+  fadeInDuration: 3
+  fadeOutDuration: 3
 --- !u!82 &6121464719057578769
 AudioSource:
   m_ObjectHideFlags: 0

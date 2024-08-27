@@ -9,7 +9,7 @@ public class Monster : ScriptableObject
 
     [Header("Monster Visuals")]
     public Sprite monsterSprite;
-    public Animator monsterAnimator;
+    public RuntimeAnimatorController monsterAnimator;
 
     [Header("Monster Stats Properties")]
     public float monsterHealth;

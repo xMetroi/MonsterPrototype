@@ -15,8 +15,13 @@ public class PlayerVisuals : MonoBehaviour
 
     private void Start()
     {
+        SetMonsterData();
+    }
+
+    public void SetMonsterData()
+    {
         //Initialize
-        originalColor = references.monsterSprite.color;
+        originalColor = Color.white;
 
         //Events subscriptions
 
@@ -32,6 +37,10 @@ public class PlayerVisuals : MonoBehaviour
 
         //Set the sprite of the actual monster
         references.monsterSprite.sprite = references.currentMonster.monsterSprite;
+        //references.monsterSprite.color = originalColor;
+
+        Debug.Log(references.currentMonster.monsterAnimator.name);
+        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator;
     }
 
     private void OnDisable()

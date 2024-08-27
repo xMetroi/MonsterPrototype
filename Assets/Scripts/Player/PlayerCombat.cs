@@ -60,6 +60,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         return monsterHp;
     }
 
+    public void SetHP(float hp)
+    {
+        monsterHp = hp;
+    }
+
     public bool GetIsHitted() { return isHitted; }
 
     #endregion
@@ -105,7 +110,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         Initialize();
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         if (references.currentMonster != null)
         {
@@ -270,8 +275,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
     public IEnumerator StartTransformAttack(Attack attack)
     {
-        references.monsterSprite.sprite = attack.prefabTransformation.GetComponent<SpriteRenderer>().sprite;
-        references.monsterAnimator.runtimeAnimatorController = attack.prefabTransformation.GetComponent<Animator>().runtimeAnimatorController;
+        references.monsterSprite.sprite = attack.spriteTransformation;
+        references.monsterAnimator.runtimeAnimatorController = attack.animatorTransformation;
 
         references.playerMovement.SetMovementSpeeds
         (
@@ -283,7 +288,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(attack.transformationDuration);
         references.monsterSprite.sprite = references.currentMonster.monsterSprite;
-        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator.runtimeAnimatorController;
+        references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator;
         
         references.playerMovement.SetMovementSpeeds
         (
