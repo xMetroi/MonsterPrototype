@@ -74,7 +74,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         if (isHitted)
             return false;
 
-        if (!GameManager.Instance.battleStarted)
+        if (!GameManager.instance.battleStarted)
             return false;
 
         return true;
@@ -373,9 +373,9 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 StartHitted?.Invoke(damage);
                 StartCoroutine(RoutineDamage(damage, kb));
 
-                if (monsterHp <= 0 && !GameManager.Instance.gameFinished)
+                if (monsterHp <= 0 && !GameManager.instance.gameFinished)
                 {
-                    GameManager.Instance.PlayerLoose();
+                    GameManager.instance.PlayerLoose();
                 }
             }
         }               

@@ -3,67 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
-public enum SoundType
-{
- BigDinoBasicAttack_1,
- BigDinoBasicAttack_2,
- BigDinoSpecialAttack,
- BigDinoHurt,
- SmallDinoBasicAttack_1,
- SmallDinoBasicAttack_2,
- SmallDinoSpecialAttack,
- SmallDinoHurt,
- FireMonsterBasicAttack_1,
- FireMonsterBasicAttack_2,
- FireMonsterSpecialAttack,
- FireMonsterHurt,
- Dialogues
-
-}
-
-[RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private SoundList [] soundList;
-    private static AudioManager Instance;
-    private AudioSource soundEffects;
-    
+    [Header("Audio Properties")]
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource sfxSource;
 
-    private void Awake() 
-    {
-       Instance = this;
-    }
+    public static AudioManager instance;
 
-    private void Start() 
+    private void Awake()
     {
-        soundEffects = GetComponent<AudioSource>();    
-    }
-   
-    public static void PlaySound(SoundType sound, float volume = 1)
-    {
-       AudioClip[] clips = Instance.soundList[(int)sound].Sounds;
-       AudioClip randomClip = clips [UnityEngine.Random.Range(0, clips.Length)];
-       Instance.soundEffects.PlayOneShot(randomClip, volume);
-    }
-
-    #if UNITY_EDITOR
-    private void OnEnable() 
-    {
-        string [] names = Enum.GetNames(typeof(SoundType));
-        Array.Resize(ref soundList, names.Length);
-        for (int i = 0; i < soundList.Length; i++)
+        if (instance != null && instance != this)
         {
-            soundList[i].name = names[i];
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
-    #endif
-}
 
-[Serializable]
-public struct SoundList 
-{
-    public AudioClip[] Sounds {get => sounds;}
-    [HideInInspector] public string name;
-    [SerializeField] private AudioClip [] sounds;
+    /// <summary>
+    /// Play a audio clip in the Music Channel
+    /// </summary>
+    /// <param name="clip"></param>
+    public void PlayMusicClip(AudioClip clip)
+    {
+        musicSource.PlayOneShot(clip);
+    }
+
+    /// <summary>
+    /// Play a audio clip in the SFX Channel
+    /// </summary>
+    /// <param name="clip"></param>
+    public void PlaySfxClip(AudioClip clip)
+    {
+        sfxSource.PlayOneShot(clip);
+    }
 }

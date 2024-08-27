@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
-    public static GameManager Instance;
-
     public GameObject panelStartBattle;
     public GameObject panelLifeMonsters;
 
@@ -20,52 +17,149 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject looseText;
     public bool gameFinished;
 
-    public bool isBattle = false;
+    public bool isInBattle = false;
     public bool battleStarted = false;
 
-    public bool isWinBattle = false; 
+    public bool isWinBattle = false;
 
-    public Transform playerLocation;
-    public Transform enemyLocation;
-    public GameObject playerMonster;
-    public GameObject enemyMonster;
-
-    bool areSpawned = false;
+    [Header("Combat Site Properties")]
+    [SerializeField] private Transform playerMonsterSpawn;
+    [SerializeField] private Transform enemyMonsterSpawn;
+    [SerializeField] private GameObject playerMonsterPrefab;
+    [SerializeField] private GameObject enemyMonsterPrefab;
 
     [Header("Slow Motion")]
     public float slowMotionFactor = 0.05f;
     public float slowMotionDuration = 0.08f;
     private bool isSlowMotionActive = false;
 
+    public static GameManager instance;
+
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
         }
         else
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
 
-    private void Update()
+    private void Start()
     {
-        if (isBattle && !areSpawned)
+        //Events Subscriptions
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    #region Getter / Setter
+
+    public bool GetIsInBattle() { return isInBattle; }
+
+    #endregion
+
+    #region Scene Manager
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (scene.name == "Intro")
         {
-            panelStartBattle.SetActive(true);
-            panelLifeMonsters.SetActive(true);
-            FindObjectOfType<TrainerMovement>().SetCanMove(false);
-            Instantiate(playerMonster, playerLocation.position, Quaternion.identity);
-            Instantiate(enemyMonster, enemyLocation.position, Quaternion.identity);
-            areSpawned = true;           
+            LoadScene("WorldPROTOTYPEScene", 33);
         }
 
-        if (isBattle)
+        if (scene.name == "WorldPROTOTYPEScene")
+        {
+            InitializeWorldVariables();
+        }
+    }
+
+    #region Utilities
+
+    /// <summary>
+    /// Load a new scene
+    /// </summary>
+    /// <param name="sceneName"> name of the scene to load </param>
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    /// <summary>
+    /// Load a new scene with a delay
+    /// </summary>
+    /// <param name="sceneName"> name of the scene to load </param>
+    /// <param name="seconds"> delay to load the scene </param>
+    public void LoadScene(string sceneName, float seconds)
+    {
+        StartCoroutine(LoadSceneDelay(sceneName, seconds));
+    }
+
+    IEnumerator LoadSceneDelay(string sceneName, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(sceneName);
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Battle Manager
+
+    /// <summary>
+    /// We use this to initialize the variables we are gonna need in the world scene
+    /// </summary>
+    private void InitializeWorldVariables()
+    {
+        trainerTransform = GameObject.Find("Trainer").transform;
+        battlePointTransform = GameObject.Find("Fight Camera Holder").transform;
+
+        playerMonsterSpawn = GameObject.Find("SpawnPointPlayerMonster").transform;
+        enemyMonsterSpawn = GameObject.Find("SpawnPointEnemyMonster").transform;
+    }
+
+    /// <summary>
+    /// We use this method to start a battle
+    /// </summary>
+    public void StartBattle()
+    {
+        //panelStartBattle.SetActive(true);
+        //panelLifeMonsters.SetActive(true);
+        FindObjectOfType<TrainerMovement>().SetCanMove(false);
+
+        Instantiate(playerMonsterPrefab, playerMonsterSpawn.position, Quaternion.identity);
+        Instantiate(enemyMonsterPrefab, enemyMonsterSpawn.position, Quaternion.identity);
+
+        isInBattle = true;
+    }
+
+    #endregion
+
+    #region Camera Manager
+
+    private void CameraManager()
+    {
+        if (isInBattle)
             Camera.main.transform.position = new Vector3(battlePointTransform.position.x, battlePointTransform.position.y, -10);
         else
             Camera.main.transform.position = new Vector3(trainerTransform.position.x, trainerTransform.position.y, -10);
+    }
+
+    #endregion
+
+    private void Update()
+    {
+        /*
+        if (isBattle && !areSpawned)
+        {
+
+            areSpawned = true;           
+        }*/
+
+        CameraManager();
     }
 
     void ActivateSlowMotion()
@@ -103,8 +197,8 @@ public class GameManager : MonoBehaviour
     {
         panelLifeMonsters.SetActive(false);
         Time.timeScale = 0f;
-        isBattle = false;
-        areSpawned = false;
+        isInBattle = false;
+        //areSpawned = false;
         StartCoroutine(StartSlow());
     }
 
@@ -126,16 +220,6 @@ public class GameManager : MonoBehaviour
             }
         }
         return null;
-    }
-
-    public void SetIsBattle(bool isBattle)
-    {
-        this.isBattle = isBattle;
-    }
-
-    public bool IsBattle()
-    {
-        return isBattle;
     }
 
     public void ExitGame()

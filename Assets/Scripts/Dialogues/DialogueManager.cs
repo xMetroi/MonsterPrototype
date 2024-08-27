@@ -62,6 +62,7 @@ public class DialogueManager : MonoBehaviour
     {
         animator.SetBool("IsOpen", false);
         FindObjectOfType<TrainerMovement>().SetCanMove(true);
-        GameManager.Instance.SetIsBattle(true);
+        //GameManager.instance.SetIsBattle(true);
+        GameManager.instance.StartBattle();
     }
 }
