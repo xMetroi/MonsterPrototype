@@ -7,52 +7,53 @@ using UnityEngine;
 public class PlayerData
 {
     public List<int> monstersIds = new List<int>();
+    public Vector3 playerPosition;
+    public int enemiesDefeated;
 }
 
-public class SaveLoadManager : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
-    public static SaveLoadManager Instance { get; private set; }
+    public static DataManager Instance { get; private set; }
     private string filePath;
 
     private void Awake()
     {
-        try
+        if (Instance != null && Instance != this)
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);  // Persistir entre escenas
-            }
+            Destroy(gameObject);
         }
-        catch (System.Exception ex)
+        else
         {
-            Debug.LogError("Error en Awake: " + ex.Message);
-        }
-    }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }        
 
-    private void Start()
-    {
-        try
-        {
-            filePath = Application.persistentDataPath + "/playerData.json";
-            LoadPlayerData();
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error en Start: " + ex.Message);
-        }
+        filePath = Application.persistentDataPath + "/playerData.json";
     }
 
     private void OnDestroy()
     {
+        SaveDataBeforeExit();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveDataBeforeExit();        
+    }
+
+    private void SaveDataBeforeExit()
+    {
         try
         {
             TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
-            SavePlayerData(trainer.GetAllMonstersById());
+            // -------------------------Modifica esta linea para pasar la posicion del jugador y los enemigos derrotados--------------------------------------------
+            Vector3 playerPosition = trainer.transform.position;
+            int enemiesDefeated = 0;
+            // ----------------------------------------------------------------------------------------------------------
+
+            List<int> monstersIds = trainer.GetAllMonstersById();
+
+            SavePlayerData(monstersIds, playerPosition, enemiesDefeated);
         }
         catch (System.Exception ex)
         {
@@ -60,11 +61,12 @@ public class SaveLoadManager : MonoBehaviour
         }
     }
 
-    public void SavePlayerData(List<int> monstersIds)
+    public void SavePlayerData(List<int> monstersIds, Vector3 playerPosition, int enemiesDefeated)
     {
+        Debug.Log("Path: " + filePath);
         try
         {
-            PlayerData data = new PlayerData { monstersIds = monstersIds };
+            PlayerData data = new PlayerData { monstersIds = monstersIds, playerPosition = playerPosition, enemiesDefeated = enemiesDefeated };
             string json = JsonUtility.ToJson(data);
             File.WriteAllText(filePath, json);
         }
@@ -98,23 +100,20 @@ public class SaveLoadManager : MonoBehaviour
 
     public List<int> LoadPlayerMonster()
     {
-        try
-        {
-            PlayerData data = LoadPlayerData();
-            if (data != null)
-            {
-                return data.monstersIds;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error al cargar los IDs de los monstruos del jugador: " + ex.Message);
-            return null;
-        }
+        PlayerData data = LoadPlayerData();
+        return data?.monstersIds ?? new List<int>();
+    }
+
+    public Vector3 LoadPlayerPosition()
+    {
+        PlayerData data = LoadPlayerData();
+        return data?.playerPosition ?? Vector3.zero;
+    }
+
+    public int LoadEnemiesDefeated()
+    {
+        PlayerData data = LoadPlayerData();
+        return data?.enemiesDefeated ?? 0;
     }
 
     public List<Monster> LoadAllMonstersFromAssets()

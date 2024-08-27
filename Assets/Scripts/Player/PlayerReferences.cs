@@ -44,6 +44,8 @@ public class PlayerReferences : MonoBehaviour
 
     private void Awake()
     {
+        currentMonster = FindObjectOfType<TrainerController>().GetMonsterById(0);
+
         monsterAnimator = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         playerAim = GetComponent<PlayerAim>();
@@ -54,7 +56,7 @@ public class PlayerReferences : MonoBehaviour
         playerInputs = new PlayerInputs();
         playerInputs.Movement.Enable();
         playerInputs.Interactions.Enable();
-        playerInputs.Combat.Enable();
+        playerInputs.Combat.Enable();     
     }
 
     /// <summary>

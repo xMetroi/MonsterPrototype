@@ -7,20 +7,57 @@ using UnityEngine.UI;
 public class SelectMonsterToWin : MonoBehaviour
 {
     [SerializeField] Button[] monsterButtons;
-    private List<Monster> monsters = new List<Monster>();
+    [SerializeField]private List<Monster> monsters = new List<Monster>();
     private bool canSelect = true;
 
     [SerializeField] private GameObject panelSelectMonster;
     [SerializeField] private GameObject panelSuccessful;
+
 
     private void Start()
     {
         panelSelectMonster.SetActive(false);
         panelSuccessful.SetActive(false);
 
-        FindMontersEnemy();
+        //FindMontersEnemy();
         AddEventsToButtons();    
+
+        SelectMonsterFistTime();
     }
+
+    #region FirstEnterGame
+
+    public void SelectMonsterFistTime()
+    {
+        Debug.Log("asasasas: " + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
+
+        //Debug.Log("Cantidad" + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
+        if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
+        {
+            var localMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
+
+            if (localMonsters != null)
+            {
+                monsters = localMonsters;
+
+                for (int i = 0; i < monsterButtons.Length; i++)
+                {
+                    if (i < monsters.Count && monsters[i] != null)
+                    {
+                        monsterButtons[i].image.sprite = monsters[i].monsterSprite;
+                    }
+                    else
+                    {
+                        monsterButtons[i].gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            panelSelectMonster.SetActive(true);
+        }
+    }
+
+    #endregion
 
     #region Initialization
 
@@ -41,17 +78,21 @@ public class SelectMonsterToWin : MonoBehaviour
     {
         monsters = GameObject.FindAnyObjectByType<TrainerEnemyController>().GetAllMonsters();
 
-        for (int i = 0; i < monsterButtons.Length; i++)
+        if (monsters != null)
         {
-            if (i < monsters.Count && monsters[i] != null)
+            for (int i = 0; i < monsterButtons.Length; i++)
             {
-                monsterButtons[i].image.sprite = monsters[i].monsterSprite;
-            }
-            else
-            {
-                monsterButtons[i].gameObject.SetActive(false);
+                if (i < monsters.Count && monsters[i] != null)
+                {
+                    monsterButtons[i].image.sprite = monsters[i].monsterSprite;
+                }
+                else
+                {
+                    monsterButtons[i].gameObject.SetActive(false);
+                }
             }
         }
+        
     }
 
     #endregion

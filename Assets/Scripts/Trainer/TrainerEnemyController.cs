@@ -17,7 +17,7 @@ public class TrainerEnemyController : MonoBehaviour
 
     public void SetMonsters(List<int> ids)
     {
-        List<Monster> allMonsters = SaveLoadManager.Instance.LoadAllMonstersFromAssets();
+        List<Monster> allMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
 
         Monster[] filteredMonstersById = allMonsters
             .Where(monster => ids.Contains(monster.monsterID))
