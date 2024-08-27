@@ -16,35 +16,17 @@ public class SaveLoadManager : MonoBehaviour
 
     private void Awake()
     {
-        try
+        if (Instance != null && Instance != this)
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);  // Persistir entre escenas
-            }
+            Destroy(gameObject);
         }
-        catch (System.Exception ex)
+        else
         {
-            Debug.LogError("Error en Awake: " + ex.Message);
-        }
-    }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);  // Persistir entre escenas
+        }        
 
-    private void Start()
-    {
-        try
-        {
-            filePath = Application.persistentDataPath + "/playerData.json";
-            LoadPlayerData();
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error en Start: " + ex.Message);
-        }
+        filePath = Application.persistentDataPath + "/playerData.json";
     }
 
     private void OnDestroy()
@@ -52,6 +34,9 @@ public class SaveLoadManager : MonoBehaviour
         try
         {
             TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
+
+            Debug.Log(trainer.GetAllMonstersById().Count);
+
             SavePlayerData(trainer.GetAllMonstersById());
         }
         catch (System.Exception ex)
@@ -62,6 +47,7 @@ public class SaveLoadManager : MonoBehaviour
 
     public void SavePlayerData(List<int> monstersIds)
     {
+        Debug.Log("Path: " + filePath);
         try
         {
             PlayerData data = new PlayerData { monstersIds = monstersIds };

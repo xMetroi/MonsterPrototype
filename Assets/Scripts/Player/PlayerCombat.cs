@@ -60,6 +60,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         return monsterHp;
     }
 
+    public void SetHP(float hp)
+    {
+        monsterHp = hp;
+    }
+
     public bool GetIsHitted() { return isHitted; }
 
     #endregion
@@ -105,7 +110,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         Initialize();
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         if (references.currentMonster != null)
         {
