@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TestPlayAudio : MonoBehaviour
 {
+    /*
     // Start is called before the first frame update
     public void PlaySmallDinoAttack()
     {
@@ -28,5 +29,5 @@ public class TestPlayAudio : MonoBehaviour
     public void FireMonsterHurt()
     {
         
-    }
+    }*/
 }

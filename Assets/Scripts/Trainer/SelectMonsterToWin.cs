@@ -117,7 +117,7 @@ public class SelectMonsterToWin : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.isWinBattle && canSelect)
+        if (GameManager.instance.isWinBattle && canSelect)
         {
             panelSelectMonster.SetActive(true);
         }
