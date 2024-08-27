@@ -17,10 +17,10 @@ MonoBehaviour:
   attackDescription: 
   attackType: 0
   attackClip: {fileID: 0}
-  attackDamage: 0
-  attackCooldown: 0
-  attackKnockback: 0
-  meleeRange: 0
+  attackDamage: 1
+  attackCooldown: 1
+  attackKnockback: 1
+  meleeRange: 1
   meleePrefab: {fileID: 7177953139975411725, guid: bf3fbf7e83e1098469dc5ab8b59daa37, type: 3}
   throwableSpeed: 0
   throwablePrefab: {fileID: 0}
