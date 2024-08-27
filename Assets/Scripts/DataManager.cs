@@ -8,6 +8,7 @@ public class PlayerData
 {
     public List<int> monstersIds = new List<int>();
     public Vector3 playerPosition;
+    public int enemiesDefeated;
 }
 
 public class DataManager : MonoBehaviour
@@ -45,13 +46,14 @@ public class DataManager : MonoBehaviour
         try
         {
             TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
-            // -------------------------Modifica esta linea para pasar la posicion del jugador --------------------------------------------
+            // -------------------------Modifica esta linea para pasar la posicion del jugador y los enemigos derrotados--------------------------------------------
             Vector3 playerPosition = trainer.transform.position;
+            int enemiesDefeated = 0;
             // ----------------------------------------------------------------------------------------------------------
 
             List<int> monstersIds = trainer.GetAllMonstersById();
 
-            SavePlayerData(monstersIds, playerPosition);
+            SavePlayerData(monstersIds, playerPosition, enemiesDefeated);
         }
         catch (System.Exception ex)
         {
@@ -59,12 +61,12 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SavePlayerData(List<int> monstersIds, Vector3 playerPosition)
+    public void SavePlayerData(List<int> monstersIds, Vector3 playerPosition, int enemiesDefeated)
     {
         Debug.Log("Path: " + filePath);
         try
         {
-            PlayerData data = new PlayerData { monstersIds = monstersIds, playerPosition = playerPosition };
+            PlayerData data = new PlayerData { monstersIds = monstersIds, playerPosition = playerPosition, enemiesDefeated = enemiesDefeated };
             string json = JsonUtility.ToJson(data);
             File.WriteAllText(filePath, json);
         }
@@ -106,6 +108,12 @@ public class DataManager : MonoBehaviour
     {
         PlayerData data = LoadPlayerData();
         return data?.playerPosition ?? Vector3.zero;
+    }
+
+    public int LoadEnemiesDefeated()
+    {
+        PlayerData data = LoadPlayerData();
+        return data?.enemiesDefeated ?? 0;
     }
 
     public List<Monster> LoadAllMonstersFromAssets()
