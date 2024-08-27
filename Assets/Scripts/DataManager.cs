@@ -7,11 +7,12 @@ using UnityEngine;
 public class PlayerData
 {
     public List<int> monstersIds = new List<int>();
+    public Vector3 playerPosition;
 }
 
-public class SaveLoadManager : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
-    public static SaveLoadManager Instance { get; private set; }
+    public static DataManager Instance { get; private set; }
     private string filePath;
 
     private void Awake()
@@ -23,7 +24,7 @@ public class SaveLoadManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);  // Persistir entre escenas
+            DontDestroyOnLoad(gameObject);
         }        
 
         filePath = Application.persistentDataPath + "/playerData.json";
@@ -31,13 +32,26 @@ public class SaveLoadManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        SaveDataBeforeExit();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveDataBeforeExit();        
+    }
+
+    private void SaveDataBeforeExit()
+    {
         try
         {
             TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
+            // -------------------------Modifica esta linea para pasar la posicion del jugador --------------------------------------------
+            Vector3 playerPosition = trainer.transform.position;
+            // ----------------------------------------------------------------------------------------------------------
 
-            Debug.Log(trainer.GetAllMonstersById().Count);
+            List<int> monstersIds = trainer.GetAllMonstersById();
 
-            SavePlayerData(trainer.GetAllMonstersById());
+            SavePlayerData(monstersIds, playerPosition);
         }
         catch (System.Exception ex)
         {
@@ -45,12 +59,12 @@ public class SaveLoadManager : MonoBehaviour
         }
     }
 
-    public void SavePlayerData(List<int> monstersIds)
+    public void SavePlayerData(List<int> monstersIds, Vector3 playerPosition)
     {
         Debug.Log("Path: " + filePath);
         try
         {
-            PlayerData data = new PlayerData { monstersIds = monstersIds };
+            PlayerData data = new PlayerData { monstersIds = monstersIds, playerPosition = playerPosition };
             string json = JsonUtility.ToJson(data);
             File.WriteAllText(filePath, json);
         }
@@ -84,23 +98,14 @@ public class SaveLoadManager : MonoBehaviour
 
     public List<int> LoadPlayerMonster()
     {
-        try
-        {
-            PlayerData data = LoadPlayerData();
-            if (data != null)
-            {
-                return data.monstersIds;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error al cargar los IDs de los monstruos del jugador: " + ex.Message);
-            return null;
-        }
+        PlayerData data = LoadPlayerData();
+        return data?.monstersIds ?? new List<int>();
+    }
+
+    public Vector3 LoadPlayerPosition()
+    {
+        PlayerData data = LoadPlayerData();
+        return data?.playerPosition ?? Vector3.zero;
     }
 
     public List<Monster> LoadAllMonstersFromAssets()

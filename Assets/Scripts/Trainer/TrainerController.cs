@@ -38,9 +38,9 @@ public class TrainerController : MonoBehaviour
 
     private void Start()
     {
-        if (SaveLoadManager.Instance.LoadPlayerMonster() != null)
+        if (DataManager.Instance.LoadPlayerMonster() != null)
         {
-            SetMonsters(SaveLoadManager.Instance.LoadPlayerMonster());
+            SetMonsters(DataManager.Instance.LoadPlayerMonster());
         }
 
         SetAllMonstersHP();
@@ -56,7 +56,7 @@ public class TrainerController : MonoBehaviour
 
     public void SetMonsters(List<int> ids)
     {
-        List<Monster> allMonsters = SaveLoadManager.Instance.LoadAllMonstersFromAssets();
+        List<Monster> allMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
 
         List<Monster> filteredMonstersById = allMonsters
             .Where(monster => ids.Contains(monster.monsterID) && monster.monsterID != 0)

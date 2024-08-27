@@ -34,7 +34,7 @@ public class SelectMonsterToWin : MonoBehaviour
         //Debug.Log("Cantidad" + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
         if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
         {
-            var localMonsters = SaveLoadManager.Instance.LoadAllMonstersFromAssets();
+            var localMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
 
             if (localMonsters != null)
             {
