@@ -41,9 +41,9 @@ public class TrainerController : MonoBehaviour
         if (DataManager.Instance.LoadPlayerMonster() != null)
         {
             SetMonsters(DataManager.Instance.LoadPlayerMonster());
+            SetAllMonstersHP();
         }
 
-        SetAllMonstersHP();
     }
 
     public void SetAllMonstersHP()
@@ -103,7 +103,7 @@ public class TrainerController : MonoBehaviour
     private void Update()
     {
 
-        if (GameManager.Instance.isBattle)
+        if (GameManager.instance.isInBattle)
         {
             if (playerReferences == null)
             {

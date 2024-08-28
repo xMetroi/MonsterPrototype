@@ -19,10 +19,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(monsterSliderLife.value != references.GetHP()) 
-        {
-            monsterSliderLife.value = references.GetHP();
-        }
+        //if(monsterSliderLife.value != references.GetHP()) 
+        //{
+            //monsterSliderLife.value = references.GetHP();
+        //}
     }
 
     /*public void ChangeHP()

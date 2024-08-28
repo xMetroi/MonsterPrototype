@@ -1,40 +1,40 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject panelStartBattle;
-    public GameObject panelLifeMonsters;
-
-    public Transform trainerTransform;
-    public Transform battlePointTransform;
-
-    [Header("Game Over")]
-    public GameObject panelGameOver;
-    [SerializeField] GameObject winText;
-    [SerializeField] GameObject looseText;
-    public bool gameFinished;
-
-    public bool isInBattle = false;
-    public bool battleStarted = false;
-
-    public bool isWinBattle = false;
+    [Header("Player References")]
+    [SerializeField] private GameObject trainerGO;
+    [SerializeField] private Transform trainerTransform;
 
     [Header("Combat Site Properties")]
+    public bool isInBattle = false;
     [SerializeField] private Transform playerMonsterSpawn;
     [SerializeField] private Transform enemyMonsterSpawn;
     [SerializeField] private GameObject playerMonsterPrefab;
     [SerializeField] private GameObject enemyMonsterPrefab;
+    [SerializeField] private Transform battlePointTransform;
+    GameObject playerMonsterGO;
+    GameObject enemyMonsterGO;
 
     [Header("Slow Motion")]
     public float slowMotionFactor = 0.05f;
     public float slowMotionDuration = 0.08f;
     private bool isSlowMotionActive = false;
 
-    public static GameManager instance;
+    #region Events
 
+    public event Action BattleStarted;
+    public event Action<bool> BattleEnded;
+
+    #endregion
+
+    public static GameManager instance;
+    
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -53,11 +53,22 @@ public class GameManager : MonoBehaviour
         //Events Subscriptions
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+        BattleEnded += OnBattleEnded;
     }
 
     #region Getter / Setter
 
     public bool GetIsInBattle() { return isInBattle; }
+
+    #endregion
+
+    #region Event Manager
+
+    public void TriggerBattleEnded(bool playerWon)
+    {
+        BattleEnded?.Invoke(playerWon);
+    }
+
 
     #endregion
 
@@ -67,7 +78,7 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name == "Intro")
         {
-            LoadScene("WorldPROTOTYPEScene", 33);
+            LoadScene("WorldPROTOTYPEScene", 3);
         }
 
         if (scene.name == "WorldPROTOTYPEScene")
@@ -114,6 +125,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void InitializeWorldVariables()
     {
+        trainerGO = GameObject.Find("Trainer");
         trainerTransform = GameObject.Find("Trainer").transform;
         battlePointTransform = GameObject.Find("Fight Camera Holder").transform;
 
@@ -126,14 +138,26 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartBattle()
     {
-        //panelStartBattle.SetActive(true);
-        //panelLifeMonsters.SetActive(true);
         FindObjectOfType<TrainerMovement>().SetCanMove(false);
 
-        Instantiate(playerMonsterPrefab, playerMonsterSpawn.position, Quaternion.identity);
-        Instantiate(enemyMonsterPrefab, enemyMonsterSpawn.position, Quaternion.identity);
+        playerMonsterGO = Instantiate(playerMonsterPrefab, playerMonsterSpawn.position, Quaternion.identity);
+        enemyMonsterGO = Instantiate(enemyMonsterPrefab, enemyMonsterSpawn.position, Quaternion.identity);
 
         isInBattle = true;
+        BattleStarted?.Invoke();
+    }
+
+    //Events
+
+    private void OnBattleEnded(bool playerWin)
+    {
+        if (!playerWin)
+            GameObject.FindAnyObjectByType<GameOverCanvas>().ShowLooseHolder();
+
+        isInBattle = false;
+
+        Destroy(playerMonsterGO);
+        Destroy(enemyMonsterGO);
     }
 
     #endregion
@@ -142,6 +166,8 @@ public class GameManager : MonoBehaviour
 
     private void CameraManager()
     {
+        if (trainerTransform == null || trainerTransform.gameObject.scene.name != "WorldPROTOTYPEScene") return;
+
         if (isInBattle)
             Camera.main.transform.position = new Vector3(battlePointTransform.position.x, battlePointTransform.position.y, -10);
         else
@@ -177,36 +203,35 @@ public class GameManager : MonoBehaviour
         slowMotionDuration = 0.08f;
     }
 
-    public void PlayerWins()
-    {
-        panelLifeMonsters.SetActive(false);
-        panelGameOver.SetActive(true);
-        winText.SetActive(true);
-        gameFinished = true;
-    }
+    //public void PlayerWins()
+    //{
+    //    panelLifeMonsters.SetActive(false);
+    //    panelGameOver.SetActive(true);
+    //    winText.SetActive(true);
+    //    gameFinished = true;
+    //}
 
-    public void PlayerLoose()
-    {
-        panelLifeMonsters.SetActive(false);
-        looseText.SetActive(true);
-        gameFinished = true;
-        StartCoroutine(StartSlow());
-    }
+    //public void PlayerLoose()
+    //{
+    //    panelLifeMonsters.SetActive(false);
+    //    looseText.SetActive(true);
+    //    gameFinished = true;
+    //    StartCoroutine(StartSlow());
+    //}
 
-    public void GameOver()
-    {
-        panelLifeMonsters.SetActive(false);
-        Time.timeScale = 0f;
-        isInBattle = false;
-        //areSpawned = false;
-        StartCoroutine(StartSlow());
-    }
+    //public void GameOver()
+    //{
+    //    panelLifeMonsters.SetActive(false);
+    //    Time.timeScale = 0f;
+    //    isInBattle = false;
+    //    //areSpawned = false;
+    //    StartCoroutine(StartSlow());
+    //}
 
     IEnumerator StartSlow()
     {
         ActivateSlowMotion();
         yield return new WaitForSeconds(slowMotionDuration);
-        panelGameOver.SetActive(true);
     }
 
     GameObject FindInactiveGameObjectByName(string name)
