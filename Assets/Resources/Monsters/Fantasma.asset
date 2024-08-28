@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
+  m_Name: Fantasma
+  m_EditorClassIdentifier: 
+  monsterID: 8
+  monsterName: 
+  monsterSprite: {fileID: 226360074, guid: 5774009bc2405184eab4ee339f22ab4c, type: 3}
+  monsterAnimator: {fileID: 9100000, guid: 6e45c3ff67af45a4f8e1c94d5039933a, type: 2}
+  monsterHealth: 0
+  monsterSpeed: 0
+  monsterAimSpeed: 0
+  monsterDashForce: 0
+  monsterDashCooldown: 0
+  basickAttack1: {fileID: 0}
+  basickAttack2: {fileID: 0}
+  specialAttack: {fileID: 0}

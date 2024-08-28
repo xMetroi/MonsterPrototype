@@ -2082,6 +2082,7 @@ MonoBehaviour:
   - {fileID: 2095196007}
   - {fileID: 1342123117}
   - {fileID: 2041404539}
+  monsters: []
   panelSelectMonster: {fileID: 1099848468}
   panelSuccessful: {fileID: 107107169}
 --- !u!114 &1804720466
