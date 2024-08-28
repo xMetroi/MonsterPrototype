@@ -202,6 +202,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""282b0967-dd73-4c98-a882-171792e6756c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -281,6 +290,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""AimLook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c528cba7-5ff1-4cea-ba8d-bbe0de334180"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard && Mouse"",
+                    ""action"": ""ChangeDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -530,6 +550,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Interactions = asset.FindActionMap("Interactions", throwIfNotFound: true);
         m_Interactions_Aim = m_Interactions.FindAction("Aim", throwIfNotFound: true);
         m_Interactions_AimLook = m_Interactions.FindAction("AimLook", throwIfNotFound: true);
+        m_Interactions_ChangeDialogue = m_Interactions.FindAction("ChangeDialogue", throwIfNotFound: true);
         // Combat
         m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
         m_Combat_BasicAttack1 = m_Combat.FindAction("BasicAttack1", throwIfNotFound: true);
@@ -657,12 +678,14 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private List<IInteractionsActions> m_InteractionsActionsCallbackInterfaces = new List<IInteractionsActions>();
     private readonly InputAction m_Interactions_Aim;
     private readonly InputAction m_Interactions_AimLook;
+    private readonly InputAction m_Interactions_ChangeDialogue;
     public struct InteractionsActions
     {
         private @PlayerInputs m_Wrapper;
         public InteractionsActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Aim => m_Wrapper.m_Interactions_Aim;
         public InputAction @AimLook => m_Wrapper.m_Interactions_AimLook;
+        public InputAction @ChangeDialogue => m_Wrapper.m_Interactions_ChangeDialogue;
         public InputActionMap Get() { return m_Wrapper.m_Interactions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -678,6 +701,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @AimLook.started += instance.OnAimLook;
             @AimLook.performed += instance.OnAimLook;
             @AimLook.canceled += instance.OnAimLook;
+            @ChangeDialogue.started += instance.OnChangeDialogue;
+            @ChangeDialogue.performed += instance.OnChangeDialogue;
+            @ChangeDialogue.canceled += instance.OnChangeDialogue;
         }
 
         private void UnregisterCallbacks(IInteractionsActions instance)
@@ -688,6 +714,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @AimLook.started -= instance.OnAimLook;
             @AimLook.performed -= instance.OnAimLook;
             @AimLook.canceled -= instance.OnAimLook;
+            @ChangeDialogue.started -= instance.OnChangeDialogue;
+            @ChangeDialogue.performed -= instance.OnChangeDialogue;
+            @ChangeDialogue.canceled -= instance.OnChangeDialogue;
         }
 
         public void RemoveCallbacks(IInteractionsActions instance)
@@ -834,6 +863,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     {
         void OnAim(InputAction.CallbackContext context);
         void OnAimLook(InputAction.CallbackContext context);
+        void OnChangeDialogue(InputAction.CallbackContext context);
     }
     public interface ICombatActions
     {
