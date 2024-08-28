@@ -604,8 +604,8 @@ MonoBehaviour:
   hittedCooldown: 0.5
   monsterHp: 10
   damageColor: {r: 1, g: 0, b: 0, a: 0.8666667}
-  initialDefenseBubbleHP: 0
-  defenseBubbleHP: 3
+  initialDefenseBubbleHP: 4
+  defenseBubbleHP: 4
   defenseBubbleBrokenCooldown: 3
   isDefended: 0
   defenseBubbleGO: {fileID: 3113739519142426152}

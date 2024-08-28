@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         if (references.playerCombat.GetIsHitted())
             return false;
 
-        if (!GameManager.instance.battleStarted)
+        if (!GameManager.instance.isInBattle)
             return false;
 
         return true;

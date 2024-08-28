@@ -19,21 +19,30 @@ public class SelectMonsterToWin : MonoBehaviour
         panelSelectMonster.SetActive(false);
         panelSuccessful.SetActive(false);
 
+        //Event subscription
+        GameManager.instance.BattleEnded += OnBattleEnded;
+
         //FindMontersEnemy();
         AddEventsToButtons();    
 
-        SelectMonsterFistTime();
+        SelectMonster();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.instance.BattleEnded -= OnBattleEnded;
     }
 
     #region FirstEnterGame
 
-    public void SelectMonsterFistTime()
+    public void SelectMonster()
     {
         Debug.Log("asasasas: " + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
 
         //Debug.Log("Cantidad" + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
         if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
         {
+            panelSelectMonster.SetActive(true);
             var localMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
 
             if (localMonsters != null)
@@ -53,7 +62,6 @@ public class SelectMonsterToWin : MonoBehaviour
                 }
             }
 
-            panelSelectMonster.SetActive(true);
         }
     }
 
@@ -61,7 +69,7 @@ public class SelectMonsterToWin : MonoBehaviour
 
     #region Initialization
 
-    private void AddEventsToButtons()
+    public void AddEventsToButtons()
     {
         for (int i = 0; i < monsterButtons.Length; i++)
         {
@@ -115,11 +123,9 @@ public class SelectMonsterToWin : MonoBehaviour
         panelSuccessful.SetActive(false);
     }
 
-    private void Update()
+    private void OnBattleEnded(bool playerWin)
     {
-        if (GameManager.instance.isWinBattle && canSelect)
-        {
+        if (playerWin && canSelect)
             panelSelectMonster.SetActive(true);
-        }
     }
 }

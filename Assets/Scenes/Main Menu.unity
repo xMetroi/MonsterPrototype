@@ -3199,6 +3199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1212172008}
   - component: {fileID: 1212172007}
+  - component: {fileID: 1212172009}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3220,6 +3221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelStartBattle: {fileID: 0}
   panelLifeMonsters: {fileID: 0}
+  trainerGO: {fileID: 0}
   trainerTransform: {fileID: 0}
   battlePointTransform: {fileID: 0}
   panelGameOver: {fileID: 0}
@@ -3229,6 +3231,9 @@ MonoBehaviour:
   isInBattle: 0
   battleStarted: 0
   isWinBattle: 0
+  monsters: []
+  panelSelectMonster: {fileID: 0}
+  monsterButtons: []
   playerMonsterSpawn: {fileID: 0}
   enemyMonsterSpawn: {fileID: 0}
   playerMonsterPrefab: {fileID: 4939346786512639601, guid: d5af103e1c9227f40a151c529461c4ec, type: 3}
@@ -3250,6 +3255,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1212172009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212172006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6fe54f8bcd921b4aa8388c6244d7ef7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1215284730
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,18 +29,24 @@ public class VSManager : MonoBehaviour
 
     private void Start()
     {
+        //Event subscribtion
+        GameManager.instance.BattleStarted += OnBattleStarted;
+
         panelStartBattle.SetActive(false);
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        if (GameManager.instance.GetIsInBattle())
-        {
-            StartCoroutine(StarAnimation());
-        }
+        //Event desubscribtion
+        GameManager.instance.BattleStarted -= OnBattleStarted;
     }
 
-    IEnumerator StarAnimation()
+    private void OnBattleStarted()
+    {
+        StartCoroutine(StartAnimation());
+    }
+
+    IEnumerator StartAnimation()
     {
         panelStartBattle.SetActive(true);
         yield return new WaitForSeconds(10f);
@@ -49,7 +55,6 @@ public class VSManager : MonoBehaviour
 
     public void DestroyPanel() 
     {
-        GameManager.instance.battleStarted = true;
         Destroy(gameObject);
     }
 }
