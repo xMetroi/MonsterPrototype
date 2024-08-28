@@ -66,13 +66,13 @@ public class StateMachineController : MonoBehaviour
 
     private (bool hasMeleeAttackAvailable, Attack availableAttack) HasMeleeAttacksAvailable()
     {
-        if (references.currentMonster.basickAttack1.attackType == Attack.AttackType.Melee && canUseAttack1)
+        if (references.currentMonster.basickAttack1?.attackType == Attack.AttackType.Melee && canUseAttack1)
             return (true, references.currentMonster.basickAttack1);
 
-        if (references.currentMonster.basickAttack2.attackType == Attack.AttackType.Melee && canUseAttack2)
+        if (references.currentMonster.basickAttack2?.attackType == Attack.AttackType.Melee && canUseAttack2)
             return (true, references.currentMonster.basickAttack2);
 
-        if (references.currentMonster.specialAttack.attackType == Attack.AttackType.Melee && canUseSpecial)
+        if (references.currentMonster.specialAttack?.attackType == Attack.AttackType.Melee && canUseSpecial)
             return (true, references.currentMonster.specialAttack);
 
         return (false, null); // No hay ataque cuerpo a cuerpo disponible
@@ -80,13 +80,13 @@ public class StateMachineController : MonoBehaviour
 
     private (bool hasThrowableAttackAvailable, Attack availableAttack) HasThrowableAttacksAvailable()
     {
-        if (references.currentMonster.basickAttack1.attackType == Attack.AttackType.Throwable && canUseAttack1)
+        if (references.currentMonster.basickAttack1?.attackType == Attack.AttackType.Throwable && canUseAttack1)
             return (true, references.currentMonster.basickAttack1);
 
-        if (references.currentMonster.basickAttack2.attackType == Attack.AttackType.Throwable && canUseAttack2)
+        if (references.currentMonster.basickAttack2?.attackType == Attack.AttackType.Throwable && canUseAttack2)
             return (true, references.currentMonster.basickAttack2);
 
-        if (references.currentMonster.specialAttack.attackType == Attack.AttackType.Throwable && canUseSpecial)
+        if (references.currentMonster.specialAttack?.attackType == Attack.AttackType.Throwable && canUseSpecial)
             return (true, references.currentMonster.specialAttack);
 
         return (false, null); // No hay ataque cuerpo a cuerpo disponible
