@@ -60,7 +60,7 @@ public class PlayerSounds : MonoBehaviour
     /// <param name="attack"></param>
     private void OnAttackStarted(Attack attack)
     {
-
+        
     }
 
     /// <summary>

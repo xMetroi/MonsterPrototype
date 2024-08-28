@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.ShaderGraph;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -12,11 +13,36 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI dialogueText;
     public Animator animator;
 
+    private PlayerInputs controls;
+
+    private void Awake()
+    {
+        controls = new();
+    }
+
+    private void OnEnable()
+    {
+        controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         animator.enabled = false;
         sentences = new Queue<string>();
+    }
+
+    private void Update()
+    {
+        if (controls.Interactions.ChangeDialogue.triggered)
+        {
+            DisplayNextSentence();
+        }
     }
 
     public void StartDialogue(Dialogue dialogue)
@@ -62,6 +88,7 @@ public class DialogueManager : MonoBehaviour
     {
         animator.SetBool("IsOpen", false);
         FindObjectOfType<TrainerMovement>().SetCanMove(true);
-        GameManager.Instance.SetIsBattle(true);
+        //GameManager.instance.SetIsBattle(true);
+        GameManager.instance.StartBattle();
     }
 }

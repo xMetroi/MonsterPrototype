@@ -60,6 +60,11 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         return monsterHp;
     }
 
+    public void SetHP(float hp)
+    {
+        monsterHp = hp;
+    }
+
     public bool GetIsHitted() { return isHitted; }
 
     #endregion
@@ -74,7 +79,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         if (isHitted)
             return false;
 
-        if (!GameManager.Instance.battleStarted)
+        if (!GameManager.instance.battleStarted)
             return false;
 
         return true;
@@ -105,7 +110,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         Initialize();
     }
 
-    private void Initialize()
+    public void Initialize()
     {
         if (references.currentMonster != null)
         {
@@ -373,9 +378,9 @@ public class PlayerCombat : MonoBehaviour, IDamageable
                 StartHitted?.Invoke(damage);
                 StartCoroutine(RoutineDamage(damage, kb));
 
-                if (monsterHp <= 0 && !GameManager.Instance.gameFinished)
+                if (monsterHp <= 0 && !GameManager.instance.gameFinished)
                 {
-                    GameManager.Instance.PlayerLoose();
+                    GameManager.instance.PlayerLoose();
                 }
             }
         }               

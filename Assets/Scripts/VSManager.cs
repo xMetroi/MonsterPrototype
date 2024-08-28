@@ -34,7 +34,7 @@ public class VSManager : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.IsBattle())
+        if (GameManager.instance.GetIsInBattle())
         {
             StartCoroutine(StarAnimation());
         }
@@ -49,7 +49,7 @@ public class VSManager : MonoBehaviour
 
     public void DestroyPanel() 
     {
-        GameManager.Instance.battleStarted = true;
+        GameManager.instance.battleStarted = true;
         Destroy(gameObject);
     }
 }

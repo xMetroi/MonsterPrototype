@@ -485,7 +485,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &8869286958327668496
@@ -599,7 +599,7 @@ MonoBehaviour:
   centerPoint: {fileID: 0}
   forceToApply: {x: 0, y: 0}
   forceDamping: 1.2
-  actualMonster: {fileID: 0}
+  actualMonster: {fileID: 11400000, guid: 486a9b4134d5b8c469586b3ee6627762, type: 2}
   meleeRange: 1.2
   hittedCooldown: 0.5
   monsterHp: 10
@@ -622,7 +622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ee6548cc017554e87213a8d492a7e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMonster: {fileID: 11400000, guid: ab04a3ccd491d314c8bd4022ff9b2479, type: 2}
+  currentMonster: {fileID: 11400000, guid: 486a9b4134d5b8c469586b3ee6627762, type: 2}
   monsterSprite: {fileID: 2164447127683377687}
   monsterAnimator: {fileID: 126969047178564655}
   playerReferences: {fileID: 0}

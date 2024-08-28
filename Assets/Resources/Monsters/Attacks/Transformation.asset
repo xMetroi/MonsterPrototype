@@ -16,8 +16,10 @@ MonoBehaviour:
   attackName: Buff
   attackDescription: 
   attackType: 2
+  attackClip: {fileID: 0}
   attackDamage: 0
   attackCooldown: 10
+  attackKnockback: 0
   meleeRange: 0
   meleePrefab: {fileID: 0}
   throwableSpeed: 0
@@ -26,4 +28,5 @@ MonoBehaviour:
   transformationResistanceMultiplier: 0
   transformationSpeedMultiplier: 2
   transformationDuration: 5
-  prefabTransformation: {fileID: 5966037644878367040, guid: ad96ab259dce76e4b8ea3ab96cc5c7e3, type: 3}
+  spriteTransformation: {fileID: 2093626443, guid: e6e9194350e44de4b94631363fc72ae6, type: 3}
+  animatorTransformation: {fileID: 9100000, guid: 284ec2ca7bd3ce645ae9eaae056e144f, type: 2}
