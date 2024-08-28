@@ -25,7 +25,7 @@ public class SelectMonsterToWin : MonoBehaviour
         //FindMontersEnemy();
         AddEventsToButtons();    
 
-        SelectMonsterFistTime();
+        SelectMonster();
     }
 
     private void OnDestroy()
@@ -35,7 +35,7 @@ public class SelectMonsterToWin : MonoBehaviour
 
     #region FirstEnterGame
 
-    public void SelectMonsterFistTime()
+    public void SelectMonster()
     {
         Debug.Log("asasasas: " + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7100171745141221503}
   - component: {fileID: 4309740126543374301}
   - component: {fileID: 8427645772460170409}
+  - component: {fileID: 6007181272865603624}
   m_Layer: 0
   m_Name: Enemy Rose
   m_TagString: Untagged
@@ -142,3 +143,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6007181272865603624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4121474341437585581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c45baa7daffc4cbf287c035a590e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsters: []
