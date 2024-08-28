@@ -180,6 +180,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ChangeDialogue",
+                    "type": "Button",
+                    "id": "282b0967-dd73-4c98-a882-171792e6756c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -259,6 +268,17 @@
                     "action": "AimLook",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c528cba7-5ff1-4cea-ba8d-bbe0de334180",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard && Mouse",
+                    "action": "ChangeDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
