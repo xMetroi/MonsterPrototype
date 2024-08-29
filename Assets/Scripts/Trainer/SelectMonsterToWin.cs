@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,8 @@ using UnityEngine.UI;
 
 public class SelectMonsterToWin : MonoBehaviour
 {
-    [SerializeField] Button[] monsterButtons;
-    [SerializeField]private List<Monster> monsters = new List<Monster>();
+    [SerializeField] private Transform buttonsHolder;
+    [SerializeField] private GameObject monsterButtonPrefab;    
     private bool canSelect = true;
 
     [SerializeField] private GameObject panelSelectMonster;
@@ -22,10 +23,8 @@ public class SelectMonsterToWin : MonoBehaviour
         //Event subscription
         GameManager.instance.BattleEnded += OnBattleEnded;
 
-        //FindMontersEnemy();
-        AddEventsToButtons();    
-
-        SelectMonster();
+        //if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
+            //SelectMonsterRandom(3);
     }
 
     private void OnDestroy()
@@ -33,86 +32,61 @@ public class SelectMonsterToWin : MonoBehaviour
         GameManager.instance.BattleEnded -= OnBattleEnded;
     }
 
-    #region FirstEnterGame
-
-    public void SelectMonster()
+    public void SelectMonster(List<Monster> monsters)
     {
-        Debug.Log("asasasas: " + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
-
-        //Debug.Log("Cantidad" + FindObjectOfType<TrainerController>().GetAllMonsters().Count);
-        if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
-        {
-            panelSelectMonster.SetActive(true);
-            var localMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
-
-            if (localMonsters != null)
-            {
-                monsters = localMonsters;
-
-                for (int i = 0; i < monsterButtons.Length; i++)
-                {
-                    if (i < monsters.Count && monsters[i] != null)
-                    {
-                        monsterButtons[i].image.sprite = monsters[i].monsterSprite;
-                    }
-                    else
-                    {
-                        monsterButtons[i].gameObject.SetActive(false);
-                    }
-                }
-            }
-
-        }
-    }
-
-    #endregion
-
-    #region Initialization
-
-    public void AddEventsToButtons()
-    {
-        for (int i = 0; i < monsterButtons.Length; i++)
-        {
-            int index = i;
-
-            if (monsterButtons[i] != null)
-            {
-                monsterButtons[i].onClick.AddListener(() => SelectMonster(index));
-            }
-        }
-    } 
-
-    private void FindMontersEnemy()
-    {
-        monsters = GameObject.FindAnyObjectByType<TrainerEnemyController>().GetAllMonsters();
+        panelSelectMonster.SetActive(true);
+        List<GameObject> monsterButtons = new List<GameObject>();
 
         if (monsters != null)
         {
-            for (int i = 0; i < monsterButtons.Length; i++)
+            for (int i = 0; i < monsters.Count; i++)
             {
-                if (i < monsters.Count && monsters[i] != null)
-                {
-                    monsterButtons[i].image.sprite = monsters[i].monsterSprite;
-                }
-                else
-                {
-                    monsterButtons[i].gameObject.SetActive(false);
-                }
+                GameObject monsterButton = Instantiate(monsterButtonPrefab, buttonsHolder);
+                monsterButtons.Add(monsterButton);
+                monsterButton.GetComponent<Image>().sprite = monsters[i].monsterSprite;
+                monsterButton.GetComponent<Button>().onClick.AddListener(() => AddMonster(monsters[i], monsterButtons));
             }
         }
-        
     }
 
-    #endregion
-
-    private void SelectMonster(int index) 
+    [ContextMenu("test")]
+    public void SelectMonsterRandom()
     {
-        if (canSelect)
+        panelSelectMonster.SetActive(true);
+        List<Monster> allMonstersList = DataManager.Instance.LoadAllMonstersFromAssets();
+        List<GameObject> monsterButtons = new List<GameObject>();
+
+        if (allMonstersList != null)
         {
-            canSelect = false;
-            GameObject.FindAnyObjectByType<TrainerController>().AddMonster(monsters[index]);
-            StartCoroutine(ShowSuccessPanel());
+            for(int i = 0; i < 3; i++)
+            {
+                monsterButtons.Add(Instantiate(monsterButtonPrefab, buttonsHolder));
+            }
+            
+            foreach (GameObject monsterButton in monsterButtons)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, allMonstersList.Count);
+                Monster randomMonster = allMonstersList[randomIndex];
+
+                monsterButton.GetComponent<Image>().sprite = randomMonster.monsterSprite;
+                monsterButton.GetComponent<Button>().onClick.AddListener(() => AddMonster(randomMonster, monsterButtons));
+
+                allMonstersList.RemoveAt(randomIndex);
+            }
         }
+    }
+
+    private void AddMonster(Monster monster, List<GameObject> buttons)
+    {
+        panelSelectMonster.SetActive(false);
+        GameObject.FindAnyObjectByType<TrainerController>().AddMonster(monster);
+
+        foreach(GameObject monsterButton in buttons)
+        {
+            Destroy(monsterButton);
+        }
+
+        StartCoroutine(ShowSuccessPanel());
     }
 
     private IEnumerator ShowSuccessPanel()
@@ -126,6 +100,8 @@ public class SelectMonsterToWin : MonoBehaviour
     private void OnBattleEnded(bool playerWin)
     {
         if (playerWin && canSelect)
-            panelSelectMonster.SetActive(true);
+        {
+
+        }            
     }
 }
