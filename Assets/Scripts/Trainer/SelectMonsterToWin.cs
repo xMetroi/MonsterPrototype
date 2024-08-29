@@ -32,6 +32,10 @@ public class SelectMonsterToWin : MonoBehaviour
         GameManager.instance.BattleEnded -= OnBattleEnded;
     }
 
+    /// <summary>
+    /// Select Monsters from a specific list
+    /// </summary>
+    /// <param name="monsters"></param>
     public void SelectMonster(List<Monster> monsters)
     {
         panelSelectMonster.SetActive(true);
@@ -41,14 +45,19 @@ public class SelectMonsterToWin : MonoBehaviour
         {
             for (int i = 0; i < monsters.Count; i++)
             {
+                Monster monster = monsters[i];
                 GameObject monsterButton = Instantiate(monsterButtonPrefab, buttonsHolder);
                 monsterButtons.Add(monsterButton);
                 monsterButton.GetComponent<Image>().sprite = monsters[i].monsterSprite;
-                monsterButton.GetComponent<Button>().onClick.AddListener(() => AddMonster(monsters[i], monsterButtons));
+                monsterButton.GetComponent<Button>().onClick.AddListener(() => AddMonster(monster, monsterButtons));
             }
         }
     }
 
+    /// <summary>
+    /// Select random monsters
+    /// </summary>
+    /// <param name="monstersNumber"> numbers of monster to generate </param>
     public void SelectMonsterRandom(int monstersNumber)
     {
         panelSelectMonster.SetActive(true);
@@ -80,9 +89,10 @@ public class SelectMonsterToWin : MonoBehaviour
         panelSelectMonster.SetActive(false);
         GameObject.FindAnyObjectByType<TrainerController>().AddMonster(monster);
 
-        foreach(GameObject monsterButton in buttons)
+        for (int i = 0; i < buttons.Count; i++)
         {
-            Destroy(monsterButton);
+            GameObject button = buttons[i];
+            Destroy(button);
         }
 
         StartCoroutine(ShowSuccessPanel());
