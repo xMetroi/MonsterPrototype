@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(menuName = "Monsters/Stats/New Attack")]
 public class Attack : ScriptableObject
@@ -19,6 +20,7 @@ public class Attack : ScriptableObject
     public string attackName;
     public string attackDescription;
     public AttackType attackType;
+    public Sprite attackSprite;
     public AudioClip attackAudioClip;
 
     [Header("Attack Properties")]
@@ -78,6 +80,7 @@ public class Attack : ScriptableObject
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackId"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackName"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDescription"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("attackSprite"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackAudioClip"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackDamage"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("attackCooldown"));

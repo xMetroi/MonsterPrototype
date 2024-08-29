@@ -15,15 +15,16 @@ MonoBehaviour:
   attackId: 0
   attackName: 
   attackDescription: 
-  attackType: 0
-  attackClip: {fileID: 0}
+  attackType: 1
+  attackSprite: {fileID: 87546282, guid: 80953a6c5554aef4a815c448d1016ffd, type: 3}
+  attackAudioClip: {fileID: 0}
   attackDamage: 0
   attackCooldown: 0
   attackKnockback: 0
   meleeRange: 0
   meleePrefab: {fileID: 0}
   throwableSpeed: 0
-  throwablePrefab: {fileID: 0}
+  throwablePrefab: {fileID: 7125650278478246345, guid: 5744e9c5dd4a40840b5b67666f9575ce, type: 3}
   transformationDamageMultiplier: 0
   transformationResistanceMultiplier: 0
   transformationSpeedMultiplier: 0

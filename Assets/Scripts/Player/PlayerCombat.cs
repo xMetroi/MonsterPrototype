@@ -138,18 +138,23 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         {
             Debug.Log($"{basickAttack1.attackName}, applying cooldown: {basickAttack1.attackCooldown}");
             StartCoroutine(StartBasicAttack1Cooldown(basickAttack1.attackCooldown));
+            FindObjectOfType<CombatUI>().StartCooldownPlayerAttack1(basickAttack1.attackCooldown);
         }
 
         if (references.playerInputs.Combat.BasicAttack2.WasPerformedThisFrame() && canUseBasicAttack2)
         {
             Debug.Log($"{basickAttack2.attackName}, applying cooldown: {basickAttack2.attackCooldown}");
             StartCoroutine(StartBasicAttack2Cooldown(basickAttack2.attackCooldown));
+            FindObjectOfType<CombatUI>().StartCooldownPlayerAttack2(basickAttack2.attackCooldown);
+
         }
 
         if (references.playerInputs.Combat.Special.WasPerformedThisFrame() && canUseSpecialAttack)
         {
             Debug.Log($"{specialAttack.attackName}, applying cooldown: {specialAttack.attackCooldown}");
             StartCoroutine(StartSpecialAttackCooldown(specialAttack.attackCooldown));
+            FindObjectOfType<CombatUI>().StartCooldownPlayerAttack3(specialAttack.attackCooldown);
+
         }
     }
 

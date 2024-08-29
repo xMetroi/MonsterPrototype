@@ -16,7 +16,8 @@ MonoBehaviour:
   attackName: Buff
   attackDescription: 
   attackType: 2
-  attackClip: {fileID: 0}
+  attackSprite: {fileID: 540033801, guid: e6e9194350e44de4b94631363fc72ae6, type: 3}
+  attackAudioClip: {fileID: 0}
   attackDamage: 0
   attackCooldown: 10
   attackKnockback: 0

@@ -16,7 +16,8 @@ MonoBehaviour:
   attackName: 
   attackDescription: 
   attackType: 0
-  attackClip: {fileID: 0}
+  attackSprite: {fileID: -1377769545, guid: 5b559fe0f0b0cff4a94083325b187794, type: 3}
+  attackAudioClip: {fileID: 0}
   attackDamage: 1
   attackCooldown: 1
   attackKnockback: 1
