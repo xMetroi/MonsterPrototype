@@ -73,7 +73,9 @@ public class AmbienceTrigger : MonoBehaviour
     public void StopClip()
     {
         if (currentVolume == 0)
+        {
         ambSource.Stop(); 
+        }
     }
 
     //Fade In/Out Behaviour 
