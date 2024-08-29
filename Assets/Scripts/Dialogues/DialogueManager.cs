@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.ShaderGraph;
 
 public class DialogueManager : MonoBehaviour
 {
     private Queue<string> sentences;
+    private TrainerEnemyController actualEnemy;
 
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
@@ -45,8 +45,9 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue(Dialogue dialogue)
+    public void StartDialogue(Dialogue dialogue, TrainerEnemyController enemyController)
     {
+        this.actualEnemy = enemyController;
         animator.enabled = true;
         animator.SetBool("IsOpen", true);
 
@@ -89,6 +90,6 @@ public class DialogueManager : MonoBehaviour
         animator.SetBool("IsOpen", false);
         FindObjectOfType<TrainerMovement>().SetCanMove(true);
         if (!GameManager.instance.isInBattle)
-            GameManager.instance.StartBattle();
+            GameManager.instance.StartBattle(actualEnemy);
     }
 }

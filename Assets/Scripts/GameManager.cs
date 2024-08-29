@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// We use this method to start a battle
     /// </summary>
-    public void StartBattle(/*TrainerEnemyController trainerEnemyController*/)
+    public void StartBattle(TrainerEnemyController trainerEnemyController)
     {
         FindObjectOfType<TrainerMovement>().SetCanMove(false);
 
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
 
         isInBattle = true;
         FindObjectOfType<CombatUI>().AddDataUiFistTime(playerMonsterGO, enemyMonsterGO);
-        //this.trainerEnemyController = trainerEnemyController;
+        this.trainerEnemyController = trainerEnemyController;
         BattleStarted?.Invoke(trainerEnemyController);
     }
 
@@ -154,11 +154,17 @@ public class GameManager : MonoBehaviour
 
     private void OnBattleEnded(TrainerEnemyController trainerEnemyController, bool playerWin)
     {
+        //Si el jugador pierde
         if (!playerWin)
             GameObject.FindAnyObjectByType<GameOverCanvas>().ShowLooseHolder();
 
-        isInBattle = false;
+        else // Si el jugador gana
+        {
+            Destroy(trainerEnemyController.gameObject); // Destruimos al enemigo
+        }
 
+        isInBattle = false;
+       
         Destroy(playerMonsterGO);
         Destroy(enemyMonsterGO);
     }
