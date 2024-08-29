@@ -41,7 +41,7 @@ public class VSManager : MonoBehaviour
         GameManager.instance.BattleStarted -= OnBattleStarted;
     }
 
-    private void OnBattleStarted()
+    private void OnBattleStarted(TrainerEnemyController trainerEnemyController)
     {
         StartCoroutine(StartAnimation());
     }

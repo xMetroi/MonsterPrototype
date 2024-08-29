@@ -23,8 +23,8 @@ public class SelectMonsterToWin : MonoBehaviour
         //Event subscription
         GameManager.instance.BattleEnded += OnBattleEnded;
 
-        //if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
-            //SelectMonsterRandom(3);
+        if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
+            SelectMonsterRandom(3);
     }
 
     private void OnDestroy()
@@ -49,8 +49,7 @@ public class SelectMonsterToWin : MonoBehaviour
         }
     }
 
-    [ContextMenu("test")]
-    public void SelectMonsterRandom()
+    public void SelectMonsterRandom(int monstersNumber)
     {
         panelSelectMonster.SetActive(true);
         List<Monster> allMonstersList = DataManager.Instance.LoadAllMonstersFromAssets();
@@ -58,7 +57,7 @@ public class SelectMonsterToWin : MonoBehaviour
 
         if (allMonstersList != null)
         {
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < monstersNumber; i++)
             {
                 monsterButtons.Add(Instantiate(monsterButtonPrefab, buttonsHolder));
             }
@@ -97,11 +96,12 @@ public class SelectMonsterToWin : MonoBehaviour
         panelSuccessful.SetActive(false);
     }
 
-    private void OnBattleEnded(bool playerWin)
+    private void OnBattleEnded(TrainerEnemyController trainerEnemyController, bool playerWin)
     {
         if (playerWin && canSelect)
         {
-
+            List<Monster> enemyMonsters = trainerEnemyController.monsters;
+            SelectMonster(enemyMonsters);
         }            
     }
 }

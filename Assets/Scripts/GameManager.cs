@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerMonsterPrefab;
     [SerializeField] private GameObject enemyMonsterPrefab;
     [SerializeField] private Transform battlePointTransform;
+    TrainerEnemyController trainerEnemyController;
     GameObject playerMonsterGO;
     GameObject enemyMonsterGO;
 
@@ -28,8 +29,8 @@ public class GameManager : MonoBehaviour
 
     #region Events
 
-    public event Action BattleStarted;
-    public event Action<bool> BattleEnded;
+    public event Action <TrainerEnemyController> BattleStarted;
+    public event Action<TrainerEnemyController, bool> BattleEnded;
 
     #endregion
 
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     public void TriggerBattleEnded(bool playerWon)
     {
-        BattleEnded?.Invoke(playerWon);
+        BattleEnded?.Invoke(trainerEnemyController, playerWon);
     }
 
 
@@ -136,7 +137,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// We use this method to start a battle
     /// </summary>
-    public void StartBattle()
+    public void StartBattle(/*TrainerEnemyController trainerEnemyController*/)
     {
         FindObjectOfType<TrainerMovement>().SetCanMove(false);
 
@@ -145,12 +146,13 @@ public class GameManager : MonoBehaviour
 
         isInBattle = true;
         FindObjectOfType<CombatUI>().AddDataUiFistTime(playerMonsterGO, enemyMonsterGO);
-        BattleStarted?.Invoke();
+        //this.trainerEnemyController = trainerEnemyController;
+        BattleStarted?.Invoke(trainerEnemyController);
     }
 
     //Events
 
-    private void OnBattleEnded(bool playerWin)
+    private void OnBattleEnded(TrainerEnemyController trainerEnemyController, bool playerWin)
     {
         if (!playerWin)
             GameObject.FindAnyObjectByType<GameOverCanvas>().ShowLooseHolder();

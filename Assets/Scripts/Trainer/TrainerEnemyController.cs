@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TrainerEnemyController : MonoBehaviour
 {
-    [SerializeField] private List<Monster> monsters = new List<Monster>();
+    public List<Monster> monsters = new List<Monster>();
     private int coins = 0;
 
 
