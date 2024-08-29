@@ -41,7 +41,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     public event Action<Attack> TransformationEnd;
 
     //Hit
-    public event Action<float> StartHitted;
+    public event Action<float, Monster> StartHitted;
     public event Action StopHitted;
 
     //Defense
@@ -241,8 +241,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
             rotation = arrowTransform.rotation;
         else
         {
-            float angleInRadians = Mathf.Atan2(lastMovementInput.y, lastMovementInput.x); // Ángulo en radianes
-            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+            float angleInRadians = Mathf.Atan2(lastMovementInput.y, lastMovementInput.x); // ï¿½ngulo en radianes
+            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversiï¿½n a grados
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
@@ -266,8 +266,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable
             rotation = arrowTransform.rotation;
         else
         {
-            float angleInRadians = Mathf.Atan2(lastMovementInput.y, lastMovementInput.x); // Ángulo en radianes
-            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+            float angleInRadians = Mathf.Atan2(lastMovementInput.y, lastMovementInput.x); // ï¿½ngulo en radianes
+            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversiï¿½n a grados
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
@@ -380,7 +380,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         {
             if (!isHitted)
             {
-                StartHitted?.Invoke(damage);
+                StartHitted?.Invoke(damage, references.currentMonster);
                 StartCoroutine(RoutineDamage(damage, kb));
 
                 if (monsterHp <= 0 && GameManager.instance.isInBattle)

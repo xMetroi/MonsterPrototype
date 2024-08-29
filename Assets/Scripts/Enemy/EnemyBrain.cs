@@ -45,7 +45,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     #region Events
 
     //Hit
-    public event Action<float> StartHitted;
+    public event Action<float, Monster> StartHitted;
     public event Action StopHitted;
 
     //Defense
@@ -335,8 +335,8 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     {
         Vector2 direction = references.playerReferences.playerTransform.position - references.MonsterTransform.position;
         direction.Normalize();
-        float angleInRadians = Mathf.Atan2(direction.y, direction.x); // Ángulo en radianes
-        float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+        float angleInRadians = Mathf.Atan2(direction.y, direction.x); // ï¿½ngulo en radianes
+        float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversiï¿½n a grados
         Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
 
         GameObject go = Instantiate(attack.meleePrefab, references.playerReferences.playerTransform.position, rotation);
@@ -360,16 +360,16 @@ public class EnemyBrain : MonoBehaviour, IDamageable
             {
                 direction = (references.playerReferences.playerPredictThrowableTransform.position - transform.position);
                 direction.Normalize();
-                float angleInRadians = Mathf.Atan2(direction.y, direction.x); // Ángulo en radianes
-                float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+                float angleInRadians = Mathf.Atan2(direction.y, direction.x); // ï¿½ngulo en radianes
+                float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversiï¿½n a grados
                 rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
             }
             else
             {
                 direction = references.playerReferences.playerTransform.position - references.MonsterTransform.position;
                 direction.Normalize();
-                float angleInRadians = Mathf.Atan2(direction.y, direction.x); // Ángulo en radianes
-                float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+                float angleInRadians = Mathf.Atan2(direction.y, direction.x); // ï¿½ngulo en radianes
+                float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversiï¿½n a grados
                 rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
             }
         }
@@ -377,8 +377,8 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         {
             direction = references.playerReferences.playerTransform.position - references.MonsterTransform.position;
             direction.Normalize();
-            float angleInRadians = Mathf.Atan2(direction.y, direction.x); // Ángulo en radianes
-            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversión a grados
+            float angleInRadians = Mathf.Atan2(direction.y, direction.x); // ï¿½ngulo en radianes
+            float angleInDegrees = angleInRadians * Mathf.Rad2Deg; // Conversiï¿½n a grados
             rotation = Quaternion.Euler(new Vector3(0, 0, angleInDegrees));
         }
 
@@ -416,6 +416,8 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         references.monsterSprite.color = damageColor;
         monsterHp -= damage;
         ApplyForce(kb);
+
+        StartHitted?.Invoke(damage, references.brain.actualMonster);
 
         yield return new WaitForSeconds(hittedCooldown);
 

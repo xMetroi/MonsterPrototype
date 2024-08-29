@@ -85,9 +85,9 @@ public class PlayerSounds : MonoBehaviour
     /// Triggers when the player gets hitted
     /// </summary>
     /// <param name="damage"></param>
-    private void OnPlayerStartHitted(float damage)
+    private void OnPlayerStartHitted(float damage, Monster currentMonster)
     {
-
+        AudioManager.instance.PlaySfxClip(currentMonster.monsterHurt);
     }
 
     /// <summary>

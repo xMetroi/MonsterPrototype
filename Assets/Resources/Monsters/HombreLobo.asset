@@ -24,3 +24,4 @@ MonoBehaviour:
   basickAttack1: {fileID: 0}
   basickAttack2: {fileID: 0}
   specialAttack: {fileID: 0}
+  monsterHurt: {fileID: 8300000, guid: 02899d39c1044a54abaff02a744238e0, type: 3}

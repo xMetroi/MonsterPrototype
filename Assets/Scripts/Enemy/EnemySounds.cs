@@ -50,16 +50,16 @@ public class EnemySounds : MonoBehaviour
     /// <param name="attack"></param>
     private void OnAttackStarted(Attack attack)
     {
-
+        AudioManager.instance.PlaySfxClip(attack.attackAudioClip);
     }
 
     /// <summary>
     /// Triggers when the enemy gets hitted
     /// </summary>
     /// <param name="damage"></param>
-    private void OnEnemyStartHitted(float damage)
+    private void OnEnemyStartHitted(float damage, Monster currentMonster)
     {
-
+        AudioManager.instance.PlaySfxClip(currentMonster.monsterHurt);
     }
 
     /// <summary>

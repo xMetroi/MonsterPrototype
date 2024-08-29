@@ -22,4 +22,7 @@ public class Monster : ScriptableObject
     public Attack basickAttack1;
     public Attack basickAttack2;
     public Attack specialAttack;
+
+    [Header("Monster Sounds")]
+    public AudioClip monsterHurt;
 }

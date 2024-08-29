@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 287d3d912a6c06e4db50b11f123afd89, type: 3}
+  m_Name: SingleKnife
+  m_EditorClassIdentifier: 
+  attackId: 0
+  attackName: 
+  attackDescription: 
+  attackType: 1
+  attackSprite: {fileID: 1853565863, guid: 10176591b06487747a1acfa158958bd2, type: 3}
+  attackAudioClip: {fileID: 8300000, guid: 8354c061f8ea5174988284f6ae26af64, type: 3}
+  attackDamage: 0
+  attackCooldown: 0
+  attackKnockback: 0
+  meleeRange: 0
+  meleePrefab: {fileID: 0}
+  throwableSpeed: 0
+  throwablePrefab: {fileID: 7211960894512739248, guid: 9c05e7034db147649bf2fdd9968a52d4, type: 3}
+  transformationDamageMultiplier: 0
+  transformationResistanceMultiplier: 0
+  transformationSpeedMultiplier: 0
+  transformationDuration: 0
+  spriteTransformation: {fileID: 0}
+  animatorTransformation: {fileID: 0}

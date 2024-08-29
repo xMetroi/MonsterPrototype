@@ -66,7 +66,7 @@ public class PlayerVisuals : MonoBehaviour
     /// Triggers when the player is hitted
     /// </summary>
     /// <param name="damage"></param>
-    private void OnPlayerStartHitted(float damage)
+    private void OnPlayerStartHitted(float damage, Monster currentMonster)
     {
         references.monsterSprite.color = damageColor;
     }
