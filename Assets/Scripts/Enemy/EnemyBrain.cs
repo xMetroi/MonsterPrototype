@@ -161,8 +161,16 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         centerPoint = GameObject.Find("CenterPoint").transform;
 
         references.stateMachineController.AttackStarted += OnAttackStarted;
+        Initialize();
     }
 
+    public void Initialize()
+    {
+        if (references.currentMonster != null)
+        {
+            monsterHp = references.currentMonster.monsterHealth;
+        }
+    }
     private void OnDestroy()
     {
         references.stateMachineController.AttackStarted -= OnAttackStarted;

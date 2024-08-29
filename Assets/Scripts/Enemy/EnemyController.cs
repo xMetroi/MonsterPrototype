@@ -10,10 +10,10 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        references = GetComponent<EnemyBrain>();
+        /*references = GetComponent<EnemyBrain>();
         monsterSliderLife = GameObject.Find("SliderIAHP").GetComponent<Slider>();
         monsterSliderLife.maxValue = references.GetHP();
-        monsterSliderLife.value = references.GetHP();
+        monsterSliderLife.value = references.GetHP();*/
     }
 
     private void Update()

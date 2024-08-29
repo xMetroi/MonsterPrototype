@@ -268,16 +268,22 @@ public class StateMachineController : MonoBehaviour
         {
             Debug.Log("Basic Attack 1 applied");
             StartCoroutine(Attack1CooldownCoroutine(basicAttack1.attackCooldown));
+            FindObjectOfType<CombatUI>().StartCooldownEnemyAttack1(basicAttack1.attackCooldown);
+
         }
         else if (basicAttack2.attackType == attackType && canUseAttack2)
         {
             Debug.Log("Basic Attack 2 applied");
             StartCoroutine(Attack2CooldownCoroutine(basicAttack2.attackCooldown));
+            FindObjectOfType<CombatUI>().StartCooldownEnemyAttack2(basicAttack2.attackCooldown);
+
         }
         else if (specialAttack.attackType == attackType && canUseSpecial)
         {
             Debug.Log("Special Attack applied");
             StartCoroutine(SpecialCooldownCoroutine(specialAttack.attackCooldown));
+            FindObjectOfType<CombatUI>().StartCooldownEnemyAttack3(specialAttack.attackCooldown);
+
         }
 
         attackTimer = time;  // Set the timer

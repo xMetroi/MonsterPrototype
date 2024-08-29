@@ -1490,7 +1490,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: a84b4f3beb244d248b4305f8753ba82d, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1676,8 +1676,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 140.38, y: 20}
-  m_SizeDelta: {x: 610.3668, y: 170.7397}
+  m_AnchoredPosition: {x: 76.98901, y: 0}
+  m_SizeDelta: {x: 336.92, y: 170.7397}
   m_Pivot: {x: 0.73, y: 0.5}
 --- !u!114 &713010532
 MonoBehaviour:
@@ -2015,14 +2015,14 @@ RectTransform:
   m_GameObject: {fileID: 849541010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 4, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1982292856}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 379, y: -163}
+  m_AnchoredPosition: {x: 384, y: -184}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &849541012
@@ -2047,7 +2047,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 257032447, guid: ccedc511949201b4ba5d85dcba6ec791, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2474,7 +2474,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -1142455458, guid: 3c24fe36ea68f54479be450455a3e80c, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -3219,25 +3219,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a059dc10c1a1d1745b3ed43655bb2231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelStartBattle: {fileID: 0}
-  panelLifeMonsters: {fileID: 0}
   trainerGO: {fileID: 0}
   trainerTransform: {fileID: 0}
-  battlePointTransform: {fileID: 0}
-  panelGameOver: {fileID: 0}
-  winText: {fileID: 0}
-  looseText: {fileID: 0}
-  gameFinished: 0
   isInBattle: 0
-  battleStarted: 0
-  isWinBattle: 0
-  monsters: []
-  panelSelectMonster: {fileID: 0}
-  monsterButtons: []
   playerMonsterSpawn: {fileID: 0}
   enemyMonsterSpawn: {fileID: 0}
   playerMonsterPrefab: {fileID: 4939346786512639601, guid: d5af103e1c9227f40a151c529461c4ec, type: 3}
   enemyMonsterPrefab: {fileID: 9202629590522215790, guid: fe98f2f51f784f2438df9dc99be8746b, type: 3}
+  battlePointTransform: {fileID: 0}
   slowMotionFactor: 0.05
   slowMotionDuration: 0.08
 --- !u!4 &1212172008
@@ -3900,7 +3889,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: 221}
+  m_AnchoredPosition: {x: -1, y: 201}
   m_SizeDelta: {x: 335.9246, y: 170.7397}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1289666971
@@ -4353,7 +4342,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: a84b4f3beb244d248b4305f8753ba82d, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -4562,7 +4551,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: a84b4f3beb244d248b4305f8753ba82d, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -6173,7 +6162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0043945312, y: -188}
+  m_AnchoredPosition: {x: -0.0043945312, y: -208}
   m_SizeDelta: {x: 335.9246, y: 170.7397}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1997392480

@@ -144,6 +144,7 @@ public class GameManager : MonoBehaviour
         enemyMonsterGO = Instantiate(enemyMonsterPrefab, enemyMonsterSpawn.position, Quaternion.identity);
 
         isInBattle = true;
+        FindObjectOfType<CombatUI>().AddDataUiFistTime(playerMonsterGO, enemyMonsterGO);
         BattleStarted?.Invoke();
     }
 
@@ -250,5 +251,10 @@ public class GameManager : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void PauseGame()
+    {
+
     }
 }

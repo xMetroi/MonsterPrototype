@@ -11,10 +11,10 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        references = GetComponent<PlayerCombat>();
+        /*references = GetComponent<PlayerCombat>();
         monsterSliderLife = GameObject.Find("SliderPlayerHP").GetComponent<Slider>();
         monsterSliderLife.maxValue = references.GetHP();
-        monsterSliderLife.value = references.GetHP();
+        monsterSliderLife.value = references.GetHP();*/
     }
 
     private void Update()
