@@ -16,9 +16,9 @@ MonoBehaviour:
   monsterName: 
   monsterSprite: {fileID: 226360074, guid: 5774009bc2405184eab4ee339f22ab4c, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 6e45c3ff67af45a4f8e1c94d5039933a, type: 2}
-  monsterHealth: 10
-  monsterSpeed: 3
-  monsterAimSpeed: 1
+  monsterHealth: 100
+  monsterSpeed: 4
+  monsterAimSpeed: 2
   monsterDashForce: 2
   monsterDashCooldown: 2
   basickAttack1: {fileID: 11400000, guid: 1f9e4b0e008e74c4faba46ab99c8e42c, type: 2}

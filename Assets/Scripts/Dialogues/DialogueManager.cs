@@ -47,6 +47,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue, TrainerEnemyController enemyController)
     {
+        transform.localScale = new Vector3(1, 1, 0);
         this.actualEnemy = enemyController;
         animator.enabled = true;
         animator.SetBool("IsOpen", true);

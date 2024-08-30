@@ -9,8 +9,10 @@ public class VSManager : MonoBehaviour
     [SerializeField] private Image imagePlayer;
     [SerializeField] private Image imageEnemy;
     [SerializeField] private TextMeshProUGUI enemyName;
+    [SerializeField] Animator animator;
 
     public GameObject panelStartBattle;
+    public GameObject dialogueSystem;
 
     public void SetImagePlayer(SpriteRenderer image)
     {
@@ -19,7 +21,10 @@ public class VSManager : MonoBehaviour
 
     public void SetImageEnemy(SpriteRenderer image)
     {
-        imageEnemy.sprite = image.sprite;
+        if (image != null && image.sprite != null)
+        {
+            imageEnemy.sprite = image.sprite;
+        }
     }
 
     public void SetEnemyName(string name)
@@ -29,10 +34,9 @@ public class VSManager : MonoBehaviour
 
     private void Start()
     {
+        panelStartBattle.SetActive(false);
         //Event subscribtion
         GameManager.instance.BattleStarted += OnBattleStarted;
-
-        panelStartBattle.SetActive(false);
     }
 
     private void OnDestroy()
@@ -41,20 +45,33 @@ public class VSManager : MonoBehaviour
         GameManager.instance.BattleStarted -= OnBattleStarted;
     }
 
-    private void OnBattleStarted(TrainerEnemyController trainerEnemyController)
+    public void OnBattleStarted(TrainerEnemyController trainerEnemyController)
     {
         StartCoroutine(StartAnimation());
     }
 
     IEnumerator StartAnimation()
     {
+        dialogueSystem.transform.localScale = new Vector3(0, 1, 0);
         panelStartBattle.SetActive(true);
-        yield return new WaitForSeconds(10f);
+
+        // Configurar el Animator para que funcione en tiempo real
+        if (animator != null)
+        {
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime; // Animación en tiempo real
+        }
+
+        // Pausar el tiempo del juego
+        Time.timeScale = 0;
+
+        // Esperar en tiempo real para que la animación se ejecute completamente
+        yield return new WaitForSecondsRealtime(3f);
+
+        // Reanudar el tiempo del juego
+        Time.timeScale = 1;
         panelStartBattle.SetActive(false);
     }
 
-    public void DestroyPanel() 
-    {
-        Destroy(gameObject);
-    }
+
+
 }

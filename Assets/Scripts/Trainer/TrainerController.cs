@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 public class TrainerController : MonoBehaviour
 {
     [SerializeField] private List<Monster> monsters = new List<Monster>();
-    private float[] monstersHP = new float[4];
+    [SerializeField] private float[] monstersHP = new float[4];
 
     PlayerReferences playerReferences;
     PlayerVisuals playerVisuals;
@@ -20,7 +20,10 @@ public class TrainerController : MonoBehaviour
 
     private bool canChange = true;
 
-    [SerializeField] private int count;
+    private int count;
+
+    public Vector3 pointPosition;
+    public List<string> defeatedEnemies = new List<string>();
 
     private void Awake()
     {
@@ -46,7 +49,22 @@ public class TrainerController : MonoBehaviour
             SetMonsters(DataManager.Instance.LoadPlayerMonster());
             SetAllMonstersHP();
         }
+        FirstDataPlayer();
+        //Invoke(nameof(FirstDataPlayer), 0);
+    }
 
+    private void FirstDataPlayer()
+    {
+        if (DataManager.Instance.LoadEnemiesDefeated().Count > 0)
+        {
+            defeatedEnemies = DataManager.Instance.LoadEnemiesDefeated();
+
+            for (int i = 0; i < DataManager.Instance.LoadEnemiesDefeated().Count; i++)
+            {
+                var enemy = GameObject.Find(DataManager.Instance.LoadEnemiesDefeated()[i]).gameObject;
+                Destroy(enemy);
+            }
+        }
     }
 
     public void SetAllMonstersHP()
@@ -95,9 +113,10 @@ public class TrainerController : MonoBehaviour
 
     public Monster GetMonsterById(int id)
     {
-        return this.monsters[id];
         currentMonster++;
         count++;
+        return this.monsters[id];
+        
     }
 
     private void Update()
@@ -123,23 +142,35 @@ public class TrainerController : MonoBehaviour
         {
             if (controls.Combat.Change1.ReadValue<float>() > 0)
             {
-                SetCurrentMonster(0);
-                StartCoroutine(CanChange());
+                if (monsters[0] != null && monstersHP[0] > 0 && currentMonster != 1)
+                {
+                    SetCurrentMonster(0);
+                    StartCoroutine(CanChange());
+                } 
             }
             if (controls.Combat.Change2.ReadValue<float>() > 0)
             {
-                SetCurrentMonster(1);
-                StartCoroutine(CanChange());
+                if (monsters[1] != null && monstersHP[1] > 0 && currentMonster != 2)
+                {
+                    SetCurrentMonster(1);
+                    StartCoroutine(CanChange());
+                }
             }
             if (controls.Combat.Change3.ReadValue<float>() > 0)
             {
-                SetCurrentMonster(2);
-                StartCoroutine(CanChange());
+                if (monsters[2] != null && monstersHP[2] > 0 && currentMonster != 3)
+                {
+                    SetCurrentMonster(2);
+                    StartCoroutine(CanChange());
+                }
             }
-            if (controls.Combat.Change4.ReadValue<float>() > 0)
+            if (controls.Combat.Change4.ReadValue<float>() > 0 && currentMonster != 4)
             {
-                SetCurrentMonster(3);
-                StartCoroutine(CanChange());
+                if (monsters[3] != null && monstersHP[3] > 0)
+                {
+                    SetCurrentMonster(3);
+                    StartCoroutine(CanChange());
+                }
             }
         }
     }
@@ -147,22 +178,22 @@ public class TrainerController : MonoBehaviour
     IEnumerator CanChange()
     {
         canChange = false;
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Puede cambiar");
         canChange = true;
 
     }
 
     private void SetCurrentMonster(int idx)
     {
-        monstersHP[currentMonster] = playerCombat.GetHP();
+        monstersHP[currentMonster - 1] = playerCombat.GetHP();
 
         playerReferences.currentMonster = monsters[idx];
         playerVisuals.SetMonsterData();
         playerCombat.Initialize();
-        //playerCombat.SetHP(monstersHP[idx]);
+        playerCombat.SetHP(monstersHP[idx]);
         
-        currentMonster = idx;
-        count++;
+        currentMonster = idx + 1;
     }
 
     public void ChangeMonster(GameObject enemy)
@@ -172,19 +203,63 @@ public class TrainerController : MonoBehaviour
             GameManager.instance.TriggerBattleEnded(false);
             return;
         }
-        else
+
+        // Actualiza el HP del monstruo actual
+        if (currentMonster - 1 < monsters.Count)
         {
-            monstersHP[currentMonster] = playerCombat.GetHP();
-
-           playerReferences.currentMonster = monsters[currentMonster];
-            playerVisuals.SetMonsterData();
-            playerCombat.Initialize();
-            //playerCombat.SetHP(monstersHP[currentMonster]);
-
-            currentMonster++;
-            count++;
-            GameManager.instance.TriggerBattleEnded(false);
-
+            monstersHP[currentMonster - 1] = playerCombat.GetHP();
+            playerCombat.SetHP(monstersHP[currentMonster - 1]);
         }
+
+        // Verifica si todos los monstruos tienen HP menor o igual a 0
+        if (monstersHP.All(n => n <= 0))
+        {
+            GameManager.instance.TriggerBattleEnded(false);
+            return;
+        }
+        // Verifica si currentMonster ha alcanzado el límite de monstruos
+        else if (currentMonster >= monsters.Count)
+        {
+            // Encuentra la primera posición donde monstersHP sea mayor a 0 y no sea la posición actual
+            int newIndex = -1;
+            for (int i = 0; i < monstersHP.Length; i++)
+            {
+                if (i != currentMonster && monstersHP[i] > 0)
+                {
+                    newIndex = i;
+                    break;
+                }
+            }
+
+            // Si no encuentra un monstruo válido, termina el combate
+            if (newIndex == -1)
+            {
+                GameManager.instance.TriggerBattleEnded(false);
+                return;
+            }
+
+            // Actualiza currentMonster a la nueva posición válida
+            currentMonster = newIndex;
+        }
+
+        
+
+        // Configura las referencias del jugador y visuales
+        playerReferences.currentMonster = monsters[currentMonster];
+        playerVisuals.SetMonsterData();
+        playerCombat.Initialize();
+        playerCombat.SetHP(monstersHP[currentMonster]); // Descomentar si se necesita establecer HP específico
+
+        // Avanza al siguiente monstruo
+        currentMonster++;
+        count++;
     }
+
+    public void ResetData()
+    {
+        currentMonster = 0;
+        count = 0;
+        SetAllMonstersHP();
+    }
+
 }

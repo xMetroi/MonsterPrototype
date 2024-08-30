@@ -98,7 +98,7 @@ Animator:
   m_GameObject: {fileID: 6062852242054438905}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 447a5c25726311743a1ce4e575a18b57, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4ea613d245b7e0c4e8f24a0d887a12ea, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -156,3 +156,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsters: []
+  monstersHP:
+  - 0
+  - 0
+  - 0
+  - 0
+  count: 0
+  currentMonster: 0

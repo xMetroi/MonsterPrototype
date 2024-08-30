@@ -18,12 +18,12 @@ MonoBehaviour:
   attackType: 1
   attackSprite: {fileID: 87546282, guid: 80953a6c5554aef4a815c448d1016ffd, type: 3}
   attackAudioClip: {fileID: 8300000, guid: 8354c061f8ea5174988284f6ae26af64, type: 3}
-  attackDamage: 1
-  attackCooldown: 1
+  attackDamage: 5
+  attackCooldown: 2
   attackKnockback: 1
   meleeRange: 0
   meleePrefab: {fileID: 0}
-  throwableSpeed: 2
+  throwableSpeed: 3
   throwablePrefab: {fileID: 7125650278478246345, guid: 5744e9c5dd4a40840b5b67666f9575ce, type: 3}
   transformationDamageMultiplier: 0
   transformationResistanceMultiplier: 0

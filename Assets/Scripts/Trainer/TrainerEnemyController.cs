@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class TrainerEnemyController : MonoBehaviour
@@ -10,7 +9,7 @@ public class TrainerEnemyController : MonoBehaviour
     public List<Monster> monsters = new List<Monster>();
     [SerializeField] private float[] monstersHP = new float[4];
 
-    int count;
+    [SerializeField] int count;
 
     AIReferences aiReferences;
     EnemyBrain enemyBrain;
@@ -20,7 +19,8 @@ public class TrainerEnemyController : MonoBehaviour
 
     private void Start()
     {
-        currentMonster = 0;
+        //currentMonster = 0;
+        //count = 0;
         SetAllMonstersHP();
     }
 
@@ -35,6 +35,7 @@ public class TrainerEnemyController : MonoBehaviour
 
     public void SetCurrentMonster(GameObject enemy)
     {
+        Debug.Log(monsters.Count);
         if (count >= monsters.Count)
         {
             Debug.Log("Gano el juego");
@@ -43,6 +44,7 @@ public class TrainerEnemyController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Seteo los valores");
             aiReferences = enemy.GetComponent<AIReferences>();
             enemyBrain = enemy.GetComponent<EnemyBrain>();
 
@@ -54,5 +56,12 @@ public class TrainerEnemyController : MonoBehaviour
             currentMonster++;
             count++;
         }   
+    }
+
+    public void ResetData()
+    {
+        currentMonster = 0;
+        count = 0;
+        SetAllMonstersHP();
     }
 }

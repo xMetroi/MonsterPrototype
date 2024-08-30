@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerMonsterPrefab;
     [SerializeField] private GameObject enemyMonsterPrefab;
     [SerializeField] private Transform battlePointTransform;
-    TrainerEnemyController trainerEnemyController;
+    public TrainerEnemyController trainerEnemyController;
     GameObject playerMonsterGO;
     GameObject enemyMonsterGO;
 
@@ -27,16 +28,21 @@ public class GameManager : MonoBehaviour
     public float slowMotionDuration = 0.08f;
     private bool isSlowMotionActive = false;
 
-   
     #region Events
 
-    public event Action <TrainerEnemyController> BattleStarted;
+    public event Action<TrainerEnemyController> BattleStarted;
     public event Action<TrainerEnemyController, bool> BattleEnded;
+
+    //Menu Pausa
+    private GameObject pauseMenu;
+    private GameObject pausePanel;
+
+    private GameObject youWinPanel;
 
     #endregion
 
     public static GameManager instance;
-    
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -86,9 +92,8 @@ public class GameManager : MonoBehaviour
         if (scene.name == "WorldPROTOTYPEScene")
         {
             InitializeWorldVariables();
-            
+
             AudioManager.instance.PlayExplorationMusic();
-            
         }
     }
 
@@ -136,6 +141,22 @@ public class GameManager : MonoBehaviour
 
         playerMonsterSpawn = GameObject.Find("SpawnPointPlayerMonster").transform;
         enemyMonsterSpawn = GameObject.Find("SpawnPointEnemyMonster").transform;
+
+        youWinPanel = GameObject.Find("YouWinPanel");
+        youWinPanel.transform.Find("Quit").GetComponent<Button>().onClick.AddListener(() => ExitGame());
+        youWinPanel.SetActive(false);
+        pauseMenu = GameObject.Find("PauseMenu");
+        pauseMenu.transform.Find("Pause Button").GetComponent<Button>().onClick.AddListener(() => PauseGame());
+        
+
+        pausePanel = pauseMenu.transform.Find("PanelPause").gameObject;
+
+        Button[] buttons = pausePanel.GetComponentsInChildren<Button>();
+
+        buttons[0].onClick.AddListener(() => PauseGame());
+        buttons[1].onClick.AddListener(() => ExitGame());
+
+        pausePanel.SetActive(false);
     }
 
     /// <summary>
@@ -143,6 +164,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartBattle(TrainerEnemyController trainerEnemyController)
     {
+        FindAnyObjectByType<VSManager>().OnBattleStarted(trainerEnemyController);
+
         FindObjectOfType<TrainerMovement>().SetCanMove(false);
 
         playerMonsterGO = Instantiate(playerMonsterPrefab, playerMonsterSpawn.position, Quaternion.identity);
@@ -152,6 +175,8 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<CombatUI>().AddDataUiFistTime(playerMonsterGO, enemyMonsterGO);
         this.trainerEnemyController = trainerEnemyController;
         BattleStarted?.Invoke(trainerEnemyController);
+
+        trainerEnemyController.SetCurrentMonster(enemyMonsterGO);
 
         AudioManager.instance.StopMusicClip();
         AudioManager.instance.PlayFightMusic();
@@ -163,20 +188,39 @@ public class GameManager : MonoBehaviour
     {
         //Si el jugador pierde
         if (!playerWin)
+        {
             GameObject.FindAnyObjectByType<GameOverCanvas>().ShowLooseHolder();
+            var positionPlayer = FindObjectOfType<TrainerController>().pointPosition;
+            FindObjectOfType<TrainerMovement>().transform.position = positionPlayer;
+            FindObjectOfType<TrainerController>().ResetData();
+            trainerEnemyController.ResetData();
+            trainerEnemyController.gameObject.GetComponent<TrainerEnemyMovement>().ResetData();
+        }
 
         else // Si el jugador gana
         {
+            FindObjectOfType<TrainerController>().defeatedEnemies.Add(trainerEnemyController.gameObject.name);
+            FindObjectOfType<TrainerController>().ResetData();
+            trainerEnemyController.ResetData();
             Destroy(trainerEnemyController.gameObject); // Destruimos al enemigo
+
+            if (FindObjectOfType<TrainerController>().defeatedEnemies.Count >= 4)
+            {
+                youWinPanel.SetActive(true);
+            }
         }
 
         isInBattle = false;
 
         AudioManager.instance.StopMusicClip();
         AudioManager.instance.PlayExplorationMusic();
-       
+
         Destroy(playerMonsterGO);
         Destroy(enemyMonsterGO);
+
+        FindObjectOfType<CombatUI>().transform.Find("Panel").gameObject.SetActive(false);
+
+        trainerGO.GetComponent<TrainerMovement>().SetCanMove(true);
     }
 
     #endregion
@@ -271,8 +315,19 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+
     public void PauseGame()
     {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+        }
 
     }
 }

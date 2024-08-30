@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class PlayerData
 {
     public List<int> monstersIds = new List<int>();
     public Vector3 playerPosition;
-    public int enemiesDefeated;
+    public List<string> enemiesDefeated = new List<string>();
 }
 
 public class DataManager : MonoBehaviour
@@ -33,27 +34,33 @@ public class DataManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        SaveDataBeforeExit();
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            SaveDataBeforeExit();
+        }
     }
 
     private void OnApplicationQuit()
     {
-        SaveDataBeforeExit();        
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            SaveDataBeforeExit();
+        }
     }
 
-    private void SaveDataBeforeExit()
+    public void SaveDataBeforeExit()
     {
         try
         {
             TrainerController trainer = GameObject.FindAnyObjectByType<TrainerController>();
             // -------------------------Modifica esta linea para pasar la posicion del jugador y los enemigos derrotados--------------------------------------------
-            Vector3 playerPosition = trainer.transform.position;
-            int enemiesDefeated = 0;
+            Vector3 playerPosition = trainer.pointPosition;
+            List<string> defeatedEnemies = trainer.defeatedEnemies;
             // ----------------------------------------------------------------------------------------------------------
 
             List<int> monstersIds = trainer.GetAllMonstersById();
 
-            SavePlayerData(monstersIds, playerPosition, enemiesDefeated);
+            SavePlayerData(monstersIds, playerPosition, defeatedEnemies);
         }
         catch (System.Exception ex)
         {
@@ -61,7 +68,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void SavePlayerData(List<int> monstersIds, Vector3 playerPosition, int enemiesDefeated)
+    public void SavePlayerData(List<int> monstersIds, Vector3 playerPosition, List<string> enemiesDefeated)
     {
         Debug.Log("Path: " + filePath);
         try
@@ -110,10 +117,10 @@ public class DataManager : MonoBehaviour
         return data?.playerPosition ?? Vector3.zero;
     }
 
-    public int LoadEnemiesDefeated()
+    public List<string> LoadEnemiesDefeated()
     {
         PlayerData data = LoadPlayerData();
-        return data?.enemiesDefeated ?? 0;
+        return data?.enemiesDefeated ?? new List<string>();
     }
 
     public List<Monster> LoadAllMonstersFromAssets()

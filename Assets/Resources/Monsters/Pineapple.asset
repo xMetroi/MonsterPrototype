@@ -21,7 +21,7 @@ MonoBehaviour:
   monsterAimSpeed: 0
   monsterDashForce: 0
   monsterDashCooldown: 0
-  basickAttack1: {fileID: 0}
-  basickAttack2: {fileID: 0}
-  specialAttack: {fileID: 0}
+  basickAttack1: {fileID: 11400000, guid: 1f9e4b0e008e74c4faba46ab99c8e42c, type: 2}
+  basickAttack2: {fileID: 11400000, guid: c2a6b14fb45553445badbab2222a95f7, type: 2}
+  specialAttack: {fileID: 11400000, guid: 4803bfebf2c5ed144b83f25332cb5648, type: 2}
   monsterHurt: {fileID: 8300000, guid: 663faca9ad3b8114d8be2d316148b31e, type: 3}

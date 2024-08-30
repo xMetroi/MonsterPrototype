@@ -18,10 +18,10 @@ MonoBehaviour:
   monsterAnimator: {fileID: 9100000, guid: 1fad39989e6a69340928aca40878278e, type: 2}
   monsterHealth: 100
   monsterSpeed: 4
-  monsterAimSpeed: 3
+  monsterAimSpeed: 2
   monsterDashForce: 2
-  monsterDashCooldown: 1
+  monsterDashCooldown: 2
   basickAttack1: {fileID: 11400000, guid: ab20ed9597578f647aad092ade6f80bc, type: 2}
-  basickAttack2: {fileID: 11400000, guid: 8207504216a303a4fa5b197357868beb, type: 2}
-  specialAttack: {fileID: 0}
+  basickAttack2: {fileID: 11400000, guid: 1f9e4b0e008e74c4faba46ab99c8e42c, type: 2}
+  specialAttack: {fileID: 11400000, guid: 8207504216a303a4fa5b197357868beb, type: 2}
   monsterHurt: {fileID: 8300000, guid: 983ec4a81c4854945932da21df7bb246, type: 3}

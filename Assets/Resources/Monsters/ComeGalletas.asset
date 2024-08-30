@@ -16,11 +16,11 @@ MonoBehaviour:
   monsterName: 
   monsterSprite: {fileID: 585366258, guid: 98e7367607721b64a90b28e86f644700, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 8b12854732fde804b96db523166aa54e, type: 2}
-  monsterHealth: 10
+  monsterHealth: 100
   monsterSpeed: 4
-  monsterAimSpeed: 0
-  monsterDashForce: 0
-  monsterDashCooldown: 0
+  monsterAimSpeed: 2
+  monsterDashForce: 2
+  monsterDashCooldown: 2
   basickAttack1: {fileID: 11400000, guid: 1f9e4b0e008e74c4faba46ab99c8e42c, type: 2}
   basickAttack2: {fileID: 11400000, guid: c2a6b14fb45553445badbab2222a95f7, type: 2}
   specialAttack: {fileID: 11400000, guid: 542124c17adf12046b5bf8a059ef22b3, type: 2}

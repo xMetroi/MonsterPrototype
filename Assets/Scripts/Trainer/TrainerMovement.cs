@@ -36,6 +36,12 @@ public class TrainerMovement : MonoBehaviour
 
     private void Start()
     {
+        if(DataManager.Instance.LoadPlayerPosition() != Vector3.zero)
+        {
+            this.transform.position = DataManager.Instance.LoadPlayerPosition();
+            FindObjectOfType<TrainerController>().pointPosition = DataManager.Instance.LoadPlayerPosition();
+        } 
+
         playerRb = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
         spriteRenderer =  GetComponent<SpriteRenderer>();
@@ -63,9 +69,6 @@ public class TrainerMovement : MonoBehaviour
         if (movInput != Vector2.zero && CanMove())
         {
             playerRb.MovePosition(playerRb.position + movInput * speed * Time.fixedDeltaTime);
-
-            // transform.rotation = Quaternion.Euler(0, movInput.x > 0 ? 0 : movInput.x < 0 ? 180f : transform.rotation.eulerAngles.y, 0);
-
             spriteRenderer.flipX = movInput.x < 0;
         }
     }

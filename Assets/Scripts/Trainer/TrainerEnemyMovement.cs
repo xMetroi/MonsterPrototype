@@ -7,6 +7,7 @@ public class TrainerEnemyMovement : MonoBehaviour
     Transform playerTransform;
     [SerializeField] private float speed;
     [SerializeField] private float stopDistance;
+    private Vector3 initialPosition;
 
     private Animator animator;
 
@@ -16,6 +17,7 @@ public class TrainerEnemyMovement : MonoBehaviour
 
     private void Start()
     {
+        initialPosition = transform.position;
         animator = GetComponent<Animator>();
         canSeePlayer = false;
         playerTransform = GameObject.FindAnyObjectByType<TrainerMovement>().transform;
@@ -42,10 +44,18 @@ public class TrainerEnemyMovement : MonoBehaviour
         if (canSeePlayer && !isStop)
         {
             isStop = true;
+            GameObject.Find("DialogueSystem").transform.localScale = new Vector3(1, 1, 0);
             FindObjectOfType<TrainerMovement>().SetCanMove(false);
             GetComponent<DialogueTrigger>().TriggerDialogue();
             FindObjectOfType<VSManager>().SetImageEnemy(gameObject.GetComponent<SpriteRenderer>());
             FindObjectOfType<VSManager>().SetEnemyName(gameObject.GetComponent<DialogueTrigger>().name);
         }
+    }
+
+    public void ResetData()
+    {
+        transform.position = initialPosition;
+        isStop = false;
+        canSeePlayer = false;
     }
 }
