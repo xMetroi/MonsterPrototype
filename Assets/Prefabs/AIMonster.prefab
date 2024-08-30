@@ -144,7 +144,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.41974, y: 1.41974, z: 1.41974}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 196185071479461608}
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 1369124440276073288}
   - component: {fileID: 126969047178564655}
   - component: {fileID: 2164447127683377687}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Monster
   m_TagString: Monster
   m_Icon: {fileID: 0}

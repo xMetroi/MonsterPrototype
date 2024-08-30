@@ -9,7 +9,7 @@ public class SelectMonsterToWin : MonoBehaviour
 {
     [SerializeField] private Transform buttonsHolder;
     [SerializeField] private GameObject monsterButtonPrefab;
-    private bool canSelect = true;
+    public bool canSelect = true;
 
     [SerializeField] private GameObject panelSelectMonster;
     [SerializeField] private GameObject panelSuccessful;
@@ -43,8 +43,8 @@ public class SelectMonsterToWin : MonoBehaviour
     /// <param name="monsters"></param>
     public void SelectMonster(List<Monster> monsters)
     {
+        GameManager.instance.isUiOpened = true;
         panelSelectMonster.SetActive(true);
-        FindObjectOfType<TrainerMovement>().SetCanMove(false);
         List<GameObject> monsterButtons = new List<GameObject>();
 
         if (monsters != null)
@@ -66,8 +66,8 @@ public class SelectMonsterToWin : MonoBehaviour
     /// <param name="monstersNumber"> numbers of monster to generate </param>
     public void SelectMonsterRandom(int monstersNumber)
     {
+        GameManager.instance.isUiOpened = true;
         panelSelectMonster.SetActive(true);
-        FindObjectOfType<TrainerMovement>().SetCanMove(false);
         List<Monster> allMonstersList = DataManager.Instance.LoadAllMonstersFromAssets();
         List<GameObject> monsterButtons = new List<GameObject>();
 
@@ -93,6 +93,7 @@ public class SelectMonsterToWin : MonoBehaviour
 
     private void AddMonster(Monster monster, List<GameObject> buttons)
     {
+        GameManager.instance.isUiOpened = false;
         panelSelectMonster.SetActive(false);
         GameObject.FindAnyObjectByType<TrainerController>().AddMonster(monster);
 
@@ -109,7 +110,6 @@ public class SelectMonsterToWin : MonoBehaviour
     {
         panelSelectMonster.SetActive(false);
         panelSuccessful.SetActive(true);
-        FindObjectOfType<TrainerMovement>().SetCanMove(true);
         yield return new WaitForSeconds(4f);   
         panelSuccessful.SetActive(false);
     }

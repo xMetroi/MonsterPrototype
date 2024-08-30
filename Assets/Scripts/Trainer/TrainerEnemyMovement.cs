@@ -45,7 +45,6 @@ public class TrainerEnemyMovement : MonoBehaviour
         {
             isStop = true;
             GameObject.Find("DialogueSystem").transform.localScale = new Vector3(1, 1, 0);
-            FindObjectOfType<TrainerMovement>().SetCanMove(false);
             GetComponent<DialogueTrigger>().TriggerDialogue();
             FindObjectOfType<VSManager>().SetImageEnemy(gameObject.GetComponent<SpriteRenderer>());
             FindObjectOfType<VSManager>().SetEnemyName(gameObject.GetComponent<DialogueTrigger>().name);

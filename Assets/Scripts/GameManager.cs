@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
 
     private GameObject youWinPanel;
 
+    public bool gameFinished;
+
+    public bool isUiOpened;
+
     #endregion
 
     public static GameManager instance;
@@ -86,7 +90,14 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name == "Intro")
         {
-            LoadScene("WorldPROTOTYPEScene", 3);
+            if (DataManager.Instance.LoadPlayerData() == null)
+            {
+                LoadScene("WorldPROTOTYPEScene", 33);
+            }
+            else
+            {
+                LoadScene("WorldPROTOTYPEScene");
+            }
         }
 
         if (scene.name == "WorldPROTOTYPEScene")
@@ -164,9 +175,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartBattle(TrainerEnemyController trainerEnemyController)
     {
+        gameFinished = false;
+        isUiOpened = false;
         FindAnyObjectByType<VSManager>().OnBattleStarted(trainerEnemyController);
-
-        FindObjectOfType<TrainerMovement>().SetCanMove(false);
 
         playerMonsterGO = Instantiate(playerMonsterPrefab, playerMonsterSpawn.position, Quaternion.identity);
         enemyMonsterGO = Instantiate(enemyMonsterPrefab, enemyMonsterSpawn.position, Quaternion.identity);
@@ -189,6 +200,7 @@ public class GameManager : MonoBehaviour
         //Si el jugador pierde
         if (!playerWin)
         {
+            gameFinished = true;
             GameObject.FindAnyObjectByType<GameOverCanvas>().ShowLooseHolder();
             var positionPlayer = FindObjectOfType<TrainerController>().pointPosition;
             FindObjectOfType<TrainerMovement>().transform.position = positionPlayer;
@@ -220,7 +232,6 @@ public class GameManager : MonoBehaviour
 
         FindObjectOfType<CombatUI>().transform.Find("Panel").gameObject.SetActive(false);
 
-        trainerGO.GetComponent<TrainerMovement>().SetCanMove(true);
     }
 
     #endregion
@@ -241,13 +252,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*
-        if (isBattle && !areSpawned)
-        {
-
-            areSpawned = true;           
-        }*/
-
+     
         CameraManager();
     }
 
@@ -265,31 +270,6 @@ public class GameManager : MonoBehaviour
         isSlowMotionActive = false;
         slowMotionDuration = 0.08f;
     }
-
-    //public void PlayerWins()
-    //{
-    //    panelLifeMonsters.SetActive(false);
-    //    panelGameOver.SetActive(true);
-    //    winText.SetActive(true);
-    //    gameFinished = true;
-    //}
-
-    //public void PlayerLoose()
-    //{
-    //    panelLifeMonsters.SetActive(false);
-    //    looseText.SetActive(true);
-    //    gameFinished = true;
-    //    StartCoroutine(StartSlow());
-    //}
-
-    //public void GameOver()
-    //{
-    //    panelLifeMonsters.SetActive(false);
-    //    Time.timeScale = 0f;
-    //    isInBattle = false;
-    //    //areSpawned = false;
-    //    StartCoroutine(StartSlow());
-    //}
 
     IEnumerator StartSlow()
     {

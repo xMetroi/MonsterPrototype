@@ -19,8 +19,8 @@ MonoBehaviour:
   attackSprite: {fileID: -939330927, guid: 85131306172cb4f4682811781b48cf66, type: 3}
   attackAudioClip: {fileID: 8300000, guid: 02899d39c1044a54abaff02a744238e0, type: 3}
   attackDamage: 4
-  attackCooldown: 3
-  attackKnockback: 2
+  attackCooldown: 1
+  attackKnockback: 10
   meleeRange: 1.5
   meleePrefab: {fileID: 7177953139975411725, guid: bf3fbf7e83e1098469dc5ab8b59daa37, type: 3}
   throwableSpeed: 0

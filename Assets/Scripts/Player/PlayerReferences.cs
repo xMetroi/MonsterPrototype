@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,6 +43,12 @@ public class PlayerReferences : MonoBehaviour
     [HideInInspector] public PlayerInput playerInput;
     #endregion
 
+    #region Events
+
+    public event Action<PlayerDevice> DeviceChanged;
+
+    #endregion
+
     private void Awake()
     {
         currentMonster = FindObjectOfType<TrainerController>().GetMonsterById(0);
@@ -69,10 +76,16 @@ public class PlayerReferences : MonoBehaviour
         {
             case "Keyboard && Mouse":
                 device = PlayerDevice.KeyboardMouse;
+                DeviceChanged?.Invoke(device);
+                Debug.Log("Kry");
                 return;
             case "Controller":
                 device = PlayerDevice.Controller;
+                DeviceChanged?.Invoke(device);
+                Debug.Log("Xbox");
                 return;
         }
     }
+
+
 }

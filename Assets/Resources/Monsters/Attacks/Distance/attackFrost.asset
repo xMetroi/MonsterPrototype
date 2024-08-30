@@ -20,7 +20,7 @@ MonoBehaviour:
   attackAudioClip: {fileID: 8300000, guid: d8b945a797e8520469d1dcf088ee1c85, type: 3}
   attackDamage: 5
   attackCooldown: 2
-  attackKnockback: 1
+  attackKnockback: 10
   meleeRange: 0
   meleePrefab: {fileID: 0}
   throwableSpeed: 3

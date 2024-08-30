@@ -83,7 +83,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private PlayerData LoadPlayerData()
+    public PlayerData LoadPlayerData()
     {
         try
         {

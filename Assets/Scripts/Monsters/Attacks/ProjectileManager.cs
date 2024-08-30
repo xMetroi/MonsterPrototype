@@ -23,6 +23,17 @@ public class ProjectileManager : MonoBehaviour
                     damageable.Damage(attack.attackDamage, direction * attack.attackKnockback);
                     Destroy(gameObject);
                 }
+                else
+                {
+                    IDamageable damageables = collision.GetComponentInParent<IDamageable>();
+
+                    if (damageables != null)
+                    {
+                        damageables.Damage(attack.attackDamage, direction * attack.attackKnockback);
+                        Destroy(gameObject);
+                    }
+                    
+                }
             }
         }
     }
