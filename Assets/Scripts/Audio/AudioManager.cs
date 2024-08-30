@@ -18,6 +18,12 @@ public class AudioManager : MonoBehaviour
     private float currentVolume = 0f;
     private float fadeTime = 0f;
 
+     [Header("Music Clips")]
+    public AudioClip[] explorationMusic;
+    public AudioClip[] fightMusic;
+    private AudioClip fightClip;
+    private AudioClip explorationClip;
+
     public static AudioManager instance;
 
     private void Awake()
@@ -39,7 +45,32 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip"></param>
     public void PlayMusicClip(AudioClip clip)
     {
-        musicSource.PlayOneShot(clip);
+               
+    }
+    public void PlayExplorationMusic()
+    {
+        explorationClip = explorationMusic[UnityEngine.Random.Range(0, explorationMusic.Length)];
+        musicSource.clip = explorationClip;
+        musicSource.loop = true;
+        FadeIn();
+        musicSource.Play();
+    }
+    public void PlayFightMusic()
+    {
+        fightClip = fightMusic[UnityEngine.Random.Range(0, fightMusic.Length)];
+        musicSource.clip = fightClip;
+        musicSource.loop = true;
+        FadeIn();
+        musicSource.Play();
+    }
+    public void StopMusicClip()
+    {
+        musicSource.Stop(); 
+        //FadeOut();
+        // if (currentVolume == 0)
+        // {
+        // }
+
     }
 
     /// <summary>
