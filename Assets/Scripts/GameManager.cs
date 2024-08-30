@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerMonsterPrefab;
     [SerializeField] private GameObject enemyMonsterPrefab;
     [SerializeField] private Transform battlePointTransform;
-    public TrainerEnemyController trainerEnemyController;
+    TrainerEnemyController trainerEnemyController;
     GameObject playerMonsterGO;
     GameObject enemyMonsterGO;
 
@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public float slowMotionDuration = 0.08f;
     private bool isSlowMotionActive = false;
 
+   
     #region Events
 
     public event Action <TrainerEnemyController> BattleStarted;
@@ -85,6 +86,9 @@ public class GameManager : MonoBehaviour
         if (scene.name == "WorldPROTOTYPEScene")
         {
             InitializeWorldVariables();
+            
+            AudioManager.instance.PlayExplorationMusic();
+            
         }
     }
 
@@ -149,7 +153,8 @@ public class GameManager : MonoBehaviour
         this.trainerEnemyController = trainerEnemyController;
         BattleStarted?.Invoke(trainerEnemyController);
 
-        trainerEnemyController.SetCurrentMonster(enemyMonsterGO);
+        AudioManager.instance.StopMusicClip();
+        AudioManager.instance.PlayFightMusic();
     }
 
     //Events
@@ -166,13 +171,12 @@ public class GameManager : MonoBehaviour
         }
 
         isInBattle = false;
+
+        AudioManager.instance.StopMusicClip();
+        AudioManager.instance.PlayExplorationMusic();
        
         Destroy(playerMonsterGO);
         Destroy(enemyMonsterGO);
-
-        FindObjectOfType<CombatUI>().transform.Find("Panel").gameObject.SetActive(false);
-
-        trainerGO.GetComponent<TrainerMovement>().SetCanMove(true);
     }
 
     #endregion
@@ -242,7 +246,7 @@ public class GameManager : MonoBehaviour
     //    //areSpawned = false;
     //    StartCoroutine(StartSlow());
     //}
-     
+
     IEnumerator StartSlow()
     {
         ActivateSlowMotion();

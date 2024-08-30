@@ -5321,6 +5321,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1658889427}
   sfxSource: {fileID: 1658889426}
+  fadeInDuration: 1
+  fadeOutDuration: 1
+  explorationMusic:
+  - {fileID: 8300000, guid: eb7d34df2aec43c41beecf69696dae12, type: 3}
+  - {fileID: 8300000, guid: cb0a7116a29c1f446be9af4e5b4842b7, type: 3}
+  fightMusic:
+  - {fileID: 8300000, guid: 8f77a9ab0244cf4448a7bb3e470bb43d, type: 3}
+  - {fileID: 8300000, guid: 1f20e1190452e0c46a51648e32cda89b, type: 3}
 --- !u!4 &1658889425
 Transform:
   m_ObjectHideFlags: 0
@@ -5446,7 +5454,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
