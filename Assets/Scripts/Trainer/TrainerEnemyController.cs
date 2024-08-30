@@ -1,70 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class TrainerEnemyController : MonoBehaviour
 {
+    
     public List<Monster> monsters = new List<Monster>();
-    private int coins = 0;
+    [SerializeField] private float[] monstersHP = new float[4];
 
+    int count;
+
+    AIReferences aiReferences;
+    EnemyBrain enemyBrain;
+    //PlayerCombat playerCombat;
+
+    [SerializeField] private int currentMonster;
 
     private void Start()
     {
-        //SetMonsters(SaveLoadManager.Instance.LoadPlayerMonster());
-        //SetCoins(SaveLoadManager.Instance.LoadPlayerCoins());
+        currentMonster = 0;
+        SetAllMonstersHP();
     }
 
-    public void SetMonsters(List<int> ids)
+    public void SetAllMonstersHP()
     {
-        List<Monster> allMonsters = DataManager.Instance.LoadAllMonstersFromAssets();
-
-        Monster[] filteredMonstersById = allMonsters
-            .Where(monster => ids.Contains(monster.monsterID))
-            .ToArray();
-
-        monsters = allMonsters;
-    }
-
-    public void AddMonster(Monster monster)
-    {
-        this.monsters.Add(monster);
-    }
-
-    public List<Monster> GetAllMonsters()
-    {
-        return this.monsters;
-    }
-
-    public List<int> GetAllMonstersById()
-    {
-        List<int> ids = new List<int>();
-
-        foreach (Monster monster in this.monsters)
+        for (int i = 0; i < monsters.Count; i++)
         {
-            ids.Add(monster.monsterID);
+            monstersHP[i] = monsters[i].monsterHealth;
         }
-
-        return ids;
     }
 
-    public Monster GetMonsterById(int id)
-    {
-        return this.monsters[id];
-    }
 
-    public void SetCoins(int coins)
+    public void SetCurrentMonster(GameObject enemy)
     {
-        this.coins = coins; 
-    }
+        if (count >= monsters.Count)
+        {
+            Debug.Log("Gano el juego");
+            GameManager.instance.TriggerBattleEnded(true);
+            return;
+        }
+        else
+        {
+            aiReferences = enemy.GetComponent<AIReferences>();
+            enemyBrain = enemy.GetComponent<EnemyBrain>();
 
-    public void AddCoins(int coin)
-    {
-        this.coins += coin;
-    }
+            monstersHP[currentMonster] = enemyBrain.GetHP();
 
-    public int GetCoins()
-    {
-        return this.coins;
+            aiReferences.currentMonster = monsters[currentMonster];
+            enemyBrain.Initialize();
+
+            currentMonster++;
+            count++;
+        }   
     }
 }

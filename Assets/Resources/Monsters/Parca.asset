@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: Parca
   m_EditorClassIdentifier: 
-  monsterID: 7
+  monsterID: 9
   monsterName: 
   monsterSprite: {fileID: -825886852, guid: bd642833d9b981649851fe83f9a5f9cd, type: 3}
   monsterAnimator: {fileID: 9100000, guid: e4a2f620de5c7544885bae3cd0112e68, type: 2}
-  monsterHealth: 0
+  monsterHealth: 10
   monsterSpeed: 0
   monsterAimSpeed: 0
   monsterDashForce: 0

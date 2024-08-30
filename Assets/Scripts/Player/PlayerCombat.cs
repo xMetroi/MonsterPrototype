@@ -385,7 +385,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
 
                 if (monsterHp <= 0 && GameManager.instance.isInBattle)
                 {
-                    GameManager.instance.TriggerBattleEnded(false);
+                    FindObjectOfType<TrainerController>().ChangeMonster(this.gameObject);
                 }
             }
         }               

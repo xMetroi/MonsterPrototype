@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class SelectMonsterToWin : MonoBehaviour
 {
     [SerializeField] private Transform buttonsHolder;
-    [SerializeField] private GameObject monsterButtonPrefab;    
+    [SerializeField] private GameObject monsterButtonPrefab;
     private bool canSelect = true;
 
     [SerializeField] private GameObject panelSelectMonster;
@@ -23,6 +23,11 @@ public class SelectMonsterToWin : MonoBehaviour
         //Event subscription
         GameManager.instance.BattleEnded += OnBattleEnded;
 
+        Invoke(nameof(FirstDataMonsterPlayer), 1f);
+    }
+
+    private void FirstDataMonsterPlayer()
+    {
         if (FindObjectOfType<TrainerController>().GetAllMonsters().Count <= 0)
             SelectMonsterRandom(3);
     }
@@ -39,6 +44,7 @@ public class SelectMonsterToWin : MonoBehaviour
     public void SelectMonster(List<Monster> monsters)
     {
         panelSelectMonster.SetActive(true);
+        FindObjectOfType<TrainerMovement>().SetCanMove(false);
         List<GameObject> monsterButtons = new List<GameObject>();
 
         if (monsters != null)
@@ -61,6 +67,7 @@ public class SelectMonsterToWin : MonoBehaviour
     public void SelectMonsterRandom(int monstersNumber)
     {
         panelSelectMonster.SetActive(true);
+        FindObjectOfType<TrainerMovement>().SetCanMove(false);
         List<Monster> allMonstersList = DataManager.Instance.LoadAllMonstersFromAssets();
         List<GameObject> monsterButtons = new List<GameObject>();
 
@@ -102,6 +109,7 @@ public class SelectMonsterToWin : MonoBehaviour
     {
         panelSelectMonster.SetActive(false);
         panelSuccessful.SetActive(true);
+        FindObjectOfType<TrainerMovement>().SetCanMove(true);
         yield return new WaitForSeconds(4f);   
         panelSuccessful.SetActive(false);
     }

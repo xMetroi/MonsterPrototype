@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerMonsterPrefab;
     [SerializeField] private GameObject enemyMonsterPrefab;
     [SerializeField] private Transform battlePointTransform;
-    TrainerEnemyController trainerEnemyController;
+    public TrainerEnemyController trainerEnemyController;
     GameObject playerMonsterGO;
     GameObject enemyMonsterGO;
 
@@ -148,6 +148,8 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<CombatUI>().AddDataUiFistTime(playerMonsterGO, enemyMonsterGO);
         this.trainerEnemyController = trainerEnemyController;
         BattleStarted?.Invoke(trainerEnemyController);
+
+        trainerEnemyController.SetCurrentMonster(enemyMonsterGO);
     }
 
     //Events
@@ -167,6 +169,10 @@ public class GameManager : MonoBehaviour
        
         Destroy(playerMonsterGO);
         Destroy(enemyMonsterGO);
+
+        FindObjectOfType<CombatUI>().transform.Find("Panel").gameObject.SetActive(false);
+
+        trainerGO.GetComponent<TrainerMovement>().SetCanMove(true);
     }
 
     #endregion
@@ -236,7 +242,7 @@ public class GameManager : MonoBehaviour
     //    //areSpawned = false;
     //    StartCoroutine(StartSlow());
     //}
-
+     
     IEnumerator StartSlow()
     {
         ActivateSlowMotion();

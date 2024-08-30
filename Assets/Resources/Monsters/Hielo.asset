@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: Hielo
   m_EditorClassIdentifier: 
-  monsterID: 5
+  monsterID: 6
   monsterName: 
   monsterSprite: {fileID: -714495704, guid: 502e4d3682d50d54ab01e72a57b857cd, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 05aae8593e9cdee4aa86cbc101613cdb, type: 2}
-  monsterHealth: 0
+  monsterHealth: 10
   monsterSpeed: 0
   monsterAimSpeed: 0
   monsterDashForce: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: Fuego
   m_EditorClassIdentifier: 
-  monsterID: 4
+  monsterID: 5
   monsterName: 
   monsterSprite: {fileID: -1643860884, guid: ced06a21635058c4d9e62b7aeae88ec1, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 1fad39989e6a69340928aca40878278e, type: 2}

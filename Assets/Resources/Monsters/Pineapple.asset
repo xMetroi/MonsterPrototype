@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: Pineapple
   m_EditorClassIdentifier: 
-  monsterID: 8
+  monsterID: 10
   monsterName: 
   monsterSprite: {fileID: -674560448, guid: 1a646b13de1226045964fb34ce9e9055, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 272593d1654488c4e892672ff008ec30, type: 2}
-  monsterHealth: 0
+  monsterHealth: 10
   monsterSpeed: 0
   monsterAimSpeed: 0
   monsterDashForce: 0

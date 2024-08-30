@@ -106,6 +106,11 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         return Vector3.Distance(references.MonsterTransform.position, references.playerReferences.playerTransform.position);
     }
 
+    public void SetHP(float hp)
+    {
+        monsterHp = hp;
+    }
+
     public bool CanMove()
     {
         if (isHitted)
@@ -157,10 +162,6 @@ public class EnemyBrain : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        originalColor = references.monsterSprite.color;
-        centerPoint = GameObject.Find("CenterPoint").transform;
-
-        references.stateMachineController.AttackStarted += OnAttackStarted;
         Initialize();
     }
 
@@ -168,6 +169,14 @@ public class EnemyBrain : MonoBehaviour, IDamageable
     {
         if (references.currentMonster != null)
         {
+            originalColor = references.monsterSprite.color;
+            centerPoint = GameObject.Find("CenterPoint").transform;
+
+            references.monsterSprite.sprite = references.currentMonster.monsterSprite;
+            references.monsterAnimator.runtimeAnimatorController = references.currentMonster.monsterAnimator;
+
+            references.stateMachineController.AttackStarted += OnAttackStarted;
+
             monsterHp = references.currentMonster.monsterHealth;
         }
     }
@@ -389,6 +398,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
 
     #region Damage
 
+    //*//
     public void Damage(float damage, Vector2 kb)
     {
         if (isDefended)
@@ -403,7 +413,7 @@ public class EnemyBrain : MonoBehaviour, IDamageable
 
                 if (monsterHp <= 0 && GameManager.instance.isInBattle)
                 {
-                    GameManager.instance.TriggerBattleEnded(true);
+                    GameManager.instance.trainerEnemyController.SetCurrentMonster(this.gameObject);
                 }
             }
         }
@@ -460,6 +470,11 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         DefenseRegenerated?.Invoke();
         defenseBubbleHP = initialDefenseBubbleHP;
         BubbleBreakRoutine = null;
+    }
+
+    internal void setHP()
+    {
+        throw new NotImplementedException();
     }
 
     #endregion

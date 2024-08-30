@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: HombreLobo
   m_EditorClassIdentifier: 
-  monsterID: 8
+  monsterID: 7
   monsterName: 
   monsterSprite: {fileID: 1548186700, guid: d3804be421c782a4cba7780ad7cea4be, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 53060e1cd3dfaf94eb0ebebba6a91c2d, type: 2}
-  monsterHealth: 0
+  monsterHealth: 10
   monsterSpeed: 0
   monsterAimSpeed: 0
   monsterDashForce: 0

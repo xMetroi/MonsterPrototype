@@ -9,7 +9,6 @@ public class TrainerController : MonoBehaviour
 {
     [SerializeField] private List<Monster> monsters = new List<Monster>();
     private float[] monstersHP = new float[4];
-    private int coins = 0;
 
     PlayerReferences playerReferences;
     PlayerVisuals playerVisuals;
@@ -20,6 +19,8 @@ public class TrainerController : MonoBehaviour
     private int currentMonster;
 
     private bool canChange = true;
+
+    [SerializeField] private int count;
 
     private void Awake()
     {
@@ -38,6 +39,8 @@ public class TrainerController : MonoBehaviour
 
     private void Start()
     {
+        currentMonster = 0;
+        count = 0;
         if (DataManager.Instance.LoadPlayerMonster() != null)
         {
             SetMonsters(DataManager.Instance.LoadPlayerMonster());
@@ -93,11 +96,8 @@ public class TrainerController : MonoBehaviour
     public Monster GetMonsterById(int id)
     {
         return this.monsters[id];
-    }
-
-    public int GetCoins()
-    {
-        return this.coins;
+        currentMonster++;
+        count++;
     }
 
     private void Update()
@@ -131,6 +131,16 @@ public class TrainerController : MonoBehaviour
                 SetCurrentMonster(1);
                 StartCoroutine(CanChange());
             }
+            if (controls.Combat.Change3.ReadValue<float>() > 0)
+            {
+                SetCurrentMonster(2);
+                StartCoroutine(CanChange());
+            }
+            if (controls.Combat.Change4.ReadValue<float>() > 0)
+            {
+                SetCurrentMonster(3);
+                StartCoroutine(CanChange());
+            }
         }
     }
 
@@ -149,8 +159,32 @@ public class TrainerController : MonoBehaviour
         playerReferences.currentMonster = monsters[idx];
         playerVisuals.SetMonsterData();
         playerCombat.Initialize();
-        playerCombat.SetHP(monstersHP[idx]);
+        //playerCombat.SetHP(monstersHP[idx]);
         
         currentMonster = idx;
+        count++;
+    }
+
+    public void ChangeMonster(GameObject enemy)
+    {
+        if (count >= monsters.Count)
+        {
+            GameManager.instance.TriggerBattleEnded(false);
+            return;
+        }
+        else
+        {
+            monstersHP[currentMonster] = playerCombat.GetHP();
+
+           playerReferences.currentMonster = monsters[currentMonster];
+            playerVisuals.SetMonsterData();
+            playerCombat.Initialize();
+            //playerCombat.SetHP(monstersHP[currentMonster]);
+
+            currentMonster++;
+            count++;
+            GameManager.instance.TriggerBattleEnded(false);
+
+        }
     }
 }

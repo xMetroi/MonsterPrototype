@@ -18,7 +18,7 @@ MonoBehaviour:
   attackType: 0
   attackSprite: {fileID: -1377769545, guid: 5b559fe0f0b0cff4a94083325b187794, type: 3}
   attackAudioClip: {fileID: 8300000, guid: 32ff201d28e6fda43b49e7c928708600, type: 3}
-  attackDamage: 1
+  attackDamage: 3
   attackCooldown: 1
   attackKnockback: 1
   meleeRange: 1

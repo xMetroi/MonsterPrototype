@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff532dcbe50aaa438c59ed5fe09640f, type: 3}
   m_Name: Fantasma
   m_EditorClassIdentifier: 
-  monsterID: 8
+  monsterID: 4
   monsterName: 
   monsterSprite: {fileID: 226360074, guid: 5774009bc2405184eab4ee339f22ab4c, type: 3}
   monsterAnimator: {fileID: 9100000, guid: 6e45c3ff67af45a4f8e1c94d5039933a, type: 2}
-  monsterHealth: 0
-  monsterSpeed: 0
-  monsterAimSpeed: 0
-  monsterDashForce: 0
-  monsterDashCooldown: 0
-  basickAttack1: {fileID: 0}
-  basickAttack2: {fileID: 0}
-  specialAttack: {fileID: 0}
+  monsterHealth: 10
+  monsterSpeed: 3
+  monsterAimSpeed: 1
+  monsterDashForce: 2
+  monsterDashCooldown: 2
+  basickAttack1: {fileID: 11400000, guid: 1f9e4b0e008e74c4faba46ab99c8e42c, type: 2}
+  basickAttack2: {fileID: 11400000, guid: c2a6b14fb45553445badbab2222a95f7, type: 2}
+  specialAttack: {fileID: 11400000, guid: 2b972438e0833a24cbd23e4e4d060fc4, type: 2}
   monsterHurt: {fileID: 8300000, guid: 8c716cc637a888d4da3645089e2ab260, type: 3}
