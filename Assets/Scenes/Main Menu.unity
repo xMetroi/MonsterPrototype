@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1563276202}
   m_HandleRect: {fileID: 85482898}
   m_Direction: 0
-  m_MinValue: 0.01
+  m_MinValue: 0.0001
   m_MaxValue: 1.3
   m_WholeNumbers: 0
   m_Value: 1
@@ -3102,7 +3102,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1336000782}
   m_HandleRect: {fileID: 287082278}
   m_Direction: 0
-  m_MinValue: 0.01
+  m_MinValue: 0.0001
   m_MaxValue: 1.3
   m_WholeNumbers: 0
   m_Value: 1
@@ -3449,6 +3449,7 @@ MonoBehaviour:
   playerMonsterPrefab: {fileID: 4939346786512639601, guid: d5af103e1c9227f40a151c529461c4ec, type: 3}
   enemyMonsterPrefab: {fileID: 9202629590522215790, guid: fe98f2f51f784f2438df9dc99be8746b, type: 3}
   battlePointTransform: {fileID: 0}
+  trainerEnemyController: {fileID: 0}
   slowMotionFactor: 0.05
   slowMotionDuration: 0.08
 --- !u!4 &1212172008
@@ -6272,7 +6273,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1583872025}
   m_HandleRect: {fileID: 717835874}
   m_Direction: 0
-  m_MinValue: 0.01
+  m_MinValue: 0.0001
   m_MaxValue: 1.3
   m_WholeNumbers: 0
   m_Value: 1
