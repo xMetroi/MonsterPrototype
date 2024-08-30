@@ -7,6 +7,16 @@ public class CombatUI : MonoBehaviour
 {
     [SerializeField] private GameObject panelCombat;
 
+    [Header("Sprites Keys")]
+    [SerializeField] private Sprite keyR;
+    [SerializeField] private Sprite keyE;
+    [SerializeField] private Sprite keyQ;
+
+    [Header("Sprites Buttons")]
+    [SerializeField] private Sprite buttonX;
+    [SerializeField] private Sprite buttonY;
+    [SerializeField] private Sprite buttonB;
+
     [Header("Player Data Combat")]
     [SerializeField] private Image playerSprite;
     [SerializeField] private Slider playerSliderHP;
@@ -14,14 +24,17 @@ public class CombatUI : MonoBehaviour
     [Header("Player Attack 1")]
     [SerializeField] private Image playerAttack1Image;
     [SerializeField] private Image playerAttack1Cooldown;
+    [SerializeField] private Image playerSkill1Image;
 
     [Header("Player Attack 2")]
     [SerializeField] private Image playerAttack2Image;
     [SerializeField] private Image playerAttack2Cooldown;
+    [SerializeField] private Image playerSkill2Image;
 
     [Header("Player Attack 3")]
     [SerializeField] private Image playerAttack3Image;
     [SerializeField] private Image playerAttack3Cooldown;
+    [SerializeField] private Image playerSkill3Image;
 
     [Header("Enemy Data Combat")]
     [SerializeField] private Image enemySprite;
@@ -40,6 +53,7 @@ public class CombatUI : MonoBehaviour
     [SerializeField] private Image enemyAttack3Cooldown;
 
 
+    private TrainerMovement trainerMovement;
     private PlayerReferences playerReferences;
     private PlayerCombat playerCombat;
     private AIReferences enemyReferences;
@@ -48,6 +62,11 @@ public class CombatUI : MonoBehaviour
     private void Start()
     {
         panelCombat.SetActive(false);
+
+        trainerMovement = FindObjectOfType<TrainerMovement>();
+
+        trainerMovement.DeviceChanged += OnDeviceChanged;
+
     }
 
     private void Update()
@@ -74,6 +93,7 @@ public class CombatUI : MonoBehaviour
 
     public void AddDataUiFistTime(GameObject playerData, GameObject enemyData)
     {
+
         playerReferences = playerData.GetComponent<PlayerReferences>();
         playerCombat = playerData.GetComponent<PlayerCombat>();
 
@@ -83,6 +103,24 @@ public class CombatUI : MonoBehaviour
         AddDataUi();
 
         SetActivePanelCombat(true);
+
+    }
+
+    private void OnDeviceChanged(TrainerMovement.PlayerDevice device)
+    {
+        switch (device)
+        {
+            case TrainerMovement.PlayerDevice.KeyboardMouse:
+                playerSkill1Image.sprite = keyR;
+                playerSkill2Image.sprite = keyE;
+                playerSkill3Image.sprite = keyQ;
+                break;
+            case TrainerMovement.PlayerDevice.Controller:
+                playerSkill1Image.sprite = buttonX;
+                playerSkill2Image.sprite = buttonY;
+                playerSkill3Image.sprite = buttonB;
+                break;
+        }
     }
 
     public void AddDataUi()

@@ -122,6 +122,9 @@ public class EnemyBrain : MonoBehaviour, IDamageable
         if (!GameManager.instance.isInBattle)
             return false;
 
+        if (GameManager.instance.gameFinished)
+            return false;
+
         return true;
     }
 
@@ -153,6 +156,9 @@ public class EnemyBrain : MonoBehaviour, IDamageable
             return false;
 
         if (!GameManager.instance.isInBattle)
+            return false;
+
+        if (GameManager.instance.gameFinished)
             return false;
 
         return true;

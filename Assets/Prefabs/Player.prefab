@@ -404,6 +404,26 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 0ddbf867-7c73-4354-a675-20f41fe01ed7
     m_ActionName: Combat/Special[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 282b0967-dd73-4c98-a882-171792e6756c
+    m_ActionName: Interactions/ChangeDialogue[/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 63489878-6ce1-4b57-8db3-4bc5a491706b
+    m_ActionName: Combat/Change1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9409efb9-7690-4218-8a6a-da6a1ed2cd86
+    m_ActionName: Combat/Change2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d5422e8b-36fd-4f86-af48-a477cb4ec32b
+    m_ActionName: Combat/Change3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 26824e95-ed10-4529-9949-6625ac049e9c
+    m_ActionName: Combat/Change4[/Keyboard/4]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard && Mouse
   m_DefaultActionMap: Movement

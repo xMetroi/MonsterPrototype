@@ -55,6 +55,9 @@ public class PlayerMovement : MonoBehaviour
         if (!GameManager.instance.isInBattle)
             return false;
 
+        if (GameManager.instance.gameFinished)
+            return false;
+
         return true;
     }
 

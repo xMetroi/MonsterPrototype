@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerReferences;
+using UnityEngine.InputSystem;
+using System;
 
 public class TrainerMovement : MonoBehaviour
 {
@@ -17,6 +20,13 @@ public class TrainerMovement : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    public PlayerDevice device;
+
+    public enum PlayerDevice
+    {
+        Controller,
+        KeyboardMouse
+    }
 
     private void Awake()
     {
@@ -73,13 +83,52 @@ public class TrainerMovement : MonoBehaviour
         }
     }
 
-    public void SetCanMove(bool canMove)
-    {
-        this.canMove = canMove;
-    }
-
     public bool CanMove()
     {
-        return canMove;
+        if (GameManager.instance.isInBattle)
+        {
+            return false;
+        }
+        if (FindObjectOfType<TrainerEnemyMovement>().canSeePlayer)
+        {
+            return false;
+        }
+        if (!FindObjectOfType<SelectMonsterToWin>().canSelect)
+        {
+            return false;
+        }
+        if (GameManager.instance.isUiOpened)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    #region Events
+
+    public event Action<PlayerDevice> DeviceChanged;
+
+    #endregion
+
+    /// <summary>
+    /// Triggers when the device changed
+    /// </summary>
+    /// <param name="playerInput"></param>
+    public void SetPlayerDevice(PlayerInput playerInput)
+    {
+        switch (playerInput.currentControlScheme)
+        {
+            case "Keyboard && Mouse":
+                device = PlayerDevice.KeyboardMouse;
+                DeviceChanged?.Invoke(device);
+                Debug.Log("Kry");
+                return;
+            case "Controller":
+                device = PlayerDevice.Controller;
+                DeviceChanged?.Invoke(device);
+                Debug.Log("Xbox");
+                return;
+        }
     }
 }

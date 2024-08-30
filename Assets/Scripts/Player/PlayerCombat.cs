@@ -82,6 +82,9 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         if (!GameManager.instance.isInBattle)
             return false;
 
+        if (GameManager.instance.gameFinished)
+            return false;
+
         return true;
     }
 

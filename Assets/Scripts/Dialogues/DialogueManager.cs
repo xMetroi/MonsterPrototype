@@ -47,6 +47,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue, TrainerEnemyController enemyController)
     {
+        GameManager.instance.isUiOpened = true;
         transform.localScale = new Vector3(1, 1, 0);
         this.actualEnemy = enemyController;
         animator.enabled = true;
@@ -89,7 +90,6 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         animator.SetBool("IsOpen", false);
-        FindObjectOfType<TrainerMovement>().SetCanMove(true);
         if (!GameManager.instance.isInBattle)
             GameManager.instance.StartBattle(actualEnemy);
     }

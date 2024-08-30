@@ -19,7 +19,7 @@ MonoBehaviour:
   monsterHealth: 100
   monsterSpeed: 4
   monsterAimSpeed: 2
-  monsterDashForce: 2
+  monsterDashForce: 8
   monsterDashCooldown: 2
   basickAttack1: {fileID: 11400000, guid: ab20ed9597578f647aad092ade6f80bc, type: 2}
   basickAttack2: {fileID: 11400000, guid: 1f9e4b0e008e74c4faba46ab99c8e42c, type: 2}
